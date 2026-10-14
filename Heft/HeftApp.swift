@@ -43,12 +43,26 @@ struct HeftApp: App {
         }
         #endif
 
+        let storeDir = modelConfiguration.url.deletingLastPathComponent()
+        try? FileManager.default.createDirectory(at: storeDir, withIntermediateDirectories: true, attributes: [
+            .protectionKey: FileProtectionType.completeUntilFirstUserAuthentication
+        ])
+        try? FileManager.default.setAttributes([
+            .protectionKey: FileProtectionType.completeUntilFirstUserAuthentication
+        ], ofItemAtPath: storeDir.path)
+
         do {
             let container = try ModelContainer(
                 for: schema,
                 migrationPlan: HeftMigrationPlan.self,
                 configurations: [modelConfiguration]
             )
+
+            if FileManager.default.fileExists(atPath: modelConfiguration.url.path) {
+                try? FileManager.default.setAttributes([
+                    .protectionKey: FileProtectionType.completeUntilFirstUserAuthentication
+                ], ofItemAtPath: modelConfiguration.url.path)
+            }
 
             let context = container.mainContext
             var descriptor = FetchDescriptor<UserProfile>()
