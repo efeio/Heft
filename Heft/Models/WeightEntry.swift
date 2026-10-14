@@ -13,9 +13,11 @@ import SwiftData
 final class WeightEntry {
     var date: Date
     var weight: Double
+    var healthKitUUID: UUID?
 
-    init(date: Date = Date(), weight: Double) {
+    init(date: Date = Date(), weight: Double, healthKitUUID: UUID? = nil) {
         self.date = date
         self.weight = weight
+        self.healthKitUUID = healthKitUUID
     }
 }

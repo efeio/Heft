@@ -628,7 +628,7 @@ struct SettingsView: View {
                 for record in records {
                     let exists = existingEntries.contains { calendar.isDate($0.date, inSameDayAs: record.date) }
                     if !exists {
-                        let entry = WeightEntry(date: record.date, weight: record.weightKg)
+                        let entry = WeightEntry(date: record.date, weight: record.weightKg, healthKitUUID: record.uuid)
                         modelContext.insert(entry)
                         newCount += 1
                     }

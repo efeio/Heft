@@ -48,20 +48,20 @@ final class HealthKitService {
         }
     }
 
-    /// Saves a weight record to Apple Health
+    /// Saves a weight record to Apple Health and returns the created sample's UUID
     @discardableResult
-    func saveWeight(weightKg: Double, date: Date) async -> Bool {
-        guard isSyncEnabled && isHealthDataAvailable else { return false }
+    func saveWeight(weightKg: Double, date: Date) async -> UUID? {
+        guard isSyncEnabled && isHealthDataAvailable else { return nil }
 
         let quantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: weightKg)
         let sample = HKQuantitySample(type: bodyMassType, quantity: quantity, start: date, end: date)
 
         do {
             try await healthStore.save(sample)
-            return true
+            return sample.uuid
         } catch {
             print("Failed to save sample to HealthKit: \(error)")
-            return false
+            return nil
         }
     }
 
@@ -85,15 +85,22 @@ final class HealthKitService {
         return count
     }
 
-    /// Removes body mass samples matching a specific day from HealthKit
-    func deleteWeight(on date: Date) async {
+    /// Removes the specific HealthKit sample by UUID, or falls back to matching exact timestamp and this app's own source.
+    func deleteWeight(uuid: UUID? = nil, on date: Date) async {
         guard isSyncEnabled && isHealthDataAvailable else { return }
 
-        let calendar = Calendar.current
-        let start = calendar.startOfDay(for: date)
-        guard let end = calendar.date(byAdding: .day, value: 1, to: start) else { return }
-
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: .strictStartDate)
+        let predicate: NSPredicate
+        if let uuid = uuid {
+            predicate = HKQuery.predicateForObject(with: uuid)
+        } else {
+            let timePredicate = HKQuery.predicateForSamples(
+                withStart: date.addingTimeInterval(-1),
+                end: date.addingTimeInterval(1),
+                options: .strictStartDate
+            )
+            let sourcePredicate = HKQuery.predicateForObjects(from: [HKSource.default()])
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, sourcePredicate])
+        }
 
         await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
             let deleteQuery = HKSampleQuery(
@@ -107,7 +114,21 @@ final class HealthKitService {
                     return
                 }
 
-                self.healthStore.delete(samples) { _, _ in
+                let filteredSamples: [HKSample]
+                if uuid != nil {
+                    filteredSamples = samples
+                } else if let myBundleId = Bundle.main.bundleIdentifier {
+                    filteredSamples = samples.filter { $0.sourceRevision.source.bundleIdentifier == myBundleId }
+                } else {
+                    filteredSamples = samples
+                }
+
+                guard !filteredSamples.isEmpty else {
+                    continuation.resume()
+                    return
+                }
+
+                self.healthStore.delete(filteredSamples) { _, _ in
                     continuation.resume()
                 }
             }
@@ -117,7 +138,7 @@ final class HealthKitService {
     }
 
     /// Fetches historical weights from Apple Health
-    func fetchHistoricalWeights(startDate: Date = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()) async -> [(date: Date, weightKg: Double)] {
+    func fetchHistoricalWeights(startDate: Date = Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()) async -> [(date: Date, weightKg: Double, uuid: UUID)] {
         guard isHealthDataAvailable else { return [] }
 
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictStartDate)
@@ -135,9 +156,9 @@ final class HealthKitService {
                     return
                 }
 
-                let results: [(date: Date, weightKg: Double)] = quantitySamples.map { sample in
+                let results: [(date: Date, weightKg: Double, uuid: UUID)] = quantitySamples.map { sample in
                     let weight = sample.quantity.doubleValue(for: .gramUnit(with: .kilo))
-                    return (date: sample.startDate, weightKg: weight)
+                    return (date: sample.startDate, weightKg: weight, uuid: sample.uuid)
                 }
 
                 continuation.resume(returning: results)

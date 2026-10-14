@@ -167,11 +167,12 @@ struct EditWeightSheet: View {
             ) {
                 Button("Kaydı Sil", role: .destructive) {
                     let dateToDelete = entry.date
+                    let uuidToDelete = entry.healthKitUUID
                     modelContext.delete(entry)
                     do {
                         try modelContext.save()
                         Task {
-                            await HealthKitService.shared.deleteWeight(on: dateToDelete)
+                            await HealthKitService.shared.deleteWeight(uuid: uuidToDelete, on: dateToDelete)
                         }
                         dismiss()
                     } catch {
@@ -221,13 +222,18 @@ struct EditWeightSheet: View {
 
     private func applyUpdate(weight: Double) {
         let oldDate = entry.date
+        let oldUUID = entry.healthKitUUID
         let targetDate = effectiveHealthKitDate(for: selectedDate)
         let dateChanged = !Calendar.current.isDate(oldDate, inSameDayAs: targetDate)
 
         entry.weight = weight
         entry.date = targetDate
 
+        var conflictUUID: UUID? = nil
+        var conflictDate: Date? = nil
         if let conflict = conflictingEntry {
+            conflictUUID = conflict.healthKitUUID
+            conflictDate = conflict.date
             modelContext.delete(conflict)
             conflictingEntry = nil
         }
@@ -237,10 +243,17 @@ struct EditWeightSheet: View {
             saveSuccessTrigger.toggle()
 
             Task {
-                if dateChanged {
-                    await HealthKitService.shared.deleteWeight(on: oldDate)
+                await HealthKitService.shared.deleteWeight(uuid: oldUUID, on: oldDate)
+                if let cUUID = conflictUUID, let cDate = conflictDate {
+                    await HealthKitService.shared.deleteWeight(uuid: cUUID, on: cDate)
                 }
-                await HealthKitService.shared.saveWeight(weightKg: weight, date: targetDate)
+                let newUUID = await HealthKitService.shared.saveWeight(weightKg: weight, date: targetDate)
+                if let uuid = newUUID {
+                    await MainActor.run {
+                        entry.healthKitUUID = uuid
+                        try? modelContext.save()
+                    }
+                }
             }
 
             dismiss()

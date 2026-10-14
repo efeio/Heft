@@ -214,12 +214,13 @@ struct HistoryView: View {
 
     private func deleteEntry(_ entry: WeightEntry) {
         let entryDate = entry.date
+        let entryUUID = entry.healthKitUUID
         modelContext.delete(entry)
         do {
             try modelContext.save()
             deleteTrigger.toggle()
             Task {
-                await HealthKitService.shared.deleteWeight(on: entryDate)
+                await HealthKitService.shared.deleteWeight(uuid: entryUUID, on: entryDate)
             }
         } catch {
             showSaveError = true

@@ -518,19 +518,34 @@ struct AddWeightSheet: View {
         guard let weight = parsedWeight else { return }
         let targetDate = effectiveHealthKitDate(for: selectedDate)
 
+        let targetEntry: WeightEntry
+        let oldUUID: UUID?
         if overwrite, let existing = conflictingEntry {
+            oldUUID = existing.healthKitUUID
             existing.date = targetDate
             existing.weight = weight
+            targetEntry = existing
         } else {
+            oldUUID = nil
             let newEntry = WeightEntry(date: targetDate, weight: weight)
             modelContext.insert(newEntry)
+            targetEntry = newEntry
         }
 
         do {
             try modelContext.save()
             saveSuccessTrigger.toggle()
             Task {
-                await HealthKitService.shared.saveWeight(weightKg: weight, date: targetDate)
+                if overwrite {
+                    await HealthKitService.shared.deleteWeight(uuid: oldUUID, on: targetDate)
+                }
+                let newUUID = await HealthKitService.shared.saveWeight(weightKg: weight, date: targetDate)
+                if let uuid = newUUID {
+                    await MainActor.run {
+                        targetEntry.healthKitUUID = uuid
+                        try? modelContext.save()
+                    }
+                }
             }
             dismiss()
         } catch {
