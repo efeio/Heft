@@ -1,0 +1,663 @@
+//
+//  WeightChartView.swift
+//  Heft
+//
+//  Weight history chart supporting multiple time ranges and trend tracking.
+//
+
+import SwiftUI
+import Charts
+
+struct WeightChartView: View {
+    let entries: [WeightEntry]
+    let targetWeight: Double
+    var goalType: GoalType = .lose
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.heftAccent) private var accent
+    @ScaledMetric(relativeTo: .body) private var cardPadding: CGFloat = 16
+    @ScaledMetric(relativeTo: .body) private var insightIconSize: CGFloat = 28
+
+    @State private var selectedRange: ChartTimeRange = {
+        #if DEBUG
+        if let idx = CommandLine.arguments.firstIndex(of: "--chart-range"), idx + 1 < CommandLine.arguments.count {
+            return ChartTimeRange(rawValue: CommandLine.arguments[idx + 1]) ?? .oneMonth
+        }
+        #endif
+        return .oneMonth
+    }()
+    @State private var selectedEntry: WeightEntry?
+    @State private var rawSelectedDate: Date?
+    @State private var sortedEntries: [WeightEntry] = []
+    @GestureState private var isScrubbing: Bool = false
+
+    private var isGainGoal: Bool {
+        goalType == .gain
+    }
+
+    private var isMaintainGoal: Bool {
+        goalType == .maintain
+    }
+
+    private var allSortedEntries: [WeightEntry] {
+        if sortedEntries.isEmpty && !entries.isEmpty {
+            return entries.sorted { $0.date < $1.date }
+        }
+        return sortedEntries
+    }
+
+    private var referenceDate: Date {
+        max(Date(), allSortedEntries.last?.date ?? Date())
+    }
+
+    private var xDomain: ClosedRange<Date> {
+        selectedRange.dateRange(relativeTo: referenceDate, allDates: allSortedEntries.map(\.date))
+    }
+
+    private var activeEntries: [WeightEntry] {
+        selectedRange.filter(entries: entries, relativeTo: referenceDate)
+    }
+
+    private var activeEntry: WeightEntry? {
+        if let selected = selectedEntry, activeEntries.contains(where: { $0.id == selected.id }) {
+            return selected
+        }
+        return activeEntries.last ?? allSortedEntries.last
+    }
+
+    private var yMin: Double {
+        let weights = activeEntries.map(\.weight)
+        let minW = weights.min() ?? (allSortedEntries.map(\.weight).min() ?? 50.0)
+        return minW - 1.5
+    }
+
+    private var yMax: Double {
+        let weights = activeEntries.map(\.weight)
+        let maxW = weights.max() ?? (allSortedEntries.map(\.weight).max() ?? 100.0)
+        return max(yMin + 2.0, maxW + 1.5)
+    }
+
+    private var xAxisDates: [Date] {
+        selectedRange.xAxisDates(referenceDate: referenceDate, allDates: allSortedEntries.map(\.date))
+    }
+
+    private static let fullDateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "tr_TR")
+        df.dateFormat = "d MMMM yyyy, EEEE"
+        return df
+    }()
+
+    // MARK: - Selected Entry Delta
+    private var activeDeltaText: (text: String, isSuccess: Bool)? {
+        guard let active = activeEntry, let first = activeEntries.first ?? allSortedEntries.first else { return nil }
+        guard (activeEntries.count >= 2 || allSortedEntries.count >= 2) else { return nil }
+
+        let delta = active.weight - first.weight
+        if active.id == first.id {
+            return ("Başlangıç", false)
+        }
+
+        let isSuccess: Bool
+        if isMaintainGoal {
+            isSuccess = abs(delta) <= 0.5
+        } else if isGainGoal {
+            isSuccess = delta > 0
+        } else {
+            isSuccess = delta < 0
+        }
+        let sign = delta > 0 ? "+" : ""
+        return ("\(sign)\(String(format: "%.1f", delta)) kg", isSuccess)
+    }
+
+    // MARK: - Motivational Insight
+    private struct MotivationInsight {
+        let icon: String
+        let color: Color
+        let title: String
+        let message: String
+    }
+
+    private var currentInsight: MotivationInsight {
+        guard let current = allSortedEntries.last?.weight else {
+            return MotivationInsight(
+                icon: "chart.line.uptrend.xyaxis",
+                color: accent,
+                title: "Yolculuk Başlıyor",
+                message: "Düzenli kilo kaydı yaparak eğiliminizi keşfetmeye başlayın."
+            )
+        }
+
+        let allWeights = allSortedEntries.map(\.weight)
+        let initialWeight = allSortedEntries.first?.weight ?? current
+
+        if isMaintainGoal {
+            let diff = abs(current - targetWeight)
+            if diff <= 0.5 {
+                return MotivationInsight(
+                    icon: "checkmark.seal.fill",
+                    color: .heftSuccess,
+                    title: "Formunuzu Koruyorsunuz",
+                    message: String(format: "Hedef kilonuz olan %.1f kg seviyesini başarıyla koruyorsunuz. İstikrarınızı sürdürün.", targetWeight)
+                )
+            } else {
+                let status = current > targetWeight ? String(format: "+%.1f kg fazla", diff) : String(format: "−%.1f kg eksik", diff)
+                return MotivationInsight(
+                    icon: "equal.circle.fill",
+                    color: accent,
+                    title: "Kilo Koruma Takibi",
+                    message: String(format: "Hedef kilonuzdan (%@) bir fark var. Dengeli beslenme ve düzenli tartımla hedefinizi koruyun.", status)
+                )
+            }
+        } else if isGainGoal {
+            let maxWeight = allWeights.max() ?? current
+            let distanceToTarget = targetWeight - current
+
+            if current >= targetWeight {
+                return MotivationInsight(
+                    icon: "trophy.fill",
+                    color: .heftSuccess,
+                    title: "Hedefinize Ulaştınız",
+                    message: String(format: "%.1f kg hedefinize başarıyla ulaştınız. Formunuzu korumak için aynı kararlılıkla devam edin.", targetWeight)
+                )
+            }
+
+            if current == maxWeight && allSortedEntries.count >= 2 && current > initialWeight {
+                return MotivationInsight(
+                    icon: "chart.line.uptrend.xyaxis",
+                    color: .heftSuccess,
+                    title: "En Yüksek Kilo Kaydı",
+                    message: String(format: "Heft'teki en yüksek kilonuza ulaştınız. Hedefe yalnızca %.1f kg kaldı.", distanceToTarget)
+                )
+            }
+
+            if allSortedEntries.count >= 2 {
+                let prev = allSortedEntries[allSortedEntries.count - 2].weight
+                if current > prev {
+                    let gained = current - prev
+                    return MotivationInsight(
+                        icon: "arrow.up.right.circle.fill",
+                        color: .heftSuccess,
+                        title: "İlerleme Devam Ediyor",
+                        message: String(format: "Son tartıma göre +%.1f kg kaydettiniz. Hedefe %.1f kg kaldı.", gained, distanceToTarget)
+                    )
+                } else if current < prev {
+                    return MotivationInsight(
+                        icon: "flame.fill",
+                        color: .orange,
+                        title: "İstikrarınızı Koruyun",
+                        message: String(format: "Hedefe %.1f kg kaldı. Günlük kalori ve su dalgalanmaları doğaldır.", distanceToTarget)
+                    )
+                }
+            }
+
+            return MotivationInsight(
+                icon: "target",
+                color: accent,
+                title: "Hedefe Doğru",
+                message: String(format: "Kilo alma hedefine ulaşmak için %.1f kg mesafe var. Düzenli tartılarak ilerlemenizi takip edin.", distanceToTarget)
+            )
+        } else {
+            let minWeight = allWeights.min() ?? current
+            let distanceToTarget = current - targetWeight
+
+            if current <= targetWeight {
+                return MotivationInsight(
+                    icon: "trophy.fill",
+                    color: .heftSuccess,
+                    title: "Hedefinize Ulaştınız",
+                    message: String(format: "%.1f kg hedefinize ulaştınız. Sağlıklı kilonuzu korumak için aynı kararlılıkla devam edin.", targetWeight)
+                )
+            }
+
+            if current == minWeight && allSortedEntries.count >= 2 && current < initialWeight {
+                return MotivationInsight(
+                    icon: "chart.line.downtrend.xyaxis",
+                    color: .heftSuccess,
+                    title: "En Düşük Kilo Kaydı",
+                    message: String(format: "Heft'teki en düşük kilonuzu kaydettiniz. Hedefinize yalnızca %.1f kg kaldı.", distanceToTarget)
+                )
+            }
+
+            if allSortedEntries.count >= 2 {
+                let prev = allSortedEntries[allSortedEntries.count - 2].weight
+                if current < prev {
+                    let lost = prev - current
+                    return MotivationInsight(
+                        icon: "arrow.down.right.circle.fill",
+                        color: .heftSuccess,
+                        title: "İlerleme Devam Ediyor",
+                        message: String(format: "Son tartıma göre %.1f kg kaydettiniz. Hedefe %.1f kg kaldı.", lost, distanceToTarget)
+                    )
+                } else if current > prev {
+                    return MotivationInsight(
+                        icon: "flame.fill",
+                        color: .orange,
+                        title: "İstikrarınızı Koruyun",
+                        message: String(format: "Hedefinize %.1f kg kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır.", distanceToTarget)
+                    )
+                }
+            }
+
+            return MotivationInsight(
+                icon: "target",
+                color: accent,
+                title: "Hedefe Doğru",
+                message: String(format: "Hedefine ulaşmak için %.1f kg mesafe var. Düzenli tartılarak ilerlemeni izle.", distanceToTarget)
+            )
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // MARK: - Header (Apple Health Clean Stat)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .center) {
+                    Text("KİLO DEĞİŞİMİ")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(Color.secondary)
+                        .tracking(0.6)
+
+                    Spacer()
+
+                    // Delta badge (always shown for active entry)
+                    if let delta = activeDeltaText {
+                        let isStart = delta.text == "Başlangıç"
+                        let badgeColor = isStart ? Color.secondary : (delta.isSuccess ? Color.heftSuccess : Color.heftError)
+
+                        Text(delta.text)
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(badgeColor)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 4)
+                            .background(
+                                badgeColor.opacity(0.12),
+                                in: Capsule()
+                            )
+                    }
+
+                    // If user tapped a past point, show quick "Güncel" switch
+                    if let selected = selectedEntry, selected.id != activeEntries.last?.id {
+                        Button {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                selectedEntry = activeEntries.last
+                                rawSelectedDate = activeEntries.last?.date
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "arrow.counterclockwise")
+                                    .font(.caption2.weight(.bold))
+                                Text("Güncel")
+                                    .font(.caption2.weight(.bold))
+                            }
+                            .foregroundStyle(accent)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 4)
+                            .background(accent.opacity(0.12), in: Capsule())
+                        }
+                        .buttonStyle(.plain)
+                        .transition(.scale.combined(with: .opacity))
+                    }
+                }
+
+                if let active = activeEntry {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(String(format: "%.1f", active.weight))
+                            .font(.title.weight(.bold))
+                            .foregroundStyle(Color.primary)
+
+                        Text("kg")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.secondary)
+                    }
+
+                    Text(Self.fullDateFormatter.string(from: active.date))
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(Color.secondary)
+                }
+            }
+            .padding(.horizontal, cardPadding)
+            .padding(.top, cardPadding)
+
+            // MARK: - Scalable Time Range Picker
+            HStack(spacing: 6) {
+                ForEach(ChartTimeRange.allCases) { range in
+                    let isSelected = selectedRange == range
+                    let isAvailable = range.isAvailable(for: allSortedEntries.map(\.date))
+                    Button {
+                        guard isAvailable else { return }
+                        withAnimation(.spring(response: 0.28, dampingFraction: 0.75)) {
+                            selectedRange = range
+                            selectedEntry = nil
+                            rawSelectedDate = nil
+                        }
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    } label: {
+                        Text(range.rawValue)
+                            .font(.caption.weight(isSelected ? .bold : .semibold))
+                            .foregroundStyle(isSelected ? Color.white : (isAvailable ? Color.secondary : Color.secondary.opacity(0.35)))
+                            .frame(maxWidth: .infinity)
+                            .frame(minHeight: 34)
+                            .background {
+                                if isSelected {
+                                    Capsule()
+                                        .fill(accent)
+                                }
+                            }
+                    }
+                    .buttonStyle(.plain)
+                    .contentShape(Rectangle())
+                    .frame(minHeight: 44)
+                    .disabled(!isAvailable)
+                }
+            }
+            .padding(4)
+            .background {
+                Capsule()
+                    .fill(Color(.tertiarySystemGroupedBackground))
+            }
+            .padding(.horizontal, cardPadding)
+
+            // MARK: - Pure, Clean Chart Canvas (Proportional Height)
+            if allSortedEntries.count == 1 {
+                // MARK: - First Measurement Milestone Card
+                VStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(accent.opacity(0.12))
+                            .frame(width: 52, height: 52)
+
+                        Image(systemName: "flag.checkered")
+                            .font(.title3.weight(.bold))
+                            .foregroundStyle(accent)
+                    }
+
+                    VStack(spacing: 4) {
+                        Text("İlk Ölçümünüz Kaydedildi")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(Color.primary)
+
+                        Text("Kilo trendini ve değişim grafiğini görebilmek için en az 2 ölçüm gerekiyor. Bir sonraki tartında ilerlemen burada canlanacak.")
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                    }
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.caption.weight(.bold))
+                        Text("Bir sonraki tartını eklediğinde grafik hazır")
+                            .font(.caption2.weight(.semibold))
+                    }
+                    .foregroundStyle(accent)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(accent.opacity(0.10), in: Capsule())
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+                .padding(.horizontal, cardPadding)
+            } else if activeEntries.isEmpty {
+                VStack(spacing: 8) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.title)
+                        .foregroundStyle(Color.secondary.opacity(0.5))
+
+                    Text(allSortedEntries.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(Color.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .aspectRatio(2.0, contentMode: .fit)
+                .frame(minHeight: 130, maxHeight: 220)
+                .padding(.horizontal, cardPadding)
+            } else {
+                Chart {
+                    // Target Weight RuleMark (Item 11)
+                    if targetWeight >= yMin && targetWeight <= yMax {
+                        RuleMark(y: .value("Hedef", targetWeight))
+                            .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+                            .foregroundStyle(Color.heftTeal)
+                            .annotation(position: .trailing, alignment: .trailing) {
+                                Text("Hedef")
+                                    .font(.caption2.weight(.bold))
+                                    .foregroundStyle(Color.heftTeal)
+                            }
+                    }
+
+                    // Vertical Guideline for Selected Point (only while actively touching/scrubbing)
+                    if isScrubbing, let selected = selectedEntry ?? activeEntry {
+                        RuleMark(x: .value("Seçilen", selected.date))
+                            .lineStyle(StrokeStyle(lineWidth: 1.2, dash: [4, 4]))
+                            .foregroundStyle(Color.secondary.opacity(0.35))
+                            .zIndex(5)
+                    }
+
+                    // AreaMark subtle gradient fill (when 2 or more entries)
+                    if activeEntries.count >= 2 {
+                        ForEach(activeEntries) { entry in
+                            AreaMark(
+                                x: .value("Tarih", entry.date),
+                                yStart: .value("Taban", yMin),
+                                yEnd: .value("Kilo", entry.weight)
+                            )
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [accent.opacity(0.18), accent.opacity(0.01)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                        }
+                    }
+
+                    // Line & Data Points (LineMark when 2 or more entries)
+                    if activeEntries.count >= 2 {
+                        ForEach(activeEntries) { entry in
+                            LineMark(
+                                x: .value("Tarih", entry.date),
+                                y: .value("Kilo", entry.weight)
+                            )
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(accent)
+                            .lineStyle(StrokeStyle(lineWidth: 3.2, lineCap: .round, lineJoin: .round))
+                        }
+                    }
+
+                    // PointMarks for each entry (1 or more)
+                    ForEach(activeEntries) { entry in
+                        let isSelected = activeEntry?.id == entry.id
+
+                        PointMark(
+                            x: .value("Tarih", entry.date),
+                            y: .value("Kilo", entry.weight)
+                        )
+                        .symbol {
+                            ZStack {
+                                if isSelected {
+                                    Circle()
+                                        .fill(accent.opacity(0.20))
+                                        .frame(width: 22, height: 22)
+
+                                    Circle()
+                                        .strokeBorder(Color.white, lineWidth: 2)
+                                        .background(Circle().fill(accent))
+                                        .frame(width: 12, height: 12)
+                                        .shadow(color: accent.opacity(0.35), radius: 3, x: 0, y: 1)
+                                } else {
+                                    Circle()
+                                        .strokeBorder(Color.white, lineWidth: 1.5)
+                                        .background(Circle().fill(accent))
+                                        .frame(width: 8, height: 8)
+                                        .shadow(color: Color.black.opacity(0.10), radius: 2, x: 0, y: 1)
+                                }
+                            }
+                        }
+                    }
+                }
+                .chartXScale(domain: xDomain)
+                .chartYScale(domain: yMin...max(yMin + 1.0, yMax))
+                .chartPlotStyle { plotArea in
+                    plotArea.clipped()
+                }
+                .chartYAxis {
+                    AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { value in
+                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4, 4]))
+                            .foregroundStyle(Color.secondary.opacity(0.12))
+                        if let weight = value.as(Double.self) {
+                            AxisValueLabel(anchor: .leading) {
+                                Text(String(format: "%.1f", weight))
+                                    .font(.caption2)
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        }
+                    }
+                }
+                .chartXAxis {
+                    AxisMarks(values: xAxisDates) { value in
+                        if let date = value.as(Date.self) {
+                            let isSelected = activeEntry.map { Calendar.current.isDate(date, inSameDayAs: $0.date) } ?? false
+                            AxisValueLabel(anchor: .top) {
+                                Text(selectedRange.format(date: date, relativeTo: referenceDate))
+                                    .font(.caption2.weight(isSelected ? .bold : .semibold))
+                                    .foregroundStyle(isSelected ? accent : Color.secondary)
+                            }
+                        }
+                    }
+                }
+                .chartGesture { proxy in
+                    DragGesture(minimumDistance: 0)
+                        .updating($isScrubbing) { _, state, _ in
+                            state = true
+                        }
+                        .onChanged { value in
+                            if let date: Date = proxy.value(atX: value.location.x) {
+                                selectClosest(to: date, playHaptic: true)
+                            }
+                        }
+                }
+                .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
+                .frame(height: activeEntries.count <= 1 ? 160 : 200)
+                .padding(.horizontal, cardPadding)
+
+                if activeEntries.count == 1 {
+                    Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
+                        .font(.footnote)
+                        .foregroundStyle(Color.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 4)
+                        .padding(.bottom, 6)
+                        .padding(.horizontal, cardPadding)
+                }
+            }
+
+            // MARK: - Motivational Insight Banner
+            if allSortedEntries.count >= 2 {
+                let insight = currentInsight
+                HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: insight.icon)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(insight.color)
+                        .frame(width: insightIconSize, height: insightIconSize)
+                        .background(insight.color.opacity(0.14), in: Circle())
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(insight.title)
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(Color.primary)
+
+                        Text(insight.message)
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(Color.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .lineSpacing(2)
+                    }
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(Color(.tertiarySystemGroupedBackground))
+                )
+                .padding(.horizontal, cardPadding)
+                .padding(.bottom, cardPadding)
+            }
+        }
+        .background(Color(.secondarySystemGroupedBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .onAppear {
+            sortedEntries = entries.sorted { $0.date < $1.date }
+            if selectedEntry == nil {
+                selectedEntry = activeEntries.last
+            }
+        }
+        .onChange(of: entries) { _, newEntries in
+            let sorted = newEntries.sorted { $0.date < $1.date }
+            sortedEntries = sorted
+            if selectedEntry == nil || !sorted.contains(where: { $0.id == selectedEntry?.id }) {
+                selectedEntry = sorted.last
+            }
+        }
+        .onChange(of: rawSelectedDate) { _, newDate in
+            if let newDate {
+                selectClosest(to: newDate, playHaptic: true)
+            }
+        }
+        .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedEntry?.id)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Kilo grafiği. \(activeEntries.count) kayıt. En düşük \(String(format: "%.1f", activeEntries.map(\.weight).min() ?? 0)) kg, en yüksek \(String(format: "%.1f", activeEntries.map(\.weight).max() ?? 0)) kg.")
+    }
+
+    // MARK: - Gesture Handling
+    private func selectClosest(to date: Date, playHaptic: Bool) {
+        guard !activeEntries.isEmpty else { return }
+        let closest = activeEntries.min(by: {
+            abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date))
+        })
+        guard let closest else { return }
+
+        if selectedEntry?.id != closest.id {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                selectedEntry = closest
+                rawSelectedDate = closest.date
+            }
+            if playHaptic {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            }
+        }
+    }
+}
+
+// MARK: - Previews
+#Preview("iPhone SE (3rd gen)", traits: .fixedLayout(width: 375, height: 667)) {
+    let now = Date()
+    let sample = [
+        WeightEntry(date: now.addingTimeInterval(-86400 * 30), weight: 80.0),
+        WeightEntry(date: now.addingTimeInterval(-86400 * 15), weight: 78.5),
+        WeightEntry(date: now, weight: 77.2)
+    ]
+    WeightChartView(entries: sample, targetWeight: 72.0, goalType: .lose)
+        .padding()
+}
+
+#Preview("iPhone 16 Pro Max", traits: .fixedLayout(width: 430, height: 932)) {
+    let now = Date()
+    let sample = [
+        WeightEntry(date: now.addingTimeInterval(-86400 * 30), weight: 80.0),
+        WeightEntry(date: now.addingTimeInterval(-86400 * 15), weight: 78.5),
+        WeightEntry(date: now, weight: 77.2)
+    ]
+    WeightChartView(entries: sample, targetWeight: 72.0, goalType: .lose)
+        .padding()
+}
+
+#Preview("Tek Ölçüm (Milestone)", traits: .fixedLayout(width: 390, height: 400)) {
+    WeightChartView(
+        entries: [WeightEntry(date: Date(), weight: 59.7)],
+        targetWeight: 53.7,
+        goalType: .lose
+    )
+    .padding()
+}
