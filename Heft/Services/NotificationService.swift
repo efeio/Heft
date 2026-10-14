@@ -9,8 +9,7 @@ import Foundation
 import UserNotifications
 
 enum NotificationService {
-    static let notificationIdentifier = "weekly-weigh-in"
-    static let notificationPrefix = "heft-weigh-in"
+    static let notificationPrefix = "heft-weigh-in-"
 
     /// Requests authorization for alerts and sounds. Returns whether granted.
     static func requestPermission() async -> Bool {
@@ -23,15 +22,23 @@ enum NotificationService {
         }
     }
 
-    /// Clears all existing weigh-in notifications.
+    /// Clears all existing weigh-in notifications (both pending and delivered).
     static func removeAllWeighInNotifications() async {
         let center = UNUserNotificationCenter.current()
         let pending = await center.pendingNotificationRequests()
-        let idsToRemove = pending.map(\.identifier).filter {
-            $0 == notificationIdentifier || $0.hasPrefix(notificationPrefix) || $0.hasPrefix("weigh-in")
+        let pendingIdsToRemove = pending.map(\.identifier).filter {
+            $0.hasPrefix(notificationPrefix)
         }
-        if !idsToRemove.isEmpty {
-            center.removePendingNotificationRequests(withIdentifiers: idsToRemove)
+        if !pendingIdsToRemove.isEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: pendingIdsToRemove)
+        }
+
+        let delivered = await center.deliveredNotifications()
+        let deliveredIdsToRemove = delivered.map(\.request.identifier).filter {
+            $0.hasPrefix(notificationPrefix)
+        }
+        if !deliveredIdsToRemove.isEmpty {
+            center.removeDeliveredNotifications(withIdentifiers: deliveredIdsToRemove)
         }
     }
 
@@ -73,7 +80,7 @@ enum NotificationService {
             dateComponents.minute = minute
 
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-            let request = UNNotificationRequest(identifier: "\(notificationPrefix)-daily", content: content, trigger: trigger)
+            let request = UNNotificationRequest(identifier: "\(notificationPrefix)daily", content: content, trigger: trigger)
             try? await center.add(request)
 
         case .weekly:
@@ -94,7 +101,7 @@ enum NotificationService {
             dateComponents.minute = minute
 
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-            let request = UNNotificationRequest(identifier: "\(notificationPrefix)-weekly-\(day)", content: content, trigger: trigger)
+            let request = UNNotificationRequest(identifier: "\(notificationPrefix)weekly-\(day)", content: content, trigger: trigger)
             try? await center.add(request)
 
         case .custom:
@@ -116,7 +123,7 @@ enum NotificationService {
                 dateComponents.minute = minute
 
                 let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-                let request = UNNotificationRequest(identifier: "\(notificationPrefix)-custom-\(day)", content: content, trigger: trigger)
+                let request = UNNotificationRequest(identifier: "\(notificationPrefix)custom-\(day)", content: content, trigger: trigger)
                 try? await center.add(request)
             }
         }

@@ -683,7 +683,9 @@ struct SettingsView: View {
             return
         }
 
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [NotificationService.notificationIdentifier])
+        Task {
+            await NotificationService.removeAllWeighInNotifications()
+        }
         HealthKitService.shared.isSyncEnabled = false
 
         dismiss()
