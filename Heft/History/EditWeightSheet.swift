@@ -199,7 +199,7 @@ struct EditWeightSheet: View {
                 }
                 Button("Vazgeç", role: .cancel) {}
             }
-            .alert("Bu tarihe zaten bir kayıt var (\(String(format: "%.1f kg", conflictingEntry?.weight ?? 0.0))). Üzerine yazılsın mı?", isPresented: $showOverwriteAlert) {
+            .alert("Kayıt Güncellensin mi?", isPresented: $showOverwriteAlert) {
                 Button("Üzerine Yaz", role: .destructive) {
                     if let w = parsedWeight {
                         applyUpdate(weight: w)
@@ -207,6 +207,12 @@ struct EditWeightSheet: View {
                 }
                 Button("Vazgeç", role: .cancel) {
                     conflictingEntry = nil
+                }
+            } message: {
+                if let conflict = conflictingEntry, let weight = parsedWeight {
+                    Text(String(format: "Bu tarihe ait mevcut kayıt (%.1f kg), yeni değer olan %.1f kg ile güncellenecek.", conflict.weight, weight))
+                } else {
+                    Text("Bu tarihteki mevcut kayıt güncellenecek.")
                 }
             }
             .alert("Hata", isPresented: $showSaveError) {
@@ -242,7 +248,6 @@ struct EditWeightSheet: View {
         let oldDate = entry.date
         let oldUUID = entry.healthKitUUID
         let targetDate = effectiveHealthKitDate(for: selectedDate)
-        let dateChanged = !Calendar.current.isDate(oldDate, inSameDayAs: targetDate)
 
         entry.weight = weight
         entry.date = targetDate

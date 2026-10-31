@@ -20,6 +20,7 @@ struct AllSetStep: View {
     let weighInDays: [Int]
     let weighInDay: Int
     let weighInTime: Date
+    let wantsNotifications: Bool
     var onBack: (() -> Void)? = nil
     let onFinish: () -> Void
 
@@ -35,6 +36,7 @@ struct AllSetStep: View {
         weighInDays: [Int]? = nil,
         weighInDay: Int = 2,
         weighInTime: Date,
+        wantsNotifications: Bool = false,
         onBack: (() -> Void)? = nil,
         onFinish: @escaping () -> Void
     ) {
@@ -49,6 +51,7 @@ struct AllSetStep: View {
         self.weighInDays = weighInDays ?? [weighInDay]
         self.weighInDay = weighInDay
         self.weighInTime = weighInTime
+        self.wantsNotifications = wantsNotifications
         self.onBack = onBack
         self.onFinish = onFinish
     }
@@ -203,15 +206,21 @@ struct AllSetStep: View {
             return
         }
 
-        // 4. Schedule repeating notifications based on chosen frequency
+        // 4. Schedule repeating notifications only if opted in during ScheduleStep
+        UserDefaults.standard.set(true, forKey: "heft_notifications_pref_initialized")
+        UserDefaults.standard.set(wantsNotifications, forKey: "heft_notifications_enabled")
         Task {
-            await NotificationService.scheduleNotifications(
-                frequency: weighInFrequency,
-                days: weighInDays,
-                hour: hour,
-                minute: minute,
-                userName: name
-            )
+            if wantsNotifications {
+                await NotificationService.scheduleNotifications(
+                    frequency: weighInFrequency,
+                    days: weighInDays,
+                    hour: hour,
+                    minute: minute,
+                    userName: name
+                )
+            } else {
+                await NotificationService.removeAllWeighInNotifications()
+            }
             await MainActor.run {
                 onFinish()
             }

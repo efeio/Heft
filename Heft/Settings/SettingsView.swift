@@ -8,11 +8,13 @@
 import SwiftUI
 import SwiftData
 import UserNotifications
+import UIKit
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.heftAccent) private var accent
     @Environment(\.heftAccentFill) private var accentFill
     @Query private var profiles: [UserProfile]
@@ -20,6 +22,8 @@ struct SettingsView: View {
 
     @ScaledMetric(relativeTo: .body) private var inputFieldMinWidth: CGFloat = 50
     @ScaledMetric(relativeTo: .body) private var inputFieldMaxWidth: CGFloat = 85
+
+    @AppStorage("heft_notifications_enabled") private var notificationsEnabled = false
 
     @State private var nameText = ""
     @State private var heightText = ""
@@ -31,6 +35,9 @@ struct SettingsView: View {
     @State private var weighInDays: [Int] = [2]
     @State private var weighInDay = 2
     @State private var weighInTime = Date()
+    @State private var isRemindersOn = false
+    @State private var notificationAuthStatus: UNAuthorizationStatus = .notDetermined
+    @State private var isHandlingReminderToggle = false
     @State private var isHealthKitSyncEnabled = HealthKitService.shared.isSyncEnabled
     @State private var isImportingHealthKit = false
     @State private var importResultAlert = false
@@ -45,6 +52,7 @@ struct SettingsView: View {
     @State private var hasUnsavedChanges = false
     @State private var isLoaded = false
     @State private var saveSuccessTrigger = false
+    @State private var deleteAllTrigger = false
     @FocusState private var focusedField: Field?
 
     private enum Field {
@@ -129,6 +137,7 @@ struct SettingsView: View {
             .interactiveDismissDisabled(hasUnsavedChanges)
             .onAppear {
                 loadCurrentProfile()
+                refreshNotificationStatus()
                 #if DEBUG
                 if CommandLine.arguments.contains("--scroll-schedule") {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -138,6 +147,11 @@ struct SettingsView: View {
                     }
                 }
                 #endif
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .active {
+                    refreshNotificationStatus()
+                }
             }
         }
         .sheet(isPresented: $showPrivacyPolicy) {
@@ -167,13 +181,14 @@ struct SettingsView: View {
             Text("\(exportCount) adet tartım kaydı Apple Sağlık'a başarıyla aktarıldı.")
         }
         .sensoryFeedback(.success, trigger: saveSuccessTrigger)
+        .sensoryFeedback(.warning, trigger: deleteAllTrigger)
         .alert("Tüm Verileri Sil", isPresented: $showDeleteAllDataAlert) {
             Button("Tüm Verileri Sil", role: .destructive) {
                 deleteAllData()
             }
             Button("Vazgeç", role: .cancel) {}
         } message: {
-            Text("Tüm kilo kayıtlarınız, profil bilgileriniz ve ayarlarınız kalıcı olarak silinecek. Bu işlem geri alınamaz.")
+            Text("Tüm kilo kayıtların, profil bilgilerin, ayarların ve Heft tarafından Apple Sağlık'a yazılan tartım kayıtları kalıcı olarak silinecek. Bu işlem geri alınamaz.")
         }
     }
 
@@ -365,11 +380,18 @@ struct SettingsView: View {
             }
             .tint(accent)
             .onChange(of: isHealthKitSyncEnabled) { _, newValue in
-                HealthKitService.shared.isSyncEnabled = newValue
                 if newValue {
                     Task {
-                        _ = await HealthKitService.shared.requestAuthorization()
+                        let authorized = await HealthKitService.shared.requestAuthorization()
+                        await MainActor.run {
+                            HealthKitService.shared.isSyncEnabled = authorized
+                            if !authorized {
+                                isHealthKitSyncEnabled = false
+                            }
+                        }
                     }
+                } else {
+                    HealthKitService.shared.isSyncEnabled = false
                 }
             }
 
@@ -459,6 +481,41 @@ struct SettingsView: View {
     @ViewBuilder
     private var scheduleSection: some View {
         Section {
+            Toggle(isOn: $isRemindersOn) {
+                rowLabel("Tartım Hatırlatıcısı", systemImage: isRemindersOn ? "bell.badge.fill" : "bell")
+            }
+            .tint(accent)
+            .onChange(of: isRemindersOn) { _, newValue in
+                guard isLoaded && !isHandlingReminderToggle else { return }
+                handleReminderToggleChange(newValue)
+            }
+
+            if notificationAuthStatus == .denied {
+                Button {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(Color.heftWarning)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Bildirim Ayarlarını Aç")
+                                .font(.heftBodySemibold)
+                                .foregroundStyle(Color.primary)
+                            Text("Hatırlatıcı alabilmek için sistem ayarlarından Heft bildirimlerine izin ver.")
+                                .font(.caption)
+                                .foregroundStyle(Color.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "arrow.up.forward.app")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(accent)
+                    }
+                    .frame(minHeight: 44)
+                }
+            }
+
             Picker("Sıklık", selection: $weighInFrequency) {
                 ForEach(WeighInFrequency.allCases) { freq in
                     Text(freq.label).tag(freq)
@@ -536,6 +593,72 @@ struct SettingsView: View {
         .onChange(of: weighInTime) { markDirty() }
     }
 
+    private func refreshNotificationStatus() {
+        Task {
+            let center = UNUserNotificationCenter.current()
+            let settings = await center.notificationSettings()
+            let pending = await center.pendingNotificationRequests()
+            let hasPending = pending.contains { $0.identifier.hasPrefix(NotificationService.notificationPrefix) }
+
+            await MainActor.run {
+                isHandlingReminderToggle = true
+                notificationAuthStatus = settings.authorizationStatus
+                let isAuthorized = (settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional)
+                if isAuthorized {
+                    if !UserDefaults.standard.bool(forKey: "heft_notifications_pref_initialized") {
+                        notificationsEnabled = hasPending
+                        UserDefaults.standard.set(true, forKey: "heft_notifications_pref_initialized")
+                    }
+                    isRemindersOn = notificationsEnabled
+                } else {
+                    isRemindersOn = false
+                }
+                isHandlingReminderToggle = false
+            }
+        }
+    }
+
+    private func handleReminderToggleChange(_ enabled: Bool) {
+        if enabled {
+            Task {
+                let center = UNUserNotificationCenter.current()
+                let settings = await center.notificationSettings()
+                switch settings.authorizationStatus {
+                case .notDetermined:
+                    let granted = await NotificationService.requestPermission()
+                    let updated = await center.notificationSettings()
+                    await MainActor.run {
+                        isHandlingReminderToggle = true
+                        notificationAuthStatus = updated.authorizationStatus
+                        if granted {
+                            isRemindersOn = true
+                            markDirty()
+                        } else {
+                            isRemindersOn = false
+                        }
+                        isHandlingReminderToggle = false
+                    }
+                case .authorized, .provisional, .ephemeral:
+                    await MainActor.run {
+                        notificationAuthStatus = settings.authorizationStatus
+                        markDirty()
+                    }
+                case .denied:
+                    await MainActor.run {
+                        isHandlingReminderToggle = true
+                        notificationAuthStatus = .denied
+                        isRemindersOn = false
+                        isHandlingReminderToggle = false
+                    }
+                @unknown default:
+                    break
+                }
+            }
+        } else {
+            markDirty()
+        }
+    }
+
     @ViewBuilder
     private func settingsDayButton(day: ScheduleDayItem, fixedHorizontal: Bool) -> some View {
         let isSelected = weighInDays.contains(day.weekday)
@@ -594,7 +717,7 @@ struct SettingsView: View {
             Text("VERİ YÖNETİMİ")
                 .heftEyebrowStyle()
         } footer: {
-            Text("Tüm kilo kayıtlarınız, profil bilgileriniz ve bildirim ayarlarınız kalıcı olarak silinir. Bu işlem geri alınamaz.")
+            Text("Tüm kilo kayıtların, profil bilgilerin, bildirim ayarların ve Heft tarafından Apple Sağlık'a yazılan tartım kayıtları kalıcı olarak silinir. Bu işlem geri alınamaz.")
                 .font(.heftMeta)
                 .foregroundStyle(Color.secondary)
         }
@@ -674,14 +797,22 @@ struct SettingsView: View {
             saveSuccessTrigger.toggle()
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
 
+            let shouldSchedule = isRemindersOn
+            UserDefaults.standard.set(true, forKey: "heft_notifications_pref_initialized")
+            notificationsEnabled = shouldSchedule
+
             Task {
-                await NotificationService.scheduleNotifications(
-                    frequency: weighInFrequency,
-                    days: weighInDays,
-                    hour: hour,
-                    minute: minute,
-                    userName: trimmedName
-                )
+                if shouldSchedule {
+                    await NotificationService.scheduleNotifications(
+                        frequency: weighInFrequency,
+                        days: weighInDays,
+                        hour: hour,
+                        minute: minute,
+                        userName: trimmedName
+                    )
+                } else {
+                    await NotificationService.removeAllWeighInNotifications()
+                }
             }
             dismiss()
         } catch {
@@ -700,6 +831,11 @@ struct SettingsView: View {
                     isImportingHealthKit = false
                 }
                 return
+            }
+
+            await MainActor.run {
+                HealthKitService.shared.isSyncEnabled = true
+                isHealthKitSyncEnabled = true
             }
 
             let records = await HealthKitService.shared.fetchHistoricalWeights()
@@ -749,6 +885,8 @@ struct SettingsView: View {
     private func deleteAllData() {
         hasUnsavedChanges = false
         let allEntries = (try? modelContext.fetch(FetchDescriptor<WeightEntry>())) ?? []
+        let samplesToDelete: [(uuid: UUID?, date: Date)] = allEntries.map { (uuid: $0.healthKitUUID, date: $0.date) }
+
         for entry in allEntries {
             modelContext.delete(entry)
         }
@@ -765,10 +903,21 @@ struct SettingsView: View {
             return
         }
 
+        deleteAllTrigger.toggle()
+        notificationsEnabled = false
+        isRemindersOn = false
+        isHealthKitSyncEnabled = false
+
         Task {
             await NotificationService.removeAllWeighInNotifications()
+            if !samplesToDelete.isEmpty {
+                HealthKitService.shared.isSyncEnabled = true
+                for sample in samplesToDelete {
+                    await HealthKitService.shared.deleteWeight(uuid: sample.uuid, on: sample.date)
+                }
+            }
+            HealthKitService.shared.isSyncEnabled = false
         }
-        HealthKitService.shared.isSyncEnabled = false
 
         dismiss()
     }

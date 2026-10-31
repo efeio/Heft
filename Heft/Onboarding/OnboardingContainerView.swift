@@ -29,6 +29,7 @@ struct OnboardingContainerView: View {
         comps.minute = 30
         return Calendar.current.date(from: comps) ?? Date()
     }()
+    @State private var wantsNotifications = false
 
     var body: some View {
         ZStack {
@@ -65,6 +66,7 @@ struct OnboardingContainerView: View {
                     weighInFrequency: $weighInFrequency,
                     weighInDays: $weighInDays,
                     weighInTime: $weighInTime,
+                    wantsNotifications: $wantsNotifications,
                     onBack: goBack,
                     onNext: { goToStep(5) }
                 )
@@ -83,6 +85,7 @@ struct OnboardingContainerView: View {
                     weighInDays: weighInDays,
                     weighInDay: weighInDays.first ?? weighInDay,
                     weighInTime: weighInTime,
+                    wantsNotifications: wantsNotifications,
                     onBack: goBack,
                     onFinish: onCompleted
                 )

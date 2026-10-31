@@ -34,6 +34,7 @@ struct ScheduleStep: View {
     @Binding var weighInFrequency: WeighInFrequency
     @Binding var weighInDays: [Int]
     @Binding var weighInTime: Date
+    @Binding var wantsNotifications: Bool
 
     var onBack: (() -> Void)? = nil
     let onNext: () -> Void
@@ -43,20 +44,19 @@ struct ScheduleStep: View {
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 54
     @ScaledMetric(relativeTo: .body) private var sectionSpacing: CGFloat = 20
 
-    @State private var wantsNotifications = false
-    @State private var isRequesting = false
-
     // Designated init
     init(
         weighInFrequency: Binding<WeighInFrequency>,
         weighInDays: Binding<[Int]>,
         weighInTime: Binding<Date>,
+        wantsNotifications: Binding<Bool> = .constant(false),
         onBack: (() -> Void)? = nil,
         onNext: @escaping () -> Void
     ) {
         self._weighInFrequency = weighInFrequency
         self._weighInDays = weighInDays
         self._weighInTime = weighInTime
+        self._wantsNotifications = wantsNotifications
         self.onBack = onBack
         self.onNext = onNext
     }
@@ -65,6 +65,7 @@ struct ScheduleStep: View {
     init(
         weighInDay: Binding<Int>,
         weighInTime: Binding<Date>,
+        wantsNotifications: Binding<Bool> = .constant(false),
         onBack: (() -> Void)? = nil,
         onNext: @escaping () -> Void
     ) {
@@ -74,6 +75,7 @@ struct ScheduleStep: View {
             set: { weighInDay.wrappedValue = $0.first ?? 2 }
         )
         self._weighInTime = weighInTime
+        self._wantsNotifications = wantsNotifications
         self.onBack = onBack
         self.onNext = onNext
     }
@@ -115,20 +117,9 @@ struct ScheduleStep: View {
             currentStep: 4,
             totalSteps: 5,
             buttonTitle: "İleri",
-            isButtonEnabled: !isRequesting,
+            isButtonEnabled: true,
             onBack: onBack,
-            onButtonTap: {
-                if wantsNotifications {
-                    Task {
-                        isRequesting = true
-                        _ = await NotificationService.requestPermission()
-                        isRequesting = false
-                        onNext()
-                    }
-                } else {
-                    onNext()
-                }
-            }
+            onButtonTap: onNext
         ) {
             ScrollView {
                 VStack(alignment: .leading, spacing: sectionSpacing) {
