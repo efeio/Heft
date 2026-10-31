@@ -45,10 +45,10 @@ struct WeightInfoStep: View {
             return "Hedef kilo 20 ile 500 kg arasında olmalıdır."
         }
         if goalType == .gain && targetWeight <= currentWeight {
-            return "Kilo alma hedefi için hedef kilonuz mevcut kilonuzdan yüksek olmalıdır."
+            return "Kilo alma hedefi için hedef kilon mevcut kilondan yüksek olmalıdır."
         }
         if goalType == .lose && targetWeight >= currentWeight {
-            return "Kilo verme hedefi için hedef kilonuz mevcut kilonuzdan düşük olmalıdır."
+            return "Kilo verme hedefi için hedef kilon mevcut kilondan düşük olmalıdır."
         }
         return "Geçersiz hedef kilo."
     }
@@ -69,10 +69,10 @@ struct WeightInfoStep: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: sectionSpacing) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Kilo Hedefleriniz")
+                        Text("Kilo Hedeflerin")
                             .font(.heftScreenTitle)
 
-                        Text("Hedefinizi ve ulaşmak istediğiniz kilonuzu belirleyin.")
+                        Text("Hedefini ve ulaşmak istediğin kilonu belirle.")
                             .font(.heftBody)
                             .foregroundStyle(Color.secondary)
                     }
@@ -80,7 +80,7 @@ struct WeightInfoStep: View {
 
                     // Goal Type Selector
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("AMACINIZ NEDİR?")
+                        Text("AMACIN NEDİR?")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
 

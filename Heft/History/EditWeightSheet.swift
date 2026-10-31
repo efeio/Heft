@@ -179,7 +179,7 @@ struct EditWeightSheet: View {
                 selectedDate = entry.date
             }
             .confirmationDialog(
-                "Bu kaydı silmek istediğinizden emin misiniz?",
+                "Bu kaydı silmek istediğinden emin misin?",
                 isPresented: $showDeleteConfirmation,
                 titleVisibility: .visible
             ) {
@@ -218,7 +218,7 @@ struct EditWeightSheet: View {
             .alert("Hata", isPresented: $showSaveError) {
                 Button("Tamam", role: .cancel) {}
             } message: {
-                Text("İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.")
+                Text("İşlem sırasında bir hata oluştu. Lütfen tekrar dene.")
             }
             .sensoryFeedback(.success, trigger: saveSuccessTrigger)
         }

@@ -151,6 +151,14 @@ struct DashboardView: View {
                             )
                             .id("bmiChart")
                         }
+
+                        // Consolidated Medical Disclaimer Footer
+                        Text("Bilgilendirme amaçlıdır; tıbbi teşhis veya klinik tavsiye niteliği taşımaz.")
+                            .font(.caption2)
+                            .foregroundStyle(Color.secondary)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, 4)
                     }
                     .scenePadding(.horizontal)
                     .padding(.vertical, 16)
@@ -200,7 +208,7 @@ struct DashboardView: View {
             .alert("Hata", isPresented: $showSaveError) {
                 Button("Tamam") {}
             } message: {
-                Text("Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.")
+                Text("Kayıt sırasında bir hata oluştu. Lütfen tekrar dene.")
             }
             .onAppear {
                 #if DEBUG

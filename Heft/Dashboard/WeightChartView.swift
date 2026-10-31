@@ -125,7 +125,7 @@ struct WeightChartView: View {
                 icon: "chart.line.uptrend.xyaxis",
                 color: accent,
                 title: "Yolculuk Başlıyor",
-                message: "Düzenli kilo kaydı yaparak eğiliminizi keşfetmeye başlayın."
+                message: "Düzenli kilo kaydı yaparak eğilimini keşfetmeye başla."
             )
         }
 
@@ -138,8 +138,8 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "checkmark.seal.fill",
                     color: .heftSuccess,
-                    title: "Formunuzu Koruyorsunuz",
-                    message: "Hedef kilonuz olan \(HeftFormat.weightKg(targetWeight)) seviyesini başarıyla koruyorsunuz. İstikrarınızı sürdürün."
+                    title: "Formunu Koruyorsun",
+                    message: "Hedef kilon olan \(HeftFormat.weightKg(targetWeight)) seviyesini başarıyla koruyorsun. İstikrarını sürdür."
                 )
             } else {
                 let status = current > targetWeight ? "+\(HeftFormat.weightKg(diff)) fazla" : "−\(HeftFormat.weightKg(diff)) eksik"
@@ -147,7 +147,7 @@ struct WeightChartView: View {
                     icon: "equal.circle.fill",
                     color: accent,
                     title: "Kilo Koruma Takibi",
-                    message: "Hedef kilonuzdan (\(status)) bir fark var. Dengeli beslenme ve düzenli tartımla hedefinizi koruyun."
+                    message: "Hedef kilondan (\(status)) bir fark var. Dengeli beslenme ve düzenli tartımla hedefini koru."
                 )
             }
         } else if isGainGoal {
@@ -158,8 +158,8 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "trophy.fill",
                     color: .heftSuccess,
-                    title: "Hedefinize Ulaştınız",
-                    message: "\(HeftFormat.weightKg(targetWeight)) hedefinize başarıyla ulaştınız. Formunuzu korumak için aynı kararlılıkla devam edin."
+                    title: "Hedefine Ulaştın",
+                    message: "\(HeftFormat.weightKg(targetWeight)) hedefine başarıyla ulaştın. Formunu korumak için aynı kararlılıkla devam et."
                 )
             }
 
@@ -168,7 +168,7 @@ struct WeightChartView: View {
                     icon: "chart.line.uptrend.xyaxis",
                     color: .heftSuccess,
                     title: "En Yüksek Kilo Kaydı",
-                    message: "Heft'teki en yüksek kilonuza ulaştınız. Hedefe yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                    message: "Heft'teki en yüksek kilona ulaştın. Hedefe yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                 )
             }
 
@@ -180,13 +180,13 @@ struct WeightChartView: View {
                         icon: "arrow.up.right.circle.fill",
                         color: .heftSuccess,
                         title: "İlerleme Devam Ediyor",
-                        message: "Son tartıma göre +\(HeftFormat.weightKg(gained)) kaydettiniz. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                        message: "Son tartıma göre +\(HeftFormat.weightKg(gained)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                     )
                 } else if current < prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
-                        title: "İstikrarınızı Koruyun",
+                        title: "İstikrarını Koru",
                         message: "Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük kalori ve su dalgalanmaları doğaldır."
                     )
                 }
@@ -196,7 +196,7 @@ struct WeightChartView: View {
                 icon: "target",
                 color: accent,
                 title: "Hedefe Doğru",
-                message: "Kilo alma hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemenizi takip edin."
+                message: "Kilo alma hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni takip et."
             )
         } else {
             let minWeight = allWeights.min() ?? current
@@ -206,8 +206,8 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "trophy.fill",
                     color: .heftSuccess,
-                    title: "Hedefinize Ulaştınız",
-                    message: "\(HeftFormat.weightKg(targetWeight)) hedefinize ulaştınız. Sağlıklı kilonuzu korumak için aynı kararlılıkla devam edin."
+                    title: "Hedefine Ulaştın",
+                    message: "\(HeftFormat.weightKg(targetWeight)) hedefine ulaştın. Sağlıklı kilonu korumak için aynı kararlılıkla devam et."
                 )
             }
 
@@ -216,7 +216,7 @@ struct WeightChartView: View {
                     icon: "chart.line.downtrend.xyaxis",
                     color: .heftSuccess,
                     title: "En Düşük Kilo Kaydı",
-                    message: "Heft'teki en düşük kilonuzu kaydettiniz. Hedefinize yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                    message: "Heft'teki en düşük kilonu kaydettin. Hedefine yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                 )
             }
 
@@ -228,14 +228,14 @@ struct WeightChartView: View {
                         icon: "arrow.down.right.circle.fill",
                         color: .heftSuccess,
                         title: "İlerleme Devam Ediyor",
-                        message: "Son tartıma göre \(HeftFormat.weightKg(lost)) kaydettiniz. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                        message: "Son tartıma göre \(HeftFormat.weightKg(lost)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                     )
                 } else if current > prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
-                        title: "İstikrarınızı Koruyun",
-                        message: "Hedefinize \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır."
+                        title: "İstikrarını Koru",
+                        message: "Hedefine \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır."
                     )
                 }
             }
@@ -417,7 +417,7 @@ struct WeightChartView: View {
                     }
 
                     VStack(spacing: 4) {
-                        Text("İlk Ölçümünüz Kaydedildi")
+                        Text("İlk Ölçümün Kaydedildi")
                             .font(.subheadline.weight(.bold))
                             .foregroundStyle(Color.primary)
 
@@ -587,7 +587,7 @@ struct WeightChartView: View {
                 .accessibilityLabel("Kilo grafiği, \(selectedRange.accessibilityTitle). \(activeEntries.count) kayıt. En düşük \(HeftFormat.weightKg(activeEntries.map(\.weight).min() ?? 0)), en yüksek \(HeftFormat.weightKg(activeEntries.map(\.weight).max() ?? 0)).")
 
                 if activeEntries.count == 1 {
-                    Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
+                    Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsin.")
                         .font(.footnote)
                         .foregroundStyle(Color.secondary)
                         .frame(maxWidth: .infinity, alignment: .center)

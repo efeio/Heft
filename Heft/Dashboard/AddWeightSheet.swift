@@ -174,7 +174,7 @@ struct AddWeightSheet: View {
             .alert("Hata", isPresented: $showSaveError) {
                 Button("Tamam", role: .cancel) {}
             } message: {
-                Text("Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.")
+                Text("Kayıt sırasında bir hata oluştu. Lütfen tekrar dene.")
             }
         }
     }
@@ -311,6 +311,9 @@ struct AddWeightSheet: View {
     // MARK: - Hero Weight Section
     private var heroWeightSection: some View {
         VStack(spacing: 6) {
+            HeftScaleMotifView(weight: parsedWeight ?? existingEntries.first?.weight ?? 70.0)
+                .padding(.bottom, 2)
+
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(weightText.isEmpty ? "0,0" : weightText)
                     .font(.heftHeroStat)
@@ -421,7 +424,7 @@ struct AddWeightSheet: View {
             }
         } else {
             // Subtle guidance placeholder
-            Text("Tartıdaki kilonuzu girin")
+            Text("Tartıdaki kilonu gir")
                 .font(.caption)
                 .foregroundStyle(Color.secondary)
                 .frame(height: 24)
@@ -500,7 +503,9 @@ struct AddWeightSheet: View {
         let newWeight = max(20.0, min(350.0, current + delta))
         weightText = HeftFormat.weight(newWeight)
         hasUserTyped = true
-        UISelectionFeedbackGenerator().selectionChanged()
+        if !reduceMotion {
+            UISelectionFeedbackGenerator().selectionChanged()
+        }
     }
 
     // MARK: - Date Selection & Prefill
@@ -524,7 +529,9 @@ struct AddWeightSheet: View {
         guard normalized <= anchorDate else { return }
         selectedDate = normalized
         onDateChanged(normalized)
-        UISelectionFeedbackGenerator().selectionChanged()
+        if !reduceMotion {
+            UISelectionFeedbackGenerator().selectionChanged()
+        }
     }
 
     private func onDateChanged(_ date: Date) {
@@ -586,6 +593,65 @@ struct AddWeightSheet: View {
     }
 }
 
+// MARK: - Signature Scale Motif View
+struct HeftScaleMotifView: View {
+    let weight: Double
+
+    @Environment(\.heftAccent) private var accent
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var tenthStepOffset: Int {
+        Int((weight * 10).rounded())
+    }
+
+    var body: some View {
+        ZStack {
+            HStack(spacing: 10) {
+                ForEach(-9...9, id: \.self) { offset in
+                    let tickIndex = tenthStepOffset + offset
+                    let isMajor = tickIndex % 5 == 0
+                    let isCenter = offset == 0
+                    Capsule()
+                        .fill(isCenter ? Color.clear : Color.secondary.opacity(isMajor ? 0.42 : 0.22))
+                        .frame(width: isMajor ? 2 : 1.5, height: isMajor ? 12 : 7)
+                }
+            }
+            .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.8), value: tenthStepOffset)
+
+            // Center indicator needle echoing HeftTickPicker
+            VStack(spacing: 2) {
+                Path { path in
+                    path.move(to: CGPoint(x: 0, y: 0))
+                    path.addLine(to: CGPoint(x: 7, y: 0))
+                    path.addLine(to: CGPoint(x: 3.5, y: 5))
+                    path.closeSubpath()
+                }
+                .fill(accent)
+                .frame(width: 7, height: 5)
+
+                Capsule()
+                    .fill(accent)
+                    .frame(width: 2.5, height: 14)
+            }
+        }
+        .frame(height: 24)
+        .frame(maxWidth: 240)
+        .mask(
+            LinearGradient(
+                stops: [
+                    .init(color: .clear, location: 0.0),
+                    .init(color: .black, location: 0.18),
+                    .init(color: .black, location: 0.82),
+                    .init(color: .clear, location: 1.0)
+                ],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
+        .accessibilityHidden(true)
+    }
+}
+
 // MARK: - Weight Keypad View
 struct WeightKeypadView: View {
     let onDigit: (String) -> Void
@@ -595,6 +661,7 @@ struct WeightKeypadView: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.heftAccent) private var accent
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ScaledMetric(relativeTo: .title2) private var keyHeight: CGFloat = 48
 
     private let columns = [
@@ -611,7 +678,7 @@ struct WeightKeypadView: View {
                 }
             }
 
-            keypadButton(title: ",", accessibilityLabel: "Ondalık virgül") {
+            keypadButton(title: HeftFormat.decimalSeparator, accessibilityLabel: "Ondalık virgül") {
                 onDecimal()
             }
 
@@ -620,7 +687,9 @@ struct WeightKeypadView: View {
             }
 
             Button {
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                if !reduceMotion {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                }
                 onDelete()
             } label: {
                 ZStack {
@@ -639,7 +708,9 @@ struct WeightKeypadView: View {
 
     private func keypadButton(title: String, accessibilityLabel: String? = nil, action: @escaping () -> Void) -> some View {
         Button {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            if !reduceMotion {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            }
             action()
         } label: {
             ZStack {

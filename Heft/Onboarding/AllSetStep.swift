@@ -160,7 +160,7 @@ struct AllSetStep: View {
         .alert("Hata", isPresented: $showSaveError) {
             Button("Tamam") {}
         } message: {
-            Text("Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.")
+            Text("Kayıt sırasında bir hata oluştu. Lütfen tekrar dene.")
         }
     }
 

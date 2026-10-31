@@ -53,6 +53,44 @@ struct TargetProjectionCard: View {
         return "~\(rounded) Hafta"
     }
 
+    private var informalPrimaryDateRangeString: String {
+        if output.isMaintainGoal {
+            let diff = abs(output.currentWeight - output.targetWeight)
+            if diff <= 0.5 {
+                return "Formunu Koruyorsun"
+            }
+            return "\(output.currentWeight > output.targetWeight ? "+" : "−")\(HeftFormat.weightKg(diff)) fark"
+        }
+        return output.primaryDateRangeString
+    }
+
+    private var informalGeneralMessage: String {
+        switch output.condition {
+        case .plateau(let days, let avgW):
+            return "Kilon \(days) gündür \(HeftFormat.weight(avgW)) ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir."
+        case .weightGainAnomaly(let days, let gainKg):
+            return "Son \(days) günde +\(HeftFormat.weightKg(gainKg)) artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında."
+        case .goalReached:
+            return "Harika bir disiplin gösterdin. Şimdi mevcut formunu koruma zamanı."
+        case .maintainActive:
+            let isWithinBand = abs(output.currentWeight - output.targetWeight) <= 0.5
+            return isWithinBand
+                ? "Tebrikler! Kilonu başarıyla dengede tutuyorsun. Düzenli tartılmaya devam et."
+                : "Hedef kilonu dengede tutmak için beslenmene dikkat et ve tartımları aksatma."
+        case .normal:
+            if let catchUp = output.catchUpInfo {
+                return "Hedef tarihine yetişmek için haftalık \(HeftFormat.weightKg(catchUp.requiredWeeklyPace)) tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor."
+            }
+            if output.generalMessage.contains("hafta daha erken") || output.generalMessage.contains("gün daha erken") {
+                return output.generalMessage
+                    .replacingOccurrences(of: "temponuzla hedefinize", with: "temponla hedefine")
+                    .replacingOccurrences(of: "ulaşacaksınız", with: "ulaşacaksın")
+            }
+            let actionWord = goalType == .gain ? "kilo alarak" : "kilo vererek"
+            return "Mevcut temponla (haftada ortalama \(HeftFormat.weightKg(output.currentWeeklyPace)) \(actionWord)) bu aralıkta hedefine ulaşman öngörülüyor."
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             // MARK: - Header Row (Title & Pace Indicator)
@@ -121,7 +159,7 @@ struct TargetProjectionCard: View {
             if !output.isGoalReached && !output.isMaintainGoal {
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .firstTextBaseline) {
-                        Text(output.primaryDateRangeString)
+                        Text(informalPrimaryDateRangeString)
                             .font(.title2.weight(.bold))
                             .foregroundStyle(Color.primary)
                             .fixedSize(horizontal: true, vertical: false)
@@ -133,7 +171,7 @@ struct TargetProjectionCard: View {
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(output.primaryDateRangeString)
+                        Text(informalPrimaryDateRangeString)
                             .font(.title2.weight(.bold))
                             .foregroundStyle(Color.primary)
 
@@ -141,7 +179,7 @@ struct TargetProjectionCard: View {
                     }
                 }
             } else {
-                Text(output.primaryDateRangeString)
+                Text(informalPrimaryDateRangeString)
                     .font(.title2.weight(.bold))
                     .foregroundStyle(Color.primary)
             }
@@ -159,7 +197,7 @@ struct TargetProjectionCard: View {
                     .foregroundStyle(insightIconColor)
                     .padding(.top, 1)
 
-                Text(output.generalMessage)
+                Text(informalGeneralMessage)
                     .font(.heftMeta)
                     .foregroundStyle(Color.primary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -172,11 +210,6 @@ struct TargetProjectionCard: View {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(insightBackgroundColor)
             }
-
-            // Medical Disclaimer
-            Text("Bilgilendirme amaçlıdır; tıbbi teşhis veya klinik tavsiye niteliği taşımaz.")
-                .font(.caption2)
-                .foregroundStyle(Color.secondary)
         }
         .heftCard()
         .onAppear {

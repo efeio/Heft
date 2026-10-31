@@ -480,7 +480,7 @@ struct BMIChartView: View {
                 }())
 
                 if activeBmiPoints.count == 1 {
-                    Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
+                    Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsin.")
                         .font(.footnote)
                         .foregroundStyle(Color.secondary)
                         .frame(maxWidth: .infinity, alignment: .center)
@@ -509,11 +509,6 @@ struct BMIChartView: View {
                             .foregroundStyle(Color.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                             .lineSpacing(2)
-
-                        Text("Bilgilendirme amaçlıdır; tıbbi teşhis ve tedavi tavsiyesi değildir.")
-                            .font(.caption2)
-                            .foregroundStyle(Color.secondary)
-                            .padding(.top, 2)
                     }
                 }
                 .padding(12)

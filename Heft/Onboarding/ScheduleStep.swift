@@ -82,15 +82,15 @@ struct ScheduleStep: View {
 
     private var reminderSubtitle: String {
         guard wantsNotifications else {
-            return "Bildirimler kapalı. Dilediğinizde açabilirsiniz."
+            return "Bildirimler kapalı. Dilediğinde açabilirsin."
         }
         switch weighInFrequency {
         case .daily:
-            return "Her sabah seçtiğiniz saatte nazik bir bildirim alacaksınız."
+            return "Her sabah seçtiğin saatte nazik bir bildirim alacaksın."
         case .weekly:
-            return "Seçtiğiniz günde ve saatte nazik bir bildirim alacaksınız."
+            return "Seçtiğin günde ve saatte nazik bir bildirim alacaksın."
         case .custom:
-            return "Seçtiğiniz günlerde ve saatte nazik bir bildirim alacaksınız."
+            return "Seçtiğin günlerde ve saatte nazik bir bildirim alacaksın."
         }
     }
 
@@ -127,7 +127,7 @@ struct ScheduleStep: View {
                         Text("Tartım Rutini")
                             .font(.heftScreenTitle)
 
-                        Text("Düzenli tartılmak tutarlılık sağlar. Size en uygun tartım sıklığını ve saatini seçin.")
+                        Text("Düzenli tartılmak tutarlılık sağlar. Sana en uygun tartım sıklığını ve saatini seç.")
                             .font(.heftBody)
                             .foregroundStyle(Color.secondary)
                     }
@@ -240,7 +240,7 @@ struct ScheduleStep: View {
 
                     case .custom:
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("TARTILACAĞINIZ GÜNLER")
+                            Text("TARTILACAĞIN GÜNLER")
                                 .heftEyebrowStyle()
                                 .foregroundStyle(Color.secondary)
 

@@ -43,7 +43,7 @@ struct SummaryCardView: View {
 
     private var remainingPillText: String {
         if isGoalReached {
-            return isMaintainGoal ? "Formunuzu koruyorsunuz" : "Hedefe ulaşıldı"
+            return isMaintainGoal ? "Formunu koruyorsun" : "Hedefe ulaşıldı"
         }
         if isMaintainGoal {
             let diff = latestWeight - targetWeight

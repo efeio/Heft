@@ -68,10 +68,10 @@ enum NotificationService {
             let content = UNMutableNotificationContent()
             if !trimmedName.isEmpty {
                 content.title = "\(trimmedName), günaydın"
-                content.body = "Sabah tartınızı kaydetmeyi unutmayın. Yeni kilonuzu Heft'e ekleyin."
+                content.body = "Sabah tartını kaydetmeyi unutma. Yeni kilonu Heft'e ekle."
             } else {
                 content.title = "Günaydın"
-                content.body = "Sabah tartınızı kaydetmeyi unutmayın. Yeni kilonuzu Heft'e ekleyin."
+                content.body = "Sabah tartını kaydetmeyi unutma. Yeni kilonu Heft'e ekle."
             }
             content.sound = .default
 
@@ -88,10 +88,10 @@ enum NotificationService {
             let content = UNMutableNotificationContent()
             if !trimmedName.isEmpty {
                 content.title = "\(trimmedName), tartım zamanı"
-                content.body = "Bugün haftalık tartım gününüz. Yeni kilonuzu Heft'e kaydedin."
+                content.body = "Bugün haftalık tartım günün. Yeni kilonu Heft'e kaydet."
             } else {
                 content.title = "Tartım Zamanı"
-                content.body = "Bugün haftalık tartım gününüz. Yeni kilonuzu Heft'e kaydedin."
+                content.body = "Bugün haftalık tartım günün. Yeni kilonu Heft'e kaydet."
             }
             content.sound = .default
 
@@ -110,10 +110,10 @@ enum NotificationService {
                 let content = UNMutableNotificationContent()
                 if !trimmedName.isEmpty {
                     content.title = "\(trimmedName), tartım zamanı"
-                    content.body = "Bugün tartım gününüz. Yeni kilonuzu Heft'e kaydedin."
+                    content.body = "Bugün tartım günün. Yeni kilonu Heft'e kaydet."
                 } else {
                     content.title = "Tartım Zamanı"
-                    content.body = "Bugün tartım gününüz. Yeni kilonuzu Heft'e kaydedin."
+                    content.body = "Bugün tartım günün. Yeni kilonu Heft'e kaydet."
                 }
                 content.sound = .default
 

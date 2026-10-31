@@ -245,7 +245,7 @@ struct HistoryView: View {
                     .presentationDragIndicator(.visible)
             }
             .confirmationDialog(
-                "Bu kaydı silmek istediğinizden emin misiniz?",
+                "Bu kaydı silmek istediğinden emin misin?",
                 isPresented: Binding(
                     get: { entryToDelete != nil },
                     set: { if !$0 { entryToDelete = nil } }
@@ -265,7 +265,7 @@ struct HistoryView: View {
             .alert("Hata", isPresented: $showSaveError) {
                 Button("Tamam", role: .cancel) {}
             } message: {
-                Text("Kayıt silinirken bir hata oluştu. Lütfen tekrar deneyin.")
+                Text("Kayıt silinirken bir hata oluştu. Lütfen tekrar dene.")
             }
             .sensoryFeedback(.warning, trigger: deleteTrigger)
         }

@@ -42,7 +42,7 @@ struct WelcomeStep: View {
                         .font(.largeTitle.weight(.bold))
                         .foregroundStyle(accent)
 
-                    Text("Kişisel kilo takip asistanınız.\nHedefinize adım adım, sağlıklı biçimde ulaşın.")
+                    Text("Kişisel kilo takip asistanın.\nHedefine adım adım, sağlıklı biçimde ulaş.")
                         .font(.heftBody)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(Color.secondary)

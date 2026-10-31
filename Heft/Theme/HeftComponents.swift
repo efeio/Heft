@@ -697,7 +697,7 @@ struct HeftTickPicker: View {
 #Preview("Male Accent (Blue)") {
     VStack(spacing: 16) {
         HeftPrimaryButton(title: "Devam Et", icon: "arrow.right", isEnabled: true) {}
-        HeftTextInputCard(icon: "person.fill", title: "Adınız", placeholder: "Örn: Efe", text: .constant("Efe"))
+        HeftTextInputCard(icon: "person.fill", title: "Adın", placeholder: "Örn: Efe", text: .constant("Efe"))
         HeftGenderSelector(selectedGender: .constant(.male))
         HeftGoalSelector(selectedGoal: .constant(.lose))
     }
@@ -710,7 +710,7 @@ struct HeftTickPicker: View {
 #Preview("Female Accent (Pink)") {
     VStack(spacing: 16) {
         HeftPrimaryButton(title: "Devam Et", icon: "arrow.right", isEnabled: true) {}
-        HeftTextInputCard(icon: "person.fill", title: "Adınız", placeholder: "Örn: Ayşe", text: .constant("Ayşe"))
+        HeftTextInputCard(icon: "person.fill", title: "Adın", placeholder: "Örn: Ayşe", text: .constant("Ayşe"))
         HeftGenderSelector(selectedGender: .constant(.female))
         HeftGoalSelector(selectedGoal: .constant(.lose))
     }
@@ -723,7 +723,7 @@ struct HeftTickPicker: View {
 #Preview("iPhone SE (3rd gen)", traits: .fixedLayout(width: 375, height: 667)) {
     VStack(spacing: 16) {
         HeftPrimaryButton(title: "Devam Et", icon: "arrow.right", isEnabled: true) {}
-        HeftTextInputCard(icon: "person.fill", title: "Adınız", placeholder: "Örn: Efe", text: .constant("Efe"))
+        HeftTextInputCard(icon: "person.fill", title: "Adın", placeholder: "Örn: Efe", text: .constant("Efe"))
         HeftGenderSelector(selectedGender: .constant(.male))
         HeftGoalSelector(selectedGoal: .constant(.lose))
     }
@@ -733,7 +733,7 @@ struct HeftTickPicker: View {
 #Preview("iPhone 16 Pro Max", traits: .fixedLayout(width: 430, height: 932)) {
     VStack(spacing: 16) {
         HeftPrimaryButton(title: "Devam Et", icon: "arrow.right", isEnabled: true) {}
-        HeftTextInputCard(icon: "person.fill", title: "Adınız", placeholder: "Örn: Efe", text: .constant("Efe"))
+        HeftTextInputCard(icon: "person.fill", title: "Adın", placeholder: "Örn: Efe", text: .constant("Efe"))
         HeftGenderSelector(selectedGender: .constant(.male))
         HeftGoalSelector(selectedGoal: .constant(.lose))
     }

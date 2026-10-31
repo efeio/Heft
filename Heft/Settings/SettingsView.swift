@@ -163,20 +163,20 @@ struct SettingsView: View {
             }
             Button("Düzenlemeye Devam Et", role: .cancel) {}
         } message: {
-            Text("Yaptığınız değişiklikler kaybolacak. Çıkmak istiyor musunuz?")
+            Text("Yaptığın değişiklikler kaybolacak. Çıkmak istiyor musun?")
         }
         .alert("Hata", isPresented: $showSaveError) {
             Button("Tamam", role: .cancel) {}
         } message: {
-            Text("İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.")
+            Text("İşlem sırasında bir hata oluştu. Lütfen tekrar dene.")
         }
         .alert("İçe Aktarma Tamamlandı", isPresented: $importResultAlert) {
-            Button("Harika") {}
+            Button("Tamam") {}
         } message: {
             Text(importCount > 0 ? "\(importCount) adet yeni tartım Apple Sağlık'tan Heft'e aktarıldı." : "Apple Sağlık'ta içe aktarılacak yeni bir tartım bulunamadı.")
         }
         .alert("Dışa Aktarma Tamamlandı", isPresented: $exportResultAlert) {
-            Button("Harika") {}
+            Button("Tamam") {}
         } message: {
             Text("\(exportCount) adet tartım kaydı Apple Sağlık'a başarıyla aktarıldı.")
         }
@@ -218,7 +218,7 @@ struct SettingsView: View {
                     rowLabel("İsim", systemImage: "person.crop.circle")
                         .fixedSize(horizontal: true, vertical: false)
                     Spacer()
-                    TextField("Adınız", text: $nameText)
+                    TextField("Adın", text: $nameText)
                         .textFieldStyle(.plain)
                         .textInputAutocapitalization(.words)
                         .autocorrectionDisabled(true)
@@ -230,7 +230,7 @@ struct SettingsView: View {
 
                 VStack(alignment: .leading, spacing: 6) {
                     rowLabel("İsim", systemImage: "person.crop.circle")
-                    TextField("Adınız", text: $nameText)
+                    TextField("Adın", text: $nameText)
                         .textFieldStyle(.plain)
                         .textInputAutocapitalization(.words)
                         .autocorrectionDisabled(true)
@@ -381,7 +381,7 @@ struct SettingsView: View {
             Text("HEDEF")
                 .heftEyebrowStyle()
         } footer: {
-            Text(goalType == .gain ? "Kilo alma modunda artışlar pozitif olarak değerlendirilir." : (goalType == .maintain ? "Kilo koruma modunda mevcut kilonuzu dengede tutmanız hedeflenir." : "Kilo verme modunda azalışlar başarı olarak değerlendirilir."))
+            Text(goalType == .gain ? "Kilo alma modunda artışlar pozitif olarak değerlendirilir." : (goalType == .maintain ? "Kilo koruma modunda mevcut kilonu dengede tutman hedeflenir." : "Kilo verme modunda azalışlar başarı olarak değerlendirilir."))
                 .font(.heftMeta)
                 .foregroundStyle(Color.secondary)
         }
@@ -446,7 +446,7 @@ struct SettingsView: View {
             Text("APPLE SAĞLIK (HEALTHKIT)")
                 .heftEyebrowStyle()
         } footer: {
-            Text("Heft'e kaydedilen tartımlar Apple Sağlık'a aktarılır. Dilerseniz geçmiş Apple Sağlık tartımlarınızı Heft'e aktarabilir veya Heft kayıtlarınızı Apple Sağlık'a gönderebilirsiniz.")
+            Text("Heft'e kaydedilen tartımlar Apple Sağlık'a aktarılır. Dilersen geçmiş Apple Sağlık tartımlarını Heft'e aktarabilir veya Heft kayıtlarını Apple Sağlık'a gönderebilirsin.")
                 .font(.heftMeta)
                 .foregroundStyle(Color.secondary)
         }
@@ -488,7 +488,7 @@ struct SettingsView: View {
                 Text("Tıbbi Sorumluluk Reddi:")
                     .font(.heftMetaSemibold)
                     .foregroundStyle(Color.primary)
-                Text("Heft tıbbi bir teşhis veya tedavi cihazı değildir. Uygulamadaki BMI hesaplamaları ve hedef projeksiyonları genel bilgilendirme amaçlıdır. Herhangi bir beslenme veya kilo kontrol programına başlamadan önce mutlaka bir hekime danışınız.")
+                Text("Heft tıbbi bir teşhis veya tedavi cihazı değildir. Uygulamadaki BMI hesaplamaları ve hedef projeksiyonları genel bilgilendirme amaçlıdır. Herhangi bir beslenme veya kilo kontrol programına başlamadan önce mutlaka bir hekime danış.")
                     .font(.caption)
                     .foregroundStyle(Color.secondary)
             }
@@ -548,7 +548,7 @@ struct SettingsView: View {
                     Image(systemName: "clock.arrow.circlepath")
                         .font(.caption)
                         .foregroundStyle(accent)
-                    Text("Her sabah seçtiğiniz saatte hatırlatıcı alacaksınız.")
+                    Text("Her sabah seçtiğin saatte hatırlatıcı alacaksın.")
                         .font(.caption)
                         .foregroundStyle(Color.secondary)
                 }
@@ -572,7 +572,7 @@ struct SettingsView: View {
 
             case .custom:
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Tartılacağınız Günler")
+                    Text("Tartılacağın Günler")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(Color.secondary)
 
@@ -961,7 +961,7 @@ struct PrivacyPolicyView: View {
                                 .font(.heftCardTitle)
                         }
 
-                        Text("Heft, kişisel sağlık verilerinizin gizliliğine ve güvenliğine en üst düzeyde önem verir.")
+                        Text("Heft, kişisel sağlık verilerinin gizliliğine ve güvenliğine en üst düzeyde önem verir.")
                             .font(.heftBody)
                             .foregroundStyle(Color.secondary)
                     }
@@ -973,36 +973,36 @@ struct PrivacyPolicyView: View {
                     policyCard(
                         icon: "iphone.gen3",
                         title: "1. Tamamen Cihaz İçi (On-Device) Depolama",
-                        content: "Heft'e kaydettiğiniz tüm bilgiler (kilo geçmişi, boy, yaş, hedefler ve hatırlatıcı saatleri) yalnızca cihazınızın yerel depolama alanında SwiftData kullanılarak saklanır. Verileriniz hiçbir harici sunucuya veya bulut veritabanına aktarılmaz."
+                        content: "Heft'e kaydettiğin tüm bilgiler (kilo geçmişi, boy, yaş, hedefler ve hatırlatıcı saatleri) yalnızca cihazının yerel depolama alanında SwiftData kullanılarak saklanır. Verilerin hiçbir harici sunucuya veya bulut veritabanına aktarılmaz."
                     )
 
                     policyCard(
                         icon: "heart.fill",
                         title: "2. Apple Sağlık (HealthKit) Kullanımı",
-                        content: "Sağlık izinlerini onayladığınızda, Heft yalnızca vücut ağırlığı (Body Mass) verilerini Apple Sağlık uygulaması ile iki yönlü senkronize eder. Sağlık verileriniz reklam, pazarlama veya veri madenciliği amacıyla asla kullanılmaz ve üçüncü taraflarla paylaşılmaz."
+                        content: "Sağlık izinlerini onayladığında, Heft yalnızca vücut ağırlığı (Body Mass) verilerini Apple Sağlık uygulaması ile iki yönlü eşzamanlar. Sağlık verilerin reklam, pazarlama veya veri madenciliği amacıyla asla kullanılmaz ve üçüncü taraflarla paylaşılmaz."
                     )
 
                     policyCard(
                         icon: "nosign",
                         title: "3. Takip ve Reklam Bulunmaz",
-                        content: "Uygulama içerisinde kullanıcı davranışlarını izleyen hiçbir üçüncü taraf analiz (analytics) aracı veya reklam ağı bulunmamaktadır. Verileriniz takip edilmez (NSPrivacyTracking: false)."
+                        content: "Uygulama içerisinde kullanıcı davranışlarını izleyen hiçbir üçüncü taraf analiz (analytics) aracı veya reklam ağı bulunmamaktadır. Verilerin takip edilmez (NSPrivacyTracking: false)."
                     )
 
                     policyCard(
                         icon: "trash.fill",
                         title: "4. Verileri Silme ve Kontrol Hakkı",
-                        content: "Kullanıcılar diledikleri anda tüm kilo kayıtlarını tek tek silebilir veya Ayarlar > Veri Yönetimi üzerinden tüm profillerini ve kayıtlarını kalıcı olarak sıfırlayabilirler."
+                        content: "Dilediğin anda tüm kilo kayıtlarını tek tek silebilir veya Ayarlar > Veri Yönetimi üzerinden profilini ve tüm kayıtlarını kalıcı olarak sıfırlayabilirsin."
                     )
 
                     policyCard(
                         icon: "cross.case.fill",
                         title: "5. Tıbbi Feragatname (Medical Disclaimer)",
-                        content: "Heft tıbbi bir teşhis, klinik tedavi veya profesyonel sağlık tavsiyesi aracı değildir. BMI değerleri ve hedef tahminleri genel bilgilendirme amaçlıdır. Herhangi bir kilo verme, alma veya beslenme programına başlamadan önce mutlaka bir doktora danışınız."
+                        content: "Heft tıbbi bir teşhis, klinik tedavi veya profesyonel sağlık tavsiyesi aracı değildir. BMI değerleri ve hedef tahminleri genel bilgilendirme amaçlıdır. Herhangi bir kilo verme, alma veya beslenme programına başlamadan önce mutlaka bir doktora danış."
                     )
 
                     Link(destination: URL(string: "https://efekoc.github.io/heft/privacy")!) {
                         HStack {
-                            Text("Web Sitemizdeki Gizlilik Politikasını Ziyaret Edin")
+                            Text("Web Sitemizdeki Gizlilik Politikasını İncele")
                                 .font(.heftBodySemibold)
                             Spacer()
                             Image(systemName: "arrow.up.right")
