@@ -16,6 +16,16 @@ enum ChartTimeRange: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    var accessibilityTitle: String {
+        switch self {
+        case .oneMonth: return "1 Ay"
+        case .threeMonths: return "3 Ay"
+        case .sixMonths: return "6 Ay"
+        case .oneYear: return "1 Yıl"
+        case .all: return "Tüm Zamanlar"
+        }
+    }
+
     var days: Int? {
         switch self {
         case .oneMonth: return 30

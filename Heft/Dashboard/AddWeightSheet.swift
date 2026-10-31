@@ -12,6 +12,7 @@ import SwiftData
 struct AddWeightSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.heftAccent) private var accent
     @Environment(\.heftAccentFill) private var accentFill
     @Query(sort: \WeightEntry.date, order: .reverse) private var existingEntries: [WeightEntry]
@@ -195,65 +196,94 @@ struct AddWeightSheet: View {
 
     // MARK: - Date Segment Row
     private var dateSegmentRow: some View {
-        HStack(spacing: 8) {
-            // Bugün
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 8) {
+                dateButtons(fixedHorizontal: true)
+                Spacer()
+                customDateButton(fixedHorizontal: true)
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    dateButtons(fixedHorizontal: false)
+                }
+                customDateButton(fixedHorizontal: false)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func dateButtons(fixedHorizontal: Bool) -> some View {
+        // Bugün
+        Button {
+            selectDate(todayAnchor)
+        } label: {
+            Text("Bugün")
+                .font(.caption.weight(isTodaySelected ? .bold : .medium))
+                .foregroundStyle(isTodaySelected ? Color.white : Color.primary)
+                .fixedSize(horizontal: fixedHorizontal, vertical: false)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background {
+                    Capsule()
+                        .fill(isTodaySelected ? accentFill : Color.heftSurface)
+                }
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isTodaySelected ? .isSelected : [])
+
+        // Dün
+        if let yesterday = calendar.date(byAdding: .day, value: -1, to: todayAnchor) {
             Button {
-                selectDate(todayAnchor)
+                selectDate(yesterday)
             } label: {
-                Text("Bugün")
-                    .font(.caption.weight(isTodaySelected ? .bold : .medium))
-                    .foregroundStyle(isTodaySelected ? Color.white : Color.primary)
+                Text("Dün")
+                    .font(.caption.weight(isYesterdaySelected ? .bold : .medium))
+                    .foregroundStyle(isYesterdaySelected ? Color.white : Color.primary)
+                    .fixedSize(horizontal: fixedHorizontal, vertical: false)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
                     .background {
                         Capsule()
-                            .fill(isTodaySelected ? accentFill : Color.heftSurface)
+                            .fill(isYesterdaySelected ? accentFill : Color.heftSurface)
                     }
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-
-            // Dün
-            if let yesterday = calendar.date(byAdding: .day, value: -1, to: todayAnchor) {
-                Button {
-                    selectDate(yesterday)
-                } label: {
-                    Text("Dün")
-                        .font(.caption.weight(isYesterdaySelected ? .bold : .medium))
-                        .foregroundStyle(isYesterdaySelected ? Color.white : Color.primary)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background {
-                            Capsule()
-                                .fill(isYesterdaySelected ? accentFill : Color.heftSurface)
-                        }
-                }
-                .buttonStyle(.plain)
-            }
-
-            Spacer()
-
-            // Diğer / Özel Tarih
-            Button {
-                showCustomDatePicker = true
-            } label: {
-                HStack(spacing: 4) {
-                    Image(systemName: "calendar")
-                        .font(.caption)
-                    Text(isTodaySelected || isYesterdaySelected ? "Diğer" : Self.dayMonthFormatter.string(from: selectedDate))
-                        .font(.caption.weight(!isTodaySelected && !isYesterdaySelected ? .bold : .medium))
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 9, weight: .bold))
-                }
-                .foregroundStyle(!isTodaySelected && !isYesterdaySelected ? Color.white : accent)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background {
-                    Capsule()
-                        .fill(!isTodaySelected && !isYesterdaySelected ? accentFill : accent.opacity(0.12))
-                }
-            }
-            .buttonStyle(.plain)
+            .accessibilityAddTraits(isYesterdaySelected ? .isSelected : [])
         }
+    }
+
+    @ViewBuilder
+    private func customDateButton(fixedHorizontal: Bool) -> some View {
+        Button {
+            showCustomDatePicker = true
+        } label: {
+            HStack(spacing: 4) {
+                Image(systemName: "calendar")
+                    .font(.caption)
+                Text(isTodaySelected || isYesterdaySelected ? "Diğer" : Self.dayMonthFormatter.string(from: selectedDate))
+                    .font(.caption.weight(!isTodaySelected && !isYesterdaySelected ? .bold : .medium))
+                    .fixedSize(horizontal: fixedHorizontal, vertical: false)
+                Image(systemName: "chevron.down")
+                    .font(.caption2.weight(.bold))
+            }
+            .foregroundStyle(!isTodaySelected && !isYesterdaySelected ? Color.white : accent)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background {
+                Capsule()
+                    .fill(!isTodaySelected && !isYesterdaySelected ? accentFill : accent.opacity(0.12))
+            }
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(isTodaySelected || isYesterdaySelected ? "Diğer tarih seç" : "Seçili tarih: \(Self.dayMonthFormatter.string(from: selectedDate))")
+        .accessibilityAddTraits(!isTodaySelected && !isYesterdaySelected ? .isSelected : [])
     }
 
     // MARK: - Hero Weight Section
@@ -261,11 +291,11 @@ struct AddWeightSheet: View {
         VStack(spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(weightText.isEmpty ? "0.0" : weightText)
-                    .font(.system(size: 56, weight: .bold, design: .rounded))
+                    .font(.heftHeroStat)
                     .foregroundStyle(weightText.isEmpty ? Color.secondary : Color.primary)
                     .minimumScaleFactor(0.7)
                     .lineLimit(1)
-                    .contentTransition(.numericText())
+                    .contentTransition(reduceMotion ? .identity : .numericText())
 
                 Text("kg")
                     .font(.title2.weight(.bold))
@@ -273,6 +303,8 @@ struct AddWeightSheet: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 2)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Girilen kilo: \(weightText.isEmpty ? "0,0" : weightText) kilogram")
 
             // Micro Steppers (-0.1 / +0.1)
             HStack(spacing: 16) {
@@ -285,6 +317,7 @@ struct AddWeightSheet: View {
                         Text("0.1")
                             .font(.subheadline.weight(.semibold))
                     }
+                    .fixedSize(horizontal: true, vertical: false)
                     .foregroundStyle(Color.primary)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
@@ -292,8 +325,11 @@ struct AddWeightSheet: View {
                         Capsule()
                             .fill(Color(.secondarySystemGroupedBackground))
                     }
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(KeypadPressStyle())
+                .accessibilityLabel("0,1 kilogram azalt")
 
                 Button {
                     stepWeight(by: 0.1)
@@ -304,6 +340,7 @@ struct AddWeightSheet: View {
                         Text("0.1")
                             .font(.subheadline.weight(.semibold))
                     }
+                    .fixedSize(horizontal: true, vertical: false)
                     .foregroundStyle(Color.primary)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
@@ -311,8 +348,11 @@ struct AddWeightSheet: View {
                         Capsule()
                             .fill(Color(.secondarySystemGroupedBackground))
                     }
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(KeypadPressStyle())
+                .accessibilityLabel("0,1 kilogram artır")
             }
         }
     }
@@ -338,7 +378,7 @@ struct AddWeightSheet: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 5)
                 .background {
-                    Capsule()
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
                         .fill(isPositiveDirection ? Color.heftSuccess.opacity(0.12) : (isGain || isLoss ? Color.heftWarning.opacity(0.12) : Color.heftSurfaceSub))
                 }
             } else if let target = profile?.targetWeight {
@@ -353,7 +393,7 @@ struct AddWeightSheet: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 5)
                 .background {
-                    Capsule()
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
                         .fill(accent.opacity(0.12))
                 }
             }
@@ -563,6 +603,7 @@ struct WeightKeypadView: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.heftAccent) private var accent
+    @ScaledMetric(relativeTo: .title2) private var keyHeight: CGFloat = 48
 
     private let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -578,7 +619,7 @@ struct WeightKeypadView: View {
                 }
             }
 
-            keypadButton(title: ",") {
+            keypadButton(title: ",", accessibilityLabel: "Ondalık virgül") {
                 onDecimal()
             }
 
@@ -593,17 +634,18 @@ struct WeightKeypadView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .fill(Color(.secondarySystemGroupedBackground))
-                        .frame(height: 48)
+                        .frame(minHeight: max(44, keyHeight))
                     Image(systemName: "delete.left.fill")
                         .font(.headline.weight(.medium))
                         .foregroundStyle(Color.secondary)
                 }
             }
             .buttonStyle(KeypadPressStyle())
+            .accessibilityLabel("Sil")
         }
     }
 
-    private func keypadButton(title: String, action: @escaping () -> Void) -> some View {
+    private func keypadButton(title: String, accessibilityLabel: String? = nil, action: @escaping () -> Void) -> some View {
         Button {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             action()
@@ -611,22 +653,25 @@ struct WeightKeypadView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(Color(.secondarySystemGroupedBackground))
-                    .frame(height: 48)
+                    .frame(minHeight: max(44, keyHeight))
                 Text(title)
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(Color.primary)
             }
         }
         .buttonStyle(KeypadPressStyle())
+        .accessibilityLabel(accessibilityLabel ?? title)
     }
 }
 
 struct KeypadPressStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.94 : 1.0)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.94 : 1.0)
             .opacity(configuration.isPressed ? 0.75 : 1.0)
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 

@@ -62,7 +62,6 @@ struct BodyInfoStep: View {
                         Text("İSİM")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
                         HeftTextInputCard(
                             icon: "person.fill",
@@ -81,7 +80,6 @@ struct BodyInfoStep: View {
                         Text("CİNSİYET")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
                         HeftGenderSelector(selectedGender: $gender)
                     }
@@ -91,9 +89,15 @@ struct BodyInfoStep: View {
                         Text("BOY")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
-                        HeftTickPicker(value: $height, range: 120...250, step: 1, unit: "cm", formatStyle: .integer)
+                        HeftTickPicker(
+                            value: $height,
+                            range: 120...250,
+                            step: 1,
+                            unit: "cm",
+                            formatStyle: .integer,
+                            accessibilityTitle: "Boy"
+                        )
                     }
 
                     // Age Input
@@ -101,9 +105,15 @@ struct BodyInfoStep: View {
                         Text("YAŞ")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
-                        HeftTickPicker(value: $age, range: 13...100, step: 1, unit: "yıl", formatStyle: .integer)
+                        HeftTickPicker(
+                            value: $age,
+                            range: 13...100,
+                            step: 1,
+                            unit: "yıl",
+                            formatStyle: .integer,
+                            accessibilityTitle: "Yaş"
+                        )
                     }
                 }
                 .padding(.bottom, 24)

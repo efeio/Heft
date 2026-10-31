@@ -12,7 +12,6 @@ struct WelcomeStep: View {
 
     @Environment(\.heftAccent) private var accent
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 110
-    @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 52
 
     var body: some View {
         OnboardingStepContainer(
@@ -32,7 +31,8 @@ struct WelcomeStep: View {
                         .frame(width: circleSize, height: circleSize)
 
                     Image(systemName: "scalemass.fill")
-                        .font(.system(size: iconSize))
+                        .font(.largeTitle.weight(.semibold))
+                        .imageScale(.large)
                         .foregroundStyle(accent)
                 }
                 .accessibilityHidden(true)

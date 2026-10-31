@@ -54,7 +54,6 @@ struct AllSetStep: View {
     }
 
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 72
-    @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 44
     @ScaledMetric(relativeTo: .body) private var cardPadding: CGFloat = 18
 
     private static let timeFormatter: DateFormatter = {
@@ -113,10 +112,11 @@ struct AllSetStep: View {
                             .frame(width: circleSize, height: circleSize)
 
                         Image(systemName: "checkmark")
-                            .font(.system(size: 32, weight: .bold))
+                            .font(.title.weight(.bold))
                             .foregroundStyle(Color.heftTeal)
                     }
                     .padding(.top, 16)
+                    .accessibilityHidden(true)
 
                     // Title & Subtitle
                     VStack(spacing: 8) {
@@ -229,13 +229,12 @@ private struct SummaryRow: View {
                 Text(label)
                     .heftEyebrowStyle()
                     .foregroundStyle(Color.secondary)
-                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
                 Spacer(minLength: 8)
                 Text(value)
                     .font(.heftListItem)
                     .foregroundStyle(Color.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: true, vertical: false)
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -247,6 +246,7 @@ private struct SummaryRow: View {
                     .foregroundStyle(Color.primary)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 }
 

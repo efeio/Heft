@@ -253,23 +253,17 @@ struct ScheduleStep: View {
                                 .heftEyebrowStyle()
                                 .foregroundStyle(Color.secondary)
 
-                            HStack(spacing: 6) {
-                                ForEach(WeighInSchedule.days) { day in
-                                    let isSelected = weighInDays.contains(day.weekday)
-                                    Button {
-                                        toggleDay(day.weekday)
-                                    } label: {
-                                        Text(day.shortLabel)
-                                            .font(.caption.weight(isSelected ? .bold : .medium))
-                                            .foregroundStyle(isSelected ? Color.white : Color.primary)
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 44)
-                                            .background {
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .fill(isSelected ? accentFill : Color.heftSurface)
-                                            }
+                            ViewThatFits(in: .horizontal) {
+                                HStack(spacing: 6) {
+                                    ForEach(WeighInSchedule.days) { day in
+                                        dayButton(day: day, fixedHorizontal: true)
                                     }
-                                    .buttonStyle(.plain)
+                                }
+
+                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 64), spacing: 6)], spacing: 6) {
+                                    ForEach(WeighInSchedule.days) { day in
+                                        dayButton(day: day, fixedHorizontal: false)
+                                    }
                                 }
                             }
                         }
@@ -280,7 +274,6 @@ struct ScheduleStep: View {
                         Text("TARTIM SAATİ")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
                         DatePicker("", selection: $weighInTime, displayedComponents: .hourAndMinute)
                             .datePickerStyle(.wheel)
@@ -297,6 +290,29 @@ struct ScheduleStep: View {
                 .padding(.bottom, 16)
             }
         }
+    }
+
+    @ViewBuilder
+    private func dayButton(day: ScheduleDayItem, fixedHorizontal: Bool) -> some View {
+        let isSelected = weighInDays.contains(day.weekday)
+        Button {
+            toggleDay(day.weekday)
+        } label: {
+            Text(day.shortLabel)
+                .font(.caption.weight(isSelected ? .bold : .medium))
+                .foregroundStyle(isSelected ? Color.white : Color.primary)
+                .fixedSize(horizontal: fixedHorizontal, vertical: false)
+                .padding(.horizontal, 6)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 44)
+                .background {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(isSelected ? accentFill : Color.heftSurface)
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(day.label)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

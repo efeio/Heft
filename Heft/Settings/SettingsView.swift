@@ -184,54 +184,104 @@ struct SettingsView: View {
     }
 
     @ViewBuilder
+    private func rowLabel(_ title: String, systemImage: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: systemImage)
+                .foregroundStyle(accent)
+            Text(title)
+                .font(.heftBody)
+                .foregroundStyle(Color.primary)
+        }
+    }
+
+    @ViewBuilder
     private var profileSection: some View {
         Section {
             // Name
-            HStack {
-                Label("İsim", systemImage: "person.crop.circle")
-                    .font(.heftBody)
-                Spacer()
-                TextField("Adınız", text: $nameText)
-                    .textFieldStyle(.plain)
-                    .textInputAutocapitalization(.words)
-                    .autocorrectionDisabled(true)
-                    .multilineTextAlignment(.trailing)
-                    .font(.heftListItem)
-                    .frame(minWidth: 100, maxWidth: 180)
-                    .focused($focusedField, equals: .name)
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    rowLabel("İsim", systemImage: "person.crop.circle")
+                        .fixedSize(horizontal: true, vertical: false)
+                    Spacer()
+                    TextField("Adınız", text: $nameText)
+                        .textFieldStyle(.plain)
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled(true)
+                        .multilineTextAlignment(.trailing)
+                        .font(.heftListItem)
+                        .frame(minWidth: 100, maxWidth: 180)
+                        .focused($focusedField, equals: .name)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    rowLabel("İsim", systemImage: "person.crop.circle")
+                    TextField("Adınız", text: $nameText)
+                        .textFieldStyle(.plain)
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled(true)
+                        .font(.heftListItem)
+                        .focused($focusedField, equals: .name)
+                }
             }
 
             // Height
-            HStack {
-                Label("Boy", systemImage: "ruler")
-                    .font(.heftBody)
-                Spacer()
-                TextField("175", text: $heightText)
-                    .textFieldStyle(.plain)
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
-                    .font(.heftListItem)
-                    .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
-                    .padding(.vertical, 4)
-                    .focused($focusedField, equals: .height)
-                Text("cm")
-                    .font(.heftMeta)
-                    .foregroundStyle(Color.secondary)
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    rowLabel("Boy", systemImage: "ruler")
+                        .fixedSize(horizontal: true, vertical: false)
+                    Spacer()
+                    TextField("175", text: $heightText)
+                        .textFieldStyle(.plain)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .font(.heftListItem)
+                        .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
+                        .padding(.vertical, 4)
+                        .focused($focusedField, equals: .height)
+                    Text("cm")
+                        .font(.heftMeta)
+                        .foregroundStyle(Color.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    rowLabel("Boy", systemImage: "ruler")
+                    HStack {
+                        TextField("175", text: $heightText)
+                            .textFieldStyle(.plain)
+                            .keyboardType(.numberPad)
+                            .font(.heftListItem)
+                            .focused($focusedField, equals: .height)
+                        Text("cm")
+                            .font(.heftMeta)
+                            .foregroundStyle(Color.secondary)
+                    }
+                }
             }
 
             // Age
-            HStack {
-                Label("Yaş", systemImage: "calendar")
-                    .font(.heftBody)
-                Spacer()
-                TextField("28", text: $ageText)
-                    .textFieldStyle(.plain)
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
-                    .font(.heftListItem)
-                    .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
-                    .padding(.vertical, 4)
-                    .focused($focusedField, equals: .age)
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    rowLabel("Yaş", systemImage: "calendar")
+                        .fixedSize(horizontal: true, vertical: false)
+                    Spacer()
+                    TextField("28", text: $ageText)
+                        .textFieldStyle(.plain)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.trailing)
+                        .font(.heftListItem)
+                        .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
+                        .padding(.vertical, 4)
+                        .focused($focusedField, equals: .age)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    rowLabel("Yaş", systemImage: "calendar")
+                    TextField("28", text: $ageText)
+                        .textFieldStyle(.plain)
+                        .keyboardType(.numberPad)
+                        .font(.heftListItem)
+                        .focused($focusedField, equals: .age)
+                }
             }
 
             // Gender
@@ -239,8 +289,7 @@ struct SettingsView: View {
                 Label("Erkek", systemImage: "figure.stand").tag(Gender.male)
                 Label("Kadın", systemImage: "figure.stand.dress").tag(Gender.female)
             } label: {
-                Label("Cinsiyet", systemImage: "person.fill")
-                    .font(.heftBody)
+                rowLabel("Cinsiyet", systemImage: "person.fill")
             }
         } header: {
             Text("PROFİL")
@@ -260,25 +309,40 @@ struct SettingsView: View {
                 Label("Kilo Korumak", systemImage: "equal.circle.fill").tag(GoalType.maintain)
                 Label("Kilo Almak", systemImage: "figure.strengthtraining.traditional").tag(GoalType.gain)
             } label: {
-                Label("Hedef Türü", systemImage: "flag.fill")
-                    .font(.heftBody)
+                rowLabel("Hedef Türü", systemImage: "flag.fill")
             }
 
-            HStack {
-                Label("Hedef Kilo", systemImage: "target")
-                    .font(.heftBody)
-                Spacer()
-                TextField("70.0", text: $targetWeightText)
-                    .textFieldStyle(.plain)
-                    .keyboardType(.decimalPad)
-                    .multilineTextAlignment(.trailing)
-                    .font(.heftListItem)
-                    .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
-                    .padding(.vertical, 4)
-                    .focused($focusedField, equals: .targetWeight)
-                Text("kg")
-                    .font(.heftMeta)
-                    .foregroundStyle(Color.secondary)
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    rowLabel("Hedef Kilo", systemImage: "target")
+                        .fixedSize(horizontal: true, vertical: false)
+                    Spacer()
+                    TextField("70.0", text: $targetWeightText)
+                        .textFieldStyle(.plain)
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                        .font(.heftListItem)
+                        .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
+                        .padding(.vertical, 4)
+                        .focused($focusedField, equals: .targetWeight)
+                    Text("kg")
+                        .font(.heftMeta)
+                        .foregroundStyle(Color.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    rowLabel("Hedef Kilo", systemImage: "target")
+                    HStack {
+                        TextField("70.0", text: $targetWeightText)
+                            .textFieldStyle(.plain)
+                            .keyboardType(.decimalPad)
+                            .font(.heftListItem)
+                            .focused($focusedField, equals: .targetWeight)
+                        Text("kg")
+                            .font(.heftMeta)
+                            .foregroundStyle(Color.secondary)
+                    }
+                }
             }
         } header: {
             Text("HEDEF")
@@ -437,23 +501,17 @@ struct SettingsView: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(Color.secondary)
 
-                    HStack(spacing: 6) {
-                        ForEach(WeighInSchedule.days) { day in
-                            let isSelected = weighInDays.contains(day.weekday)
-                            Button {
-                                toggleSettingsDay(day.weekday)
-                            } label: {
-                                Text(day.shortLabel)
-                                    .font(.caption.weight(isSelected ? .bold : .medium))
-                                    .foregroundStyle(isSelected ? Color.white : Color.primary)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 36)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(isSelected ? accentFill : Color.heftSurfaceSub)
-                                    }
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: 6) {
+                            ForEach(WeighInSchedule.days) { day in
+                                settingsDayButton(day: day, fixedHorizontal: true)
                             }
-                            .buttonStyle(.plain)
+                        }
+
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 64), spacing: 6)], spacing: 6) {
+                            ForEach(WeighInSchedule.days) { day in
+                                settingsDayButton(day: day, fixedHorizontal: false)
+                            }
                         }
                     }
                 }
@@ -476,6 +534,29 @@ struct SettingsView: View {
         .onChange(of: weighInDays) { markDirty() }
         .onChange(of: weighInDay) { markDirty() }
         .onChange(of: weighInTime) { markDirty() }
+    }
+
+    @ViewBuilder
+    private func settingsDayButton(day: ScheduleDayItem, fixedHorizontal: Bool) -> some View {
+        let isSelected = weighInDays.contains(day.weekday)
+        Button {
+            toggleSettingsDay(day.weekday)
+        } label: {
+            Text(day.shortLabel)
+                .font(.caption.weight(isSelected ? .bold : .medium))
+                .foregroundStyle(isSelected ? Color.white : Color.primary)
+                .fixedSize(horizontal: fixedHorizontal, vertical: false)
+                .padding(.horizontal, 6)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 44)
+                .background {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(isSelected ? accentFill : Color.heftSurfaceSub)
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(day.label)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private func toggleSettingsDay(_ day: Int) {

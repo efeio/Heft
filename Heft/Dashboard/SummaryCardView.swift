@@ -127,35 +127,33 @@ struct SummaryCardView: View {
 
     // MARK: - Pill Views
     @ViewBuilder
-    private var remainingPill: some View {
+    private func remainingPill(fixedHorizontal: Bool) -> some View {
         Text(remainingPillText)
             .font(.heftMetaSemibold)
             .foregroundStyle(remainingPillColor)
-            .lineLimit(1)
-            .minimumScaleFactor(0.85)
+            .fixedSize(horizontal: fixedHorizontal, vertical: false)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .background {
-                Capsule()
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(remainingPillColor.opacity(0.15))
             }
     }
 
     @ViewBuilder
-    private var weeklyPill: some View {
+    private func weeklyPill(fixedHorizontal: Bool) -> some View {
         HStack(spacing: 4) {
             Image(systemName: weeklyTrendIcon)
                 .font(.footnote.weight(.bold))
             Text(weeklyChangeText)
                 .font(.heftMetaSemibold)
-                .lineLimit(1)
-                .minimumScaleFactor(0.85)
+                .fixedSize(horizontal: fixedHorizontal, vertical: false)
         }
         .foregroundStyle(weeklyTrendColor)
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
         .background {
-            Capsule()
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(weeklyTrendColor.opacity(0.10))
         }
     }
@@ -163,41 +161,81 @@ struct SummaryCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             // Top Row
-            HStack(alignment: .lastTextBaseline) {
-                // Left: Current Weight
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("MEVCUT")
-                        .heftEyebrowStyle()
-                        .foregroundStyle(Color.secondary)
-
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(String(format: "%.1f", latestWeight))
-                            .font(.heftHeroStat)
-                            .foregroundStyle(Color.primary)
-                            .minimumScaleFactor(0.7)
-
-                        Text("kg")
-                            .font(.heftMetaSemibold)
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .lastTextBaseline) {
+                    // Left: Current Weight
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("MEVCUT")
+                            .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
+                            .fixedSize(horizontal: true, vertical: false)
+
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text(String(format: "%.1f", latestWeight))
+                                .font(.heftHeroStat)
+                                .foregroundStyle(Color.primary)
+
+                            Text("kg")
+                                .font(.heftMetaSemibold)
+                                .foregroundStyle(Color.secondary)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+                    }
+
+                    Spacer(minLength: 12)
+
+                    // Right: Target Weight
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("HEDEF")
+                            .heftEyebrowStyle()
+                            .foregroundStyle(Color.secondary)
+                            .fixedSize(horizontal: true, vertical: false)
+
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text(String(format: "%.1f", targetWeight))
+                                .font(.heftCardTitle)
+                                .foregroundStyle(Color.primary)
+
+                            Text("kg")
+                                .font(.heftMetaSemibold)
+                                .foregroundStyle(Color.secondary)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
                     }
                 }
 
-                Spacer()
-
-                // Right: Target Weight
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("HEDEF")
-                        .heftEyebrowStyle()
-                        .foregroundStyle(Color.secondary)
-
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(String(format: "%.1f", targetWeight))
-                            .font(.heftCardTitle)
-                            .foregroundStyle(Color.primary)
-
-                        Text("kg")
-                            .font(.heftMetaSemibold)
+                VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("MEVCUT")
+                            .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
+
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text(String(format: "%.1f", latestWeight))
+                                .font(.heftHeroStat)
+                                .foregroundStyle(Color.primary)
+                                .minimumScaleFactor(0.8)
+
+                            Text("kg")
+                                .font(.heftMetaSemibold)
+                                .foregroundStyle(Color.secondary)
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("HEDEF")
+                            .heftEyebrowStyle()
+                            .foregroundStyle(Color.secondary)
+
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text(String(format: "%.1f", targetWeight))
+                                .font(.heftCardTitle)
+                                .foregroundStyle(Color.primary)
+
+                            Text("kg")
+                                .font(.heftMetaSemibold)
+                                .foregroundStyle(Color.secondary)
+                        }
                     }
                 }
             }
@@ -210,15 +248,15 @@ struct SummaryCardView: View {
             ViewThatFits(in: .horizontal) {
                 // Priority 1: Side by side if it fits
                 HStack(spacing: 8) {
-                    remainingPill
-                    weeklyPill
+                    remainingPill(fixedHorizontal: true)
+                    weeklyPill(fixedHorizontal: true)
                     Spacer()
                 }
 
                 // Priority 2: Stack vertically on narrow screens (iPhone SE / large Dynamic Type)
                 VStack(alignment: .leading, spacing: 6) {
-                    remainingPill
-                    weeklyPill
+                    remainingPill(fixedHorizontal: false)
+                    weeklyPill(fixedHorizontal: false)
                 }
             }
         }

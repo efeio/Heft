@@ -70,17 +70,18 @@ struct HeftPrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.heftButton)
+            .multilineTextAlignment(.center)
             .foregroundStyle(Color.white)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, verticalPadding)
-            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, min(verticalPadding, 18))
+            .padding(.horizontal, min(horizontalPadding, 24))
             .background {
-                Capsule()
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
                     .fill(configuration.isPressed ? accentPressed : accentFill)
             }
             .scaleEffect(configuration.isPressed && !reduceMotion ? 0.98 : 1.0)
             .opacity(isEnabled ? 1.0 : 0.4)
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 
@@ -108,6 +109,7 @@ struct HeftPrimaryButton: View {
 // MARK: - Onboarding Step Container
 struct OnboardingStepContainer<Content: View>: View {
     @Environment(\.heftAccent) private var accent
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ScaledMetric(relativeTo: .body) private var topPadding: CGFloat = 12
     @ScaledMetric(relativeTo: .body) private var bottomPadding: CGFloat = 12
     @ScaledMetric(relativeTo: .body) private var barHeight: CGFloat = 6
@@ -131,6 +133,8 @@ struct OnboardingStepContainer<Content: View>: View {
                             .foregroundStyle(Color.primary)
                             .frame(width: 36, height: 36)
                             .background(Circle().fill(Color.heftSurface))
+                            .frame(minWidth: 44, minHeight: 44)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Geri")
@@ -145,17 +149,19 @@ struct OnboardingStepContainer<Content: View>: View {
                         Capsule()
                             .fill(accent)
                             .frame(width: proxy.size.width * min(max(progress, 0.0), 1.0))
-                            .animation(.easeOut(duration: 0.3), value: currentStep)
+                            .animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: currentStep)
                     }
                 }
                 .frame(height: barHeight)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Adım \(currentStep) / \(totalSteps)")
 
                 if onBack != nil && currentStep > 1 {
                     Spacer()
-                        .frame(width: 36, height: 36)
+                        .frame(width: 44, height: 44)
                 }
             }
-            .frame(height: 36)
+            .frame(minHeight: 44)
             .padding(.top, topPadding)
             .padding(.bottom, bottomPadding)
 
@@ -171,7 +177,8 @@ struct OnboardingStepContainer<Content: View>: View {
                 isEnabled: isButtonEnabled,
                 action: onButtonTap
             )
-            .padding(.bottom, bottomPadding)
+            .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+            .padding(.bottom, min(bottomPadding, 16))
         }
         .padding(.horizontal)
         .background(Color.heftCanvas)
@@ -217,13 +224,11 @@ struct HeftTextInputCard: View {
                         Text(title)
                             .font(.heftBodySemibold)
                             .foregroundStyle(Color.primary)
-                            .lineLimit(1)
 
                         if let subtitle {
                             Text(subtitle)
                                 .font(.caption)
                                 .foregroundStyle(Color.secondary)
-                                .lineLimit(1)
                         }
                     }
 
@@ -251,8 +256,11 @@ struct HeftTextInputCard: View {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.footnote)
                                 .foregroundStyle(Color.secondary)
+                                .frame(minWidth: 44, minHeight: 44)
+                                .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("Metni temizle")
                     }
                 }
                 .padding(.horizontal, 12)
@@ -297,34 +305,37 @@ struct HeftGenderSelector: View {
     @Binding var selectedGender: Gender
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var contrast
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.heftAccent) private var accent
     @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var minHeight: CGFloat = 50
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 30
 
     var body: some View {
-        HStack(spacing: 10) {
-            genderButton(
-                title: "Erkek",
-                icon: "figure.stand",
-                tag: .male
-            )
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 10) {
+                genderButton(title: "Erkek", icon: "figure.stand", tag: .male, fixedHorizontal: true)
+                genderButton(title: "Kadın", icon: "figure.stand.dress", tag: .female, fixedHorizontal: true)
+            }
 
-            genderButton(
-                title: "Kadın",
-                icon: "figure.stand.dress",
-                tag: .female
-            )
+            VStack(spacing: 8) {
+                genderButton(title: "Erkek", icon: "figure.stand", tag: .male, fixedHorizontal: false)
+                genderButton(title: "Kadın", icon: "figure.stand.dress", tag: .female, fixedHorizontal: false)
+            }
         }
     }
 
     @ViewBuilder
-    private func genderButton(title: String, icon: String, tag: Gender) -> some View {
+    private func genderButton(title: String, icon: String, tag: Gender, fixedHorizontal: Bool) -> some View {
         let isSelected = selectedGender == tag
 
         Button {
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+            if reduceMotion {
                 selectedGender = tag
+            } else {
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+                    selectedGender = tag
+                }
             }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
@@ -342,12 +353,12 @@ struct HeftGenderSelector: View {
                 Text(title)
                     .font(.heftBodySemibold)
                     .foregroundStyle(isSelected ? accent : Color.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.85)
+                    .fixedSize(horizontal: fixedHorizontal, vertical: false)
             }
             .frame(maxWidth: .infinity)
             .frame(minHeight: minHeight)
             .padding(.horizontal, 8)
+            .padding(.vertical, 6)
             .background {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(isSelected ? (colorScheme == .dark ? accent.opacity(0.15) : accent.opacity(0.08)) : Color.heftSurface)
@@ -362,6 +373,7 @@ struct HeftGenderSelector: View {
             .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
@@ -370,40 +382,39 @@ struct HeftGoalSelector: View {
     @Binding var selectedGoal: GoalType
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var contrast
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.heftAccent) private var accent
     @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var minHeight: CGFloat = 50
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 30
 
     var body: some View {
-        HStack(spacing: 8) {
-            goalButton(
-                title: "Kilo Vermek",
-                icon: "flame.fill",
-                tag: .lose
-            )
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 8) {
+                goalButton(title: "Kilo Vermek", icon: "flame.fill", tag: .lose, fixedHorizontal: true)
+                goalButton(title: "Korumak", icon: "equal.circle.fill", tag: .maintain, fixedHorizontal: true)
+                goalButton(title: "Kilo Almak", icon: "figure.strengthtraining.traditional", tag: .gain, fixedHorizontal: true)
+            }
 
-            goalButton(
-                title: "Korumak",
-                icon: "equal.circle.fill",
-                tag: .maintain
-            )
-
-            goalButton(
-                title: "Kilo Almak",
-                icon: "figure.strengthtraining.traditional",
-                tag: .gain
-            )
+            VStack(spacing: 8) {
+                goalButton(title: "Kilo Vermek", icon: "flame.fill", tag: .lose, fixedHorizontal: false)
+                goalButton(title: "Korumak", icon: "equal.circle.fill", tag: .maintain, fixedHorizontal: false)
+                goalButton(title: "Kilo Almak", icon: "figure.strengthtraining.traditional", tag: .gain, fixedHorizontal: false)
+            }
         }
     }
 
     @ViewBuilder
-    private func goalButton(title: String, icon: String, tag: GoalType) -> some View {
+    private func goalButton(title: String, icon: String, tag: GoalType, fixedHorizontal: Bool) -> some View {
         let isSelected = selectedGoal == tag
 
         Button {
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+            if reduceMotion {
                 selectedGoal = tag
+            } else {
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+                    selectedGoal = tag
+                }
             }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
@@ -421,12 +432,12 @@ struct HeftGoalSelector: View {
                 Text(title)
                     .font(.heftBodySemibold)
                     .foregroundStyle(isSelected ? accent : Color.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.85)
+                    .fixedSize(horizontal: fixedHorizontal, vertical: false)
             }
             .frame(maxWidth: .infinity)
             .frame(minHeight: minHeight)
             .padding(.horizontal, 8)
+            .padding(.vertical, 6)
             .background {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(isSelected ? (colorScheme == .dark ? accent.opacity(0.15) : accent.opacity(0.08)) : Color.heftSurface)
@@ -441,6 +452,7 @@ struct HeftGoalSelector: View {
             .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
@@ -451,6 +463,7 @@ struct HeftTickPicker: View {
     let step: Double
     let unit: String
     let formatStyle: TickPickerFormatStyle
+    var accessibilityTitle: String? = nil
 
     enum TickPickerFormatStyle {
         case integer    // "28" for age, "178" for height
@@ -464,7 +477,10 @@ struct HeftTickPicker: View {
     @State private var scrolledID: Int?
     @State private var feedbackGenerator: UIImpactFeedbackGenerator?
 
-    private let tickSpacing: CGFloat = 8
+    @ScaledMetric(relativeTo: .caption2) private var tickSpacing: CGFloat = 8
+    @ScaledMetric(relativeTo: .caption2) private var tickAreaHeight: CGFloat = 32
+    @ScaledMetric(relativeTo: .caption2) private var rulerHeight: CGFloat = 52
+    @ScaledMetric(relativeTo: .caption2) private var indicatorHeight: CGFloat = 36
 
     private var totalSteps: Int {
         max(0, Int(round((range.upperBound - range.lowerBound) / step)))
@@ -524,10 +540,10 @@ struct HeftTickPicker: View {
             // Value display with smooth transition
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(formattedValue)
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
+                    .font(.heftHeroStat)
                     .foregroundStyle(Color.primary)
-                    .contentTransition(.numericText())
-                    .animation(.snappy, value: formattedValue)
+                    .contentTransition(reduceMotion ? .identity : .numericText())
+                    .animation(reduceMotion ? nil : .snappy, value: formattedValue)
 
                 Text(unit)
                     .font(.callout.weight(.semibold))
@@ -552,16 +568,16 @@ struct HeftTickPicker: View {
                                             .fill(tickColor(for: idx, centerIndex: centerIdx))
                                             .frame(width: 2, height: tickHeight(for: idx, centerIndex: centerIdx))
                                     }
-                                    .frame(height: 32)
+                                    .frame(height: tickAreaHeight)
 
                                     if idx % 10 == 0 {
                                         Text(labelText(for: idx))
-                                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                                            .font(.caption2.weight(.medium).monospacedDigit())
                                             .foregroundStyle(Color.secondary)
                                             .fixedSize()
                                     } else {
                                         Text(" ")
-                                            .font(.system(size: 11))
+                                            .font(.caption2)
                                             .fixedSize()
                                             .hidden()
                                     }
@@ -580,7 +596,7 @@ struct HeftTickPicker: View {
                     VStack(spacing: 2) {
                         RoundedRectangle(cornerRadius: 1.5)
                             .fill(accent)
-                            .frame(width: 2.5, height: 36)
+                            .frame(width: 2.5, height: indicatorHeight)
 
                         Circle()
                             .fill(accent)
@@ -616,7 +632,7 @@ struct HeftTickPicker: View {
                     .allowsHitTesting(false)
                 }
             }
-            .frame(height: 52)
+            .frame(height: rulerHeight)
         }
         .padding(.vertical, 10)
         .background {
@@ -652,7 +668,7 @@ struct HeftTickPicker: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(unit)
+        .accessibilityLabel(accessibilityTitle ?? unit)
         .accessibilityValue("\(formattedValue) \(unit)")
         .accessibilityAdjustableAction { direction in
             switch direction {

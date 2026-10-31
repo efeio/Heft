@@ -85,7 +85,8 @@ struct HeftApp: App {
             } else {
                 VStack(spacing: 20) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .font(.system(size: 48))
+                        .font(.largeTitle)
+                        .imageScale(.large)
                         .foregroundStyle(Color.heftError)
 
                     Text("Veritabanı Başlatılamadı")

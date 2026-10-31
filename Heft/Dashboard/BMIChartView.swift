@@ -18,6 +18,8 @@ struct BMIChartView: View {
     @Environment(\.heftAccent) private var accent
     @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var insightIconSize: CGFloat = 28
+    @ScaledMetric(relativeTo: .body) private var singleChartHeight: CGFloat = 160
+    @ScaledMetric(relativeTo: .body) private var fullChartHeight: CGFloat = 200
 
     @State private var selectedRange: ChartTimeRange = {
         #if DEBUG
@@ -133,108 +135,154 @@ struct BMIChartView: View {
         )
     }
 
+    @ViewBuilder
+    private var bmiHeaderBadges: some View {
+        HStack(spacing: 6) {
+            if let active = activePoint {
+                let cat = BMICalculator.category(for: active.bmi)
+                let catColor = BMICalculator.color(for: active.bmi)
+
+                Text(cat)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(catColor)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(catColor.opacity(0.14), in: Capsule())
+            }
+
+            if let selected = selectedPoint, selected.id != activeBmiPoints.last?.id {
+                Button {
+                    withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.75)) {
+                        selectedPoint = activeBmiPoints.last
+                        rawSelectedDate = activeBmiPoints.last?.date
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.counterclockwise")
+                            .font(.caption2.weight(.bold))
+                        Text("Güncel")
+                            .font(.caption2.weight(.bold))
+                    }
+                    .foregroundStyle(accent)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 4)
+                    .background(accent.opacity(0.12), in: Capsule())
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Güncel ölçüme dön")
+                .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func bmiRangeButton(range: ChartTimeRange, fixedHorizontal: Bool) -> some View {
+        let isSelected = selectedRange == range
+        let isAvailable = range.isAvailable(for: allBmiPoints.map(\.date))
+        Button {
+            guard isAvailable else { return }
+            withAnimation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.75)) {
+                selectedRange = range
+                selectedPoint = nil
+                rawSelectedDate = nil
+            }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        } label: {
+            Text(range.rawValue)
+                .font(.caption.weight(isSelected ? .bold : .semibold))
+                .foregroundStyle(isSelected ? Color.white : (isAvailable ? Color.secondary : Color.secondary.opacity(0.35)))
+                .fixedSize(horizontal: fixedHorizontal, vertical: false)
+                .padding(.horizontal, 8)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 36)
+                .background {
+                    if isSelected {
+                        Capsule()
+                            .fill(accentFill)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .frame(minHeight: 44)
+        .disabled(!isAvailable)
+        .accessibilityLabel(range.accessibilityTitle)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // MARK: - Header (Apple Health Clean Stat)
             VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .center) {
-                    Text("VÜCUT KİTLE İNDEKSİ")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(Color.secondary)
-                        .tracking(0.6)
-
-                    Spacer()
-
-                    // Category badge (always shown for active point)
-                    if let active = activePoint {
-                        let cat = BMICalculator.category(for: active.bmi)
-                        let catColor = BMICalculator.color(for: active.bmi)
-
-                        Text(cat)
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .center) {
+                        Text("VÜCUT KİTLE İNDEKSİ")
                             .font(.caption.weight(.bold))
-                            .foregroundStyle(catColor)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(catColor.opacity(0.14), in: Capsule())
+                            .foregroundStyle(Color.secondary)
+                            .tracking(0.6)
+                            .fixedSize(horizontal: true, vertical: false)
+
+                        Spacer()
+
+                        bmiHeaderBadges
+                            .fixedSize(horizontal: true, vertical: false)
                     }
 
-                    // If viewing a past point, show quick "Güncel" button
-                    if let selected = selectedPoint, selected.id != activeBmiPoints.last?.id {
-                        Button {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                                selectedPoint = activeBmiPoints.last
-                                rawSelectedDate = activeBmiPoints.last?.date
-                            }
-                        } label: {
-                            HStack(spacing: 4) {
-                                Image(systemName: "arrow.counterclockwise")
-                                    .font(.caption2.weight(.bold))
-                                Text("Güncel")
-                                    .font(.caption2.weight(.bold))
-                            }
-                            .foregroundStyle(accent)
-                            .padding(.horizontal, 9)
-                            .padding(.vertical, 4)
-                            .background(accent.opacity(0.12), in: Capsule())
-                        }
-                        .buttonStyle(.plain)
-                        .transition(.scale.combined(with: .opacity))
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("VÜCUT KİTLE İNDEKSİ")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(Color.secondary)
+                            .tracking(0.6)
+
+                        bmiHeaderBadges
                     }
                 }
 
                 if let active = activePoint {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(String(format: "%.1f", active.bmi))
-                            .font(.title.weight(.bold))
-                            .foregroundStyle(Color.primary)
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                            Text(String(format: "%.1f", active.bmi))
+                                .font(.title.weight(.bold))
+                                .foregroundStyle(Color.primary)
 
-                        Text("BMI")
-                            .font(.subheadline.weight(.semibold))
+                            Text("BMI")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(Color.secondary)
+                        }
+
+                        Text(Self.fullDateFormatter.string(from: active.date))
+                            .font(.footnote.weight(.medium))
                             .foregroundStyle(Color.secondary)
                     }
-
-                    Text(Self.fullDateFormatter.string(from: active.date))
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(Color.secondary)
+                    .accessibilityElement(children: .combine)
                 }
             }
 
             // MARK: - Scalable Time Range Picker
-            HStack(spacing: 6) {
-                ForEach(ChartTimeRange.allCases) { range in
-                    let isSelected = selectedRange == range
-                    let isAvailable = range.isAvailable(for: allBmiPoints.map(\.date))
-                    Button {
-                        guard isAvailable else { return }
-                        withAnimation(.spring(response: 0.28, dampingFraction: 0.75)) {
-                            selectedRange = range
-                            selectedPoint = nil
-                            rawSelectedDate = nil
-                        }
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    } label: {
-                        Text(range.rawValue)
-                            .font(.caption.weight(isSelected ? .bold : .semibold))
-                            .foregroundStyle(isSelected ? Color.white : (isAvailable ? Color.secondary : Color.secondary.opacity(0.35)))
-                            .frame(maxWidth: .infinity)
-                            .frame(minHeight: 34)
-                            .background {
-                                if isSelected {
-                                    Capsule()
-                                        .fill(accentFill)
-                                }
-                            }
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 6) {
+                    ForEach(ChartTimeRange.allCases) { range in
+                        bmiRangeButton(range: range, fixedHorizontal: true)
                     }
-                    .buttonStyle(.plain)
-                    .contentShape(Rectangle())
-                    .frame(minHeight: 44)
-                    .disabled(!isAvailable)
                 }
-            }
-            .padding(4)
-            .background {
-                Capsule()
-                    .fill(Color.heftSurfaceSub)
+                .padding(4)
+                .background {
+                    Capsule()
+                        .fill(Color.heftSurfaceSub)
+                }
+
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 6)], spacing: 6) {
+                    ForEach(ChartTimeRange.allCases) { range in
+                        bmiRangeButton(range: range, fixedHorizontal: false)
+                    }
+                }
+                .padding(6)
+                .background {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(Color.heftSurfaceSub)
+                }
             }
 
             // MARK: - Pure, Clean Chart Canvas (Proportional Height)
@@ -355,6 +403,8 @@ struct BMIChartView: View {
                             x: .value("Tarih", point.date),
                             y: .value("BMI", point.bmi)
                         )
+                        .accessibilityLabel(Self.fullDateFormatter.string(from: point.date))
+                        .accessibilityValue(String(format: "BMI %.1f, %@", point.bmi, BMICalculator.category(for: point.bmi)))
                         .symbol {
                             ZStack {
                                 if isSelected {
@@ -420,7 +470,14 @@ struct BMIChartView: View {
                         }
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
-                .frame(height: activeBmiPoints.count <= 1 ? 160 : 200)
+                .frame(minHeight: activeBmiPoints.count <= 1 ? singleChartHeight : fullChartHeight)
+                .accessibilityLabel({
+                    let minBMI = activeBmiPoints.map(\.bmi).min() ?? 0
+                    let maxBMI = activeBmiPoints.map(\.bmi).max() ?? 0
+                    let currentBMI = activePoint?.bmi ?? 0
+                    let currentCategory = BMICalculator.category(for: currentBMI)
+                    return "Vücut kitle indeksi grafiği, \(selectedRange.accessibilityTitle). \(activeBmiPoints.count) kayıt. Mevcut BMI: \(String(format: "%.1f", currentBMI)) (\(currentCategory)). En düşük \(String(format: "%.1f", minBMI)), en yüksek \(String(format: "%.1f", maxBMI))."
+                }())
 
                 if activeBmiPoints.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
@@ -465,6 +522,7 @@ struct BMIChartView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color.heftSurfaceSub)
                 )
+                .accessibilityElement(children: .combine)
             }
         }
         .heftCard()
@@ -488,14 +546,6 @@ struct BMIChartView: View {
             }
         }
         .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedPoint?.id)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel({
-            let minBMI = activeBmiPoints.map(\.bmi).min() ?? 0
-            let maxBMI = activeBmiPoints.map(\.bmi).max() ?? 0
-            let currentBMI = activePoint?.bmi ?? 0
-            let currentCategory = BMICalculator.category(for: currentBMI)
-            return "Vücut kütle indeksi grafiği. \(activeBmiPoints.count) kayıt. Mevcut BMI: \(String(format: "%.1f", currentBMI)) (\(currentCategory)). En düşük \(String(format: "%.1f", minBMI)), en yüksek \(String(format: "%.1f", maxBMI))."
-        }())
     }
 
     // MARK: - Gesture Handling
@@ -507,7 +557,7 @@ struct BMIChartView: View {
         guard let closest else { return }
 
         if selectedPoint?.id != closest.id {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+            withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.75)) {
                 selectedPoint = closest
                 rawSelectedDate = closest.date
             }

@@ -84,11 +84,12 @@ struct HistoryView: View {
     }
 
     @ViewBuilder
-    private func statColumn(title: String, value: String, unit: String, highlightColor: Color? = nil) -> some View {
+    private func statColumn(title: String, value: String, unit: String, highlightColor: Color? = nil, fixedHorizontal: Bool = false) -> some View {
         VStack(spacing: 4) {
             Text(title)
                 .font(.caption2.weight(.medium))
                 .foregroundStyle(Color.secondary)
+                .fixedSize(horizontal: fixedHorizontal, vertical: false)
 
             HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(value)
@@ -98,8 +99,47 @@ struct HistoryView: View {
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(Color.secondary)
             }
+            .fixedSize(horizontal: fixedHorizontal, vertical: false)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private func statRow(title: String, value: String, unit: String, highlightColor: Color? = nil) -> some View {
+        ViewThatFits(in: .horizontal) {
+            HStack {
+                Text(title)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(Color.secondary)
+                    .fixedSize(horizontal: true, vertical: false)
+                Spacer()
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text(value)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(highlightColor ?? Color.primary)
+                    Text(unit)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(Color.secondary)
+                }
+                .fixedSize(horizontal: true, vertical: false)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(Color.secondary)
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text(value)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(highlightColor ?? Color.primary)
+                    Text(unit)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(Color.secondary)
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
     }
 
     var body: some View {
@@ -121,18 +161,35 @@ struct HistoryView: View {
                     List {
                         // Summary Stats Header Card
                         if let stats = summaryStats {
+                            let deltaColor: Color? = stats.delta == 0 ? nil : (isGainGoal ? (stats.delta > 0 ? .heftSuccess : .heftError) : (stats.delta < 0 ? .heftSuccess : .heftError))
                             Section {
-                                HStack(spacing: 0) {
-                                    statColumn(title: "Başlangıç", value: String(format: "%.1f", stats.initial), unit: "kg")
-                                    Divider().frame(height: 28)
-                                    statColumn(title: stats.extremeLabel, value: String(format: "%.1f", stats.extreme), unit: "kg")
-                                    Divider().frame(height: 28)
-                                    statColumn(
-                                        title: "Toplam Değişim",
-                                        value: String(format: "%@%.1f", stats.delta > 0 ? "+" : "", stats.delta),
-                                        unit: "kg",
-                                        highlightColor: stats.delta == 0 ? nil : (isGainGoal ? (stats.delta > 0 ? .heftSuccess : .heftError) : (stats.delta < 0 ? .heftSuccess : .heftError))
-                                    )
+                                ViewThatFits(in: .horizontal) {
+                                    HStack(spacing: 0) {
+                                        statColumn(title: "Başlangıç", value: String(format: "%.1f", stats.initial), unit: "kg", fixedHorizontal: true)
+                                        Divider().frame(height: 28)
+                                        statColumn(title: stats.extremeLabel, value: String(format: "%.1f", stats.extreme), unit: "kg", fixedHorizontal: true)
+                                        Divider().frame(height: 28)
+                                        statColumn(
+                                            title: "Toplam Değişim",
+                                            value: String(format: "%@%.1f", stats.delta > 0 ? "+" : "", stats.delta),
+                                            unit: "kg",
+                                            highlightColor: deltaColor,
+                                            fixedHorizontal: true
+                                        )
+                                    }
+
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        statRow(title: "Başlangıç", value: String(format: "%.1f", stats.initial), unit: "kg")
+                                        Divider()
+                                        statRow(title: stats.extremeLabel, value: String(format: "%.1f", stats.extreme), unit: "kg")
+                                        Divider()
+                                        statRow(
+                                            title: "Toplam Değişim",
+                                            value: String(format: "%@%.1f", stats.delta > 0 ? "+" : "", stats.delta),
+                                            unit: "kg",
+                                            highlightColor: deltaColor
+                                        )
+                                    }
                                 }
                                 .padding(.vertical, 4)
                             }

@@ -36,7 +36,17 @@ struct HistoryRow: View {
     }
 
     private var accessibilityLabel: String {
-        "\(formattedDate), \(String(format: "%.1f", weight)) kilogram, \(bmiText)"
+        let deltaPart: String
+        if let delta = delta {
+            if abs(delta) < 0.05 {
+                deltaPart = "değişim yok"
+            } else {
+                deltaPart = String(format: "değişim %@%.1f kilogram", delta > 0 ? "+" : "", delta)
+            }
+        } else {
+            deltaPart = "başlangıç kaydı"
+        }
+        return "\(formattedDate), \(String(format: "%.1f", weight)) kilogram, \(bmiText), \(deltaPart)"
     }
 
     @ViewBuilder
@@ -78,12 +88,12 @@ struct HistoryRow: View {
                     Text(formattedDate)
                         .font(.heftListItem)
                         .foregroundStyle(Color.primary)
-                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
 
                     Text(bmiText)
                         .font(.heftMeta)
                         .foregroundStyle(Color.secondary)
-                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
                 }
 
                 Spacer()
@@ -93,36 +103,35 @@ struct HistoryRow: View {
                         Text(String(format: "%.1f", weight))
                             .font(.heftCardTitle)
                             .foregroundStyle(Color.primary)
-                            .lineLimit(1)
 
                         Text("kg")
                             .font(.heftMeta)
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
                     }
+                    .fixedSize(horizontal: true, vertical: false)
 
                     deltaBadge
+                        .fixedSize(horizontal: true, vertical: false)
                 }
             }
 
             // Fallback stacked layout for huge Dynamic Type sizes
             VStack(alignment: .leading, spacing: rowSpacing * 2) {
+                Text(formattedDate)
+                    .font(.heftListItem)
+                    .foregroundStyle(Color.primary)
+
                 HStack {
-                    Text(formattedDate)
-                        .font(.heftListItem)
-                        .foregroundStyle(Color.primary)
-                    Spacer()
                     Text(String(format: "%.1f kg", weight))
                         .font(.heftCardTitle)
                         .foregroundStyle(Color.primary)
-                }
-                HStack {
-                    Text(bmiText)
-                        .font(.heftMeta)
-                        .foregroundStyle(Color.secondary)
                     Spacer()
                     deltaBadge
                 }
+
+                Text(bmiText)
+                    .font(.heftMeta)
+                    .foregroundStyle(Color.secondary)
             }
         }
         .frame(minHeight: minRowHeight)

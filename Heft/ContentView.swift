@@ -10,6 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Query private var profiles: [UserProfile]
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var profile: UserProfile? {
         profiles.first
@@ -40,7 +41,7 @@ struct ContentView: View {
         .environment(\.heftAccent, profile?.gender == .female ? .heftPink : .heftBlue)
         .environment(\.heftAccentFill, profile?.gender == .female ? .heftPinkFill : .heftBlueFill)
         .environment(\.heftAccentPressed, profile?.gender == .female ? .heftPinkPressed : .heftBluePressed)
-        .animation(.easeInOut(duration: 0.35), value: isOnboardingCompleted)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.35), value: isOnboardingCompleted)
     }
 }
 

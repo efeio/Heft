@@ -83,7 +83,6 @@ struct WeightInfoStep: View {
                         Text("AMACINIZ NEDİR?")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
                         HeftGoalSelector(selectedGoal: $goalType)
                     }
@@ -93,9 +92,15 @@ struct WeightInfoStep: View {
                         Text("MEVCUT KİLO")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
-                        HeftTickPicker(value: $currentWeight, range: 40...300, step: 0.1, unit: "kg", formatStyle: .decimal)
+                        HeftTickPicker(
+                            value: $currentWeight,
+                            range: 40...300,
+                            step: 0.1,
+                            unit: "kg",
+                            formatStyle: .decimal,
+                            accessibilityTitle: "Mevcut Kilo"
+                        )
                     }
 
                     // Target Weight
@@ -103,9 +108,15 @@ struct WeightInfoStep: View {
                         Text("HEDEF KİLO")
                             .heftEyebrowStyle()
                             .foregroundStyle(Color.secondary)
-                            .lineLimit(1)
 
-                        HeftTickPicker(value: $targetWeight, range: 40...300, step: 0.1, unit: "kg", formatStyle: .decimal)
+                        HeftTickPicker(
+                            value: $targetWeight,
+                            range: 40...300,
+                            step: 0.1,
+                            unit: "kg",
+                            formatStyle: .decimal,
+                            accessibilityTitle: "Hedef Kilo"
+                        )
 
                         if !isTargetDirectionValid {
                             Text(targetErrorMessage)

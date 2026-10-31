@@ -58,91 +58,110 @@ struct EditWeightSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                // Weight Input Card (Dynamic Height)
-                VStack(spacing: 6) {
-                    HStack {
-                        TextField("0.0", text: $weightText)
-                            .textFieldStyle(.plain)
-                            .keyboardType(.decimalPad)
-                            .focused($isWeightFocused)
-                            .font(.heftHeroStat)
-                            .multilineTextAlignment(.center)
-                            .padding(.vertical, 10)
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Weight Input Card (Dynamic Height)
+                    VStack(spacing: 6) {
+                        HStack {
+                            TextField("0.0", text: $weightText)
+                                .textFieldStyle(.plain)
+                                .keyboardType(.decimalPad)
+                                .focused($isWeightFocused)
+                                .font(.heftHeroStat)
+                                .multilineTextAlignment(.center)
+                                .padding(.vertical, 10)
+                        }
+                        .keyboardDismissToolbar(isFocused: $isWeightFocused)
+                        .frame(minHeight: heroMinHeight)
+                        .frame(maxWidth: .infinity)
+                        .background {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(.secondarySystemGroupedBackground))
+                        }
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(isWeightFocused ? accent : Color.clear, lineWidth: 1.5)
+                        }
+                        .contentShape(RoundedRectangle(cornerRadius: 16))
+                        .onTapGesture {
+                            isWeightFocused = true
+                        }
+
+                        Text("kg")
+                            .font(.heftMeta)
+                            .foregroundStyle(Color.secondary)
                     }
-                    .keyboardDismissToolbar(isFocused: $isWeightFocused)
-                    .frame(minHeight: heroMinHeight)
-                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.top, 16)
+
+                    // Date Picker (past/today only)
+                    ViewThatFits(in: .horizontal) {
+                        HStack {
+                            Label("Tartım Tarihi", systemImage: "calendar")
+                                .font(.heftBodySemibold)
+                                .foregroundStyle(Color.primary)
+                                .fixedSize(horizontal: true, vertical: false)
+
+                            Spacer()
+
+                            DatePicker(
+                                "",
+                                selection: $selectedDate,
+                                in: ...Date(),
+                                displayedComponents: .date
+                            )
+                            .datePickerStyle(.compact)
+                            .labelsHidden()
+                        }
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Label("Tartım Tarihi", systemImage: "calendar")
+                                .font(.heftBodySemibold)
+                                .foregroundStyle(Color.primary)
+
+                            DatePicker(
+                                "",
+                                selection: $selectedDate,
+                                in: ...Date(),
+                                displayedComponents: .date
+                            )
+                            .datePickerStyle(.compact)
+                            .labelsHidden()
+                        }
+                    }
+                    .padding(16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background {
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: 14)
                             .fill(Color(.secondarySystemGroupedBackground))
                     }
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(isWeightFocused ? accent : Color.clear, lineWidth: 1.5)
-                    }
-                    .contentShape(RoundedRectangle(cornerRadius: 16))
-                    .onTapGesture {
-                        isWeightFocused = true
-                    }
+                    .padding(.horizontal, horizontalPadding)
 
-                    Text("kg")
-                        .font(.heftMeta)
-                        .foregroundStyle(Color.secondary)
-                }
-                .padding(.horizontal, horizontalPadding)
-                .padding(.top, 16)
+                    // Action Buttons
+                    VStack(spacing: 12) {
+                        HeftPrimaryButton(
+                            title: "Güncellemeyi Kaydet",
+                            isEnabled: isSaveEnabled,
+                            action: handleUpdate
+                        )
 
-                // Date Picker (past/today only)
-                HStack {
-                    Label("Tartım Tarihi", systemImage: "calendar")
-                        .font(.heftBodySemibold)
-                        .foregroundStyle(Color.primary)
-
-                    Spacer()
-
-                    DatePicker(
-                        "",
-                        selection: $selectedDate,
-                        in: ...Date(),
-                        displayedComponents: .date
-                    )
-                    .datePickerStyle(.compact)
-                    .labelsHidden()
-                }
-                .padding(16)
-                .background {
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(Color(.secondarySystemGroupedBackground))
-                }
-                .padding(.horizontal, horizontalPadding)
-
-                Spacer()
-
-                // Action Buttons
-                VStack(spacing: 12) {
-                    HeftPrimaryButton(
-                        title: "Güncellemeyi Kaydet",
-                        isEnabled: isSaveEnabled,
-                        action: handleUpdate
-                    )
-
-                    Button(role: .destructive) {
-                        showDeleteConfirmation = true
-                    } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "trash")
-                            Text("Bu Kaydı Sil")
+                        Button(role: .destructive) {
+                            showDeleteConfirmation = true
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "trash")
+                                Text("Bu Kaydı Sil")
+                            }
+                            .font(.heftBodySemibold)
+                            .foregroundStyle(Color.heftError)
+                            .frame(maxWidth: .infinity)
+                            .frame(minHeight: 44)
+                            .contentShape(Rectangle())
                         }
-                        .font(.heftBodySemibold)
-                        .foregroundStyle(Color.heftError)
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: 44)
-                        .contentShape(Rectangle())
                     }
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.bottom, 20)
                 }
-                .padding(.horizontal, horizontalPadding)
-                .padding(.bottom, 20)
             }
             .background(Color.heftCanvas)
             .navigationTitle("Tartımı Düzenle")

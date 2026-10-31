@@ -17,6 +17,8 @@ struct WeightChartView: View {
     @Environment(\.heftAccent) private var accent
     @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var insightIconSize: CGFloat = 28
+    @ScaledMetric(relativeTo: .body) private var singleChartHeight: CGFloat = 160
+    @ScaledMetric(relativeTo: .body) private var fullChartHeight: CGFloat = 200
 
     @State private var selectedRange: ChartTimeRange = {
         #if DEBUG
@@ -248,111 +250,157 @@ struct WeightChartView: View {
         }
     }
 
+    @ViewBuilder
+    private var headerBadges: some View {
+        HStack(spacing: 6) {
+            if let delta = activeDeltaText {
+                let isStart = delta.text == "Başlangıç"
+                let badgeColor = isStart ? Color.secondary : (delta.isSuccess ? Color.heftSuccess : Color.heftError)
+
+                Text(delta.text)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(badgeColor)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 4)
+                    .background(
+                        badgeColor.opacity(0.12),
+                        in: Capsule()
+                    )
+            }
+
+            if let selected = selectedEntry, selected.id != activeEntries.last?.id {
+                Button {
+                    withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.75)) {
+                        selectedEntry = activeEntries.last
+                        rawSelectedDate = activeEntries.last?.date
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.counterclockwise")
+                            .font(.caption2.weight(.bold))
+                        Text("Güncel")
+                            .font(.caption2.weight(.bold))
+                    }
+                    .foregroundStyle(accent)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 4)
+                    .background(accent.opacity(0.12), in: Capsule())
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Güncel ölçüme dön")
+                .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func rangeButton(range: ChartTimeRange, fixedHorizontal: Bool) -> some View {
+        let isSelected = selectedRange == range
+        let isAvailable = range.isAvailable(for: allSortedEntries.map(\.date))
+        Button {
+            guard isAvailable else { return }
+            withAnimation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.75)) {
+                selectedRange = range
+                selectedEntry = nil
+                rawSelectedDate = nil
+            }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        } label: {
+            Text(range.rawValue)
+                .font(.caption.weight(isSelected ? .bold : .semibold))
+                .foregroundStyle(isSelected ? Color.white : (isAvailable ? Color.secondary : Color.secondary.opacity(0.35)))
+                .fixedSize(horizontal: fixedHorizontal, vertical: false)
+                .padding(.horizontal, 8)
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 36)
+                .background {
+                    if isSelected {
+                        Capsule()
+                            .fill(accentFill)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .frame(minHeight: 44)
+        .disabled(!isAvailable)
+        .accessibilityLabel(range.accessibilityTitle)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // MARK: - Header (Apple Health Clean Stat)
             VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .center) {
-                    Text("KİLO DEĞİŞİMİ")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(Color.secondary)
-                        .tracking(0.6)
-
-                    Spacer()
-
-                    // Delta badge (always shown for active entry)
-                    if let delta = activeDeltaText {
-                        let isStart = delta.text == "Başlangıç"
-                        let badgeColor = isStart ? Color.secondary : (delta.isSuccess ? Color.heftSuccess : Color.heftError)
-
-                        Text(delta.text)
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .center) {
+                        Text("KİLO DEĞİŞİMİ")
                             .font(.caption.weight(.bold))
-                            .foregroundStyle(badgeColor)
-                            .padding(.horizontal, 9)
-                            .padding(.vertical, 4)
-                            .background(
-                                badgeColor.opacity(0.12),
-                                in: Capsule()
-                            )
+                            .foregroundStyle(Color.secondary)
+                            .tracking(0.6)
+                            .fixedSize(horizontal: true, vertical: false)
+
+                        Spacer()
+
+                        headerBadges
+                            .fixedSize(horizontal: true, vertical: false)
                     }
 
-                    // If user tapped a past point, show quick "Güncel" switch
-                    if let selected = selectedEntry, selected.id != activeEntries.last?.id {
-                        Button {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                                selectedEntry = activeEntries.last
-                                rawSelectedDate = activeEntries.last?.date
-                            }
-                        } label: {
-                            HStack(spacing: 4) {
-                                Image(systemName: "arrow.counterclockwise")
-                                    .font(.caption2.weight(.bold))
-                                Text("Güncel")
-                                    .font(.caption2.weight(.bold))
-                            }
-                            .foregroundStyle(accent)
-                            .padding(.horizontal, 9)
-                            .padding(.vertical, 4)
-                            .background(accent.opacity(0.12), in: Capsule())
-                        }
-                        .buttonStyle(.plain)
-                        .transition(.scale.combined(with: .opacity))
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("KİLO DEĞİŞİMİ")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(Color.secondary)
+                            .tracking(0.6)
+
+                        headerBadges
                     }
                 }
 
                 if let active = activeEntry {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(String(format: "%.1f", active.weight))
-                            .font(.title.weight(.bold))
-                            .foregroundStyle(Color.primary)
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                            Text(String(format: "%.1f", active.weight))
+                                .font(.title.weight(.bold))
+                                .foregroundStyle(Color.primary)
 
-                        Text("kg")
-                            .font(.subheadline.weight(.semibold))
+                            Text("kg")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(Color.secondary)
+                        }
+
+                        Text(Self.fullDateFormatter.string(from: active.date))
+                            .font(.footnote.weight(.medium))
                             .foregroundStyle(Color.secondary)
                     }
-
-                    Text(Self.fullDateFormatter.string(from: active.date))
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(Color.secondary)
+                    .accessibilityElement(children: .combine)
                 }
             }
 
             // MARK: - Scalable Time Range Picker
-            HStack(spacing: 6) {
-                ForEach(ChartTimeRange.allCases) { range in
-                    let isSelected = selectedRange == range
-                    let isAvailable = range.isAvailable(for: allSortedEntries.map(\.date))
-                    Button {
-                        guard isAvailable else { return }
-                        withAnimation(.spring(response: 0.28, dampingFraction: 0.75)) {
-                            selectedRange = range
-                            selectedEntry = nil
-                            rawSelectedDate = nil
-                        }
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    } label: {
-                        Text(range.rawValue)
-                            .font(.caption.weight(isSelected ? .bold : .semibold))
-                            .foregroundStyle(isSelected ? Color.white : (isAvailable ? Color.secondary : Color.secondary.opacity(0.35)))
-                            .frame(maxWidth: .infinity)
-                            .frame(minHeight: 34)
-                            .background {
-                                if isSelected {
-                                    Capsule()
-                                        .fill(accentFill)
-                                }
-                            }
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 6) {
+                    ForEach(ChartTimeRange.allCases) { range in
+                        rangeButton(range: range, fixedHorizontal: true)
                     }
-                    .buttonStyle(.plain)
-                    .contentShape(Rectangle())
-                    .frame(minHeight: 44)
-                    .disabled(!isAvailable)
                 }
-            }
-            .padding(4)
-            .background {
-                Capsule()
-                    .fill(Color.heftSurfaceSub)
+                .padding(4)
+                .background {
+                    Capsule()
+                        .fill(Color.heftSurfaceSub)
+                }
+
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 6)], spacing: 6) {
+                    ForEach(ChartTimeRange.allCases) { range in
+                        rangeButton(range: range, fixedHorizontal: false)
+                    }
+                }
+                .padding(6)
+                .background {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(Color.heftSurfaceSub)
+                }
             }
 
             // MARK: - Pure, Clean Chart Canvas (Proportional Height)
@@ -469,6 +517,8 @@ struct WeightChartView: View {
                             x: .value("Tarih", entry.date),
                             y: .value("Kilo", entry.weight)
                         )
+                        .accessibilityLabel(Self.fullDateFormatter.string(from: entry.date))
+                        .accessibilityValue(String(format: "%.1f kilogram", entry.weight))
                         .symbol {
                             ZStack {
                                 if isSelected {
@@ -534,7 +584,8 @@ struct WeightChartView: View {
                         }
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
-                .frame(height: activeEntries.count <= 1 ? 160 : 200)
+                .frame(minHeight: activeEntries.count <= 1 ? singleChartHeight : fullChartHeight)
+                .accessibilityLabel("Kilo grafiği, \(selectedRange.accessibilityTitle). \(activeEntries.count) kayıt. En düşük \(String(format: "%.1f", activeEntries.map(\.weight).min() ?? 0)) kg, en yüksek \(String(format: "%.1f", activeEntries.map(\.weight).max() ?? 0)) kg.")
 
                 if activeEntries.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
@@ -574,6 +625,7 @@ struct WeightChartView: View {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color.heftSurfaceSub)
                 )
+                .accessibilityElement(children: .combine)
             }
         }
         .heftCard()
@@ -596,8 +648,6 @@ struct WeightChartView: View {
             }
         }
         .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedEntry?.id)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Kilo grafiği. \(activeEntries.count) kayıt. En düşük \(String(format: "%.1f", activeEntries.map(\.weight).min() ?? 0)) kg, en yüksek \(String(format: "%.1f", activeEntries.map(\.weight).max() ?? 0)) kg.")
     }
 
     // MARK: - Gesture Handling
@@ -609,7 +659,7 @@ struct WeightChartView: View {
         guard let closest else { return }
 
         if selectedEntry?.id != closest.id {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+            withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.75)) {
                 selectedEntry = closest
                 rawSelectedDate = closest.date
             }

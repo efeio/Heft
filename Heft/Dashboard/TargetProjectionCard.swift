@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct TargetProjectionCard: View {
     let entries: [WeightEntry]
@@ -16,6 +17,7 @@ struct TargetProjectionCard: View {
     var targetWeeklyPace: Double = 0.5
 
     @Environment(\.heftAccent) private var accent
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var showFeedbackBadge = false
     @State private var feedbackBadgeText: String? = nil
@@ -54,22 +56,43 @@ struct TargetProjectionCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             // MARK: - Header Row (Title & Pace Indicator)
-            HStack(alignment: .center) {
-                HStack(spacing: 6) {
-                    Image(systemName: output.isGoalReached ? "checkmark.seal.fill" : (output.isMaintainGoal ? "equal.circle.fill" : "target"))
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(output.isGoalReached ? Color.heftSuccess : accent)
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .center) {
+                    HStack(spacing: 6) {
+                        Image(systemName: output.isGoalReached ? "checkmark.seal.fill" : (output.isMaintainGoal ? "equal.circle.fill" : "target"))
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(output.isGoalReached ? Color.heftSuccess : accent)
 
-                    Text(output.isGoalReached ? "HEDEFE ULAŞILDI" : (output.isMaintainGoal ? "KİLO KORUMA" : "TAHMİNİ BİTİŞ"))
-                        .font(.caption2.weight(.bold))
-                        .tracking(0.8)
-                        .foregroundStyle(Color.secondary)
+                        Text(output.isGoalReached ? "HEDEFE ULAŞILDI" : (output.isMaintainGoal ? "KİLO KORUMA" : "TAHMİNİ BİTİŞ"))
+                            .font(.caption2.weight(.bold))
+                            .tracking(0.8)
+                            .foregroundStyle(Color.secondary)
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
+
+                    Spacer()
+
+                    if !output.isGoalReached && !output.isMaintainGoal {
+                        paceIndicatorView
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
                 }
 
-                Spacer()
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 6) {
+                        Image(systemName: output.isGoalReached ? "checkmark.seal.fill" : (output.isMaintainGoal ? "equal.circle.fill" : "target"))
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(output.isGoalReached ? Color.heftSuccess : accent)
 
-                if !output.isGoalReached && !output.isMaintainGoal {
-                    paceIndicatorView
+                        Text(output.isGoalReached ? "HEDEFE ULAŞILDI" : (output.isMaintainGoal ? "KİLO KORUMA" : "TAHMİNİ BİTİŞ"))
+                            .font(.caption2.weight(.bold))
+                            .tracking(0.8)
+                            .foregroundStyle(Color.secondary)
+                    }
+
+                    if !output.isGoalReached && !output.isMaintainGoal {
+                        paceIndicatorView
+                    }
                 }
             }
 
@@ -91,7 +114,7 @@ struct TargetProjectionCard: View {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(feedbackBadgeIsPositive ? Color.heftSuccess.opacity(0.12) : Color.heftWarning.opacity(0.12))
                 }
-                .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.95)))
             }
 
             // MARK: - Hero Date Range & Remaining Weeks
@@ -101,11 +124,12 @@ struct TargetProjectionCard: View {
                         Text(output.primaryDateRangeString)
                             .font(.title2.weight(.bold))
                             .foregroundStyle(Color.primary)
-                            .minimumScaleFactor(0.85)
+                            .fixedSize(horizontal: true, vertical: false)
 
                         Spacer()
 
                         badgeView(badge: weeksBadgeText, color: accent)
+                            .fixedSize(horizontal: true, vertical: false)
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
@@ -236,52 +260,100 @@ struct TargetProjectionCard: View {
             .frame(height: 12)
 
             // Milestone Labels
-            HStack {
-                if hasCoveredProgress {
-                    HStack(spacing: 2) {
-                        Text("Başlangıç:")
-                            .font(.caption2.weight(.medium))
-                            .foregroundStyle(Color.secondary)
-                        Text(String(format: "%.1f", milestone.startWeight))
-                            .font(.caption2.weight(.medium))
-                            .foregroundStyle(Color.secondary)
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    if hasCoveredProgress {
+                        HStack(spacing: 2) {
+                            Text("Başlangıç:")
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(Color.secondary)
+                            Text(String(format: "%.1f", milestone.startWeight))
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(Color.secondary)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+
+                        Spacer()
+
+                        HStack(spacing: 2) {
+                            Text("Bugün:")
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(Color.secondary)
+                            Text(String(format: "%.1f", milestone.currentWeight))
+                                .font(.caption2.weight(.bold))
+                                .foregroundStyle(Color.primary)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+
+                        Spacer()
+                    } else {
+                        HStack(spacing: 2) {
+                            Text("Bugün:")
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(Color.secondary)
+                            Text(String(format: "%.1f", milestone.currentWeight))
+                                .font(.caption2.weight(.bold))
+                                .foregroundStyle(Color.primary)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+
+                        Spacer()
                     }
 
-                    Spacer()
-
                     HStack(spacing: 2) {
-                        Text("Bugün:")
+                        Text("Hedef:")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.secondary)
-                        Text(String(format: "%.1f", milestone.currentWeight))
+                        Text(String(format: "%.1f", milestone.targetWeight))
                             .font(.caption2.weight(.bold))
-                            .foregroundStyle(Color.primary)
+                            .foregroundStyle(accent)
                     }
-
-                    Spacer()
-                } else {
-                    HStack(spacing: 2) {
-                        Text("Bugün:")
-                            .font(.caption2.weight(.medium))
-                            .foregroundStyle(Color.secondary)
-                        Text(String(format: "%.1f", milestone.currentWeight))
-                            .font(.caption2.weight(.bold))
-                            .foregroundStyle(Color.primary)
-                    }
-
-                    Spacer()
+                    .fixedSize(horizontal: true, vertical: false)
                 }
 
-                HStack(spacing: 2) {
-                    Text("Hedef:")
-                        .font(.caption2.weight(.medium))
-                        .foregroundStyle(Color.secondary)
-                    Text(String(format: "%.1f", milestone.targetWeight))
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(accent)
+                VStack(alignment: .leading, spacing: 4) {
+                    if hasCoveredProgress {
+                        HStack(spacing: 4) {
+                            Text("Başlangıç:")
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(Color.secondary)
+                            Text(String(format: "%.1f", milestone.startWeight))
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(Color.secondary)
+                        }
+                    }
+
+                    HStack(spacing: 4) {
+                        Text("Bugün:")
+                            .font(.caption2.weight(.medium))
+                            .foregroundStyle(Color.secondary)
+                        Text(String(format: "%.1f", milestone.currentWeight))
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(Color.primary)
+                    }
+
+                    HStack(spacing: 4) {
+                        Text("Hedef:")
+                            .font(.caption2.weight(.medium))
+                            .foregroundStyle(Color.secondary)
+                        Text(String(format: "%.1f", milestone.targetWeight))
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(accent)
+                    }
                 }
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Hedef ilerlemesi")
+        .accessibilityValue(
+            String(
+                format: "Başlangıç %.1f kilogram, güncel %.1f kilogram, hedef %.1f kilogram, yüzde %.0f tamamlandı",
+                milestone.startWeight,
+                milestone.currentWeight,
+                milestone.targetWeight,
+                milestone.progressFraction * 100
+            )
+        )
     }
 
     // MARK: - Insight Styling Helpers
@@ -364,34 +436,33 @@ struct TargetProjectionCard: View {
 
             // Delta < 0 means newDate is earlier than oldDate -> positive progress!
             if deltaDays <= -1 {
-                feedbackBadgeText = "Hedef \(abs(deltaDays)) gün öne çekildi"
+                let text = "Hedef \(abs(deltaDays)) gün öne çekildi"
+                feedbackBadgeText = text
                 feedbackBadgeIsPositive = true
-                withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                if reduceMotion {
                     showFeedbackBadge = true
+                } else {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                        showFeedbackBadge = true
+                    }
                 }
-                autoDismissBadge()
+                AccessibilityNotification.Announcement(text).post()
             } else if deltaDays >= 1 {
-                feedbackBadgeText = "Hedef \(deltaDays) gün ötelendi"
+                let text = "Hedef \(deltaDays) gün ötelendi"
+                feedbackBadgeText = text
                 feedbackBadgeIsPositive = false
-                withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                if reduceMotion {
                     showFeedbackBadge = true
+                } else {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                        showFeedbackBadge = true
+                    }
                 }
-                autoDismissBadge()
+                AccessibilityNotification.Announcement(text).post()
             }
         }
 
         lastProjectedTimestamp = currentTargetTimestamp
-    }
-
-    private func autoDismissBadge() {
-        Task {
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
-            await MainActor.run {
-                withAnimation(.easeOut(duration: 0.3)) {
-                    showFeedbackBadge = false
-                }
-            }
-        }
     }
 }
 
