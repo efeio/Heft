@@ -62,7 +62,7 @@ extension View {
 struct HeftPrimaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.heftAccent) private var accent
+    @Environment(\.heftAccentFill) private var accentFill
     @Environment(\.heftAccentPressed) private var accentPressed
     @ScaledMetric(relativeTo: .headline) private var verticalPadding: CGFloat = 14
     @ScaledMetric(relativeTo: .headline) private var horizontalPadding: CGFloat = 20
@@ -76,7 +76,7 @@ struct HeftPrimaryButtonStyle: ButtonStyle {
             .padding(.horizontal, horizontalPadding)
             .background {
                 Capsule()
-                    .fill(configuration.isPressed ? accentPressed : accent)
+                    .fill(configuration.isPressed ? accentPressed : accentFill)
             }
             .scaleEffect(configuration.isPressed && !reduceMotion ? 0.98 : 1.0)
             .opacity(isEnabled ? 1.0 : 0.4)
@@ -107,7 +107,6 @@ struct HeftPrimaryButton: View {
 
 // MARK: - Onboarding Step Container
 struct OnboardingStepContainer<Content: View>: View {
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.heftAccent) private var accent
     @ScaledMetric(relativeTo: .body) private var topPadding: CGFloat = 12
     @ScaledMetric(relativeTo: .body) private var bottomPadding: CGFloat = 12
@@ -131,7 +130,7 @@ struct OnboardingStepContainer<Content: View>: View {
                             .font(.body.weight(.semibold))
                             .foregroundStyle(Color.primary)
                             .frame(width: 36, height: 36)
-                            .background(Circle().fill(Color(.secondarySystemGroupedBackground)))
+                            .background(Circle().fill(Color.heftSurface))
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Geri")
@@ -142,7 +141,7 @@ struct OnboardingStepContainer<Content: View>: View {
                     let progress = CGFloat(currentStep) / CGFloat(max(totalSteps, 1))
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(colorScheme == .dark ? Color.heftDarkSurface2 : Color.heftSurfaceSub)
+                            .fill(Color.heftSurfaceSub)
                         Capsule()
                             .fill(accent)
                             .frame(width: proxy.size.width * min(max(progress, 0.0), 1.0))
@@ -175,7 +174,7 @@ struct OnboardingStepContainer<Content: View>: View {
             .padding(.bottom, bottomPadding)
         }
         .padding(.horizontal)
-        .background(colorScheme == .dark ? Color.heftDarkCanvas : Color.heftCanvas)
+        .background(Color.heftCanvas)
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
@@ -193,6 +192,7 @@ struct HeftTextInputCard: View {
 
     @FocusState private var isFocused: Bool
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.heftAccent) private var accent
     @ScaledMetric(relativeTo: .body) private var iconBoxSize: CGFloat = 38
     @ScaledMetric(relativeTo: .body) private var cardPadding: CGFloat = 14
@@ -204,7 +204,7 @@ struct HeftTextInputCard: View {
                     // Leading Icon Badge
                     ZStack {
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(isFocused ? accent.opacity(0.15) : (colorScheme == .dark ? Color.heftDarkSurface2 : accent.opacity(0.08)))
+                            .fill(isFocused ? accent.opacity(0.15) : (colorScheme == .dark ? Color.heftSurfaceSub : accent.opacity(0.08)))
                             .frame(width: iconBoxSize, height: iconBoxSize)
 
                         Image(systemName: icon)
@@ -250,7 +250,7 @@ struct HeftTextInputCard: View {
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.footnote)
-                                .foregroundStyle(Color.secondary.opacity(0.6))
+                                .foregroundStyle(Color.secondary)
                         }
                         .buttonStyle(.plain)
                     }
@@ -259,20 +259,20 @@ struct HeftTextInputCard: View {
                 .padding(.vertical, 8)
                 .background {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(colorScheme == .dark ? Color.white.opacity(0.06) : Color.black.opacity(0.04))
+                        .fill(Color.heftSurfaceSub)
                 }
             }
             .padding(cardPadding)
             .background {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(colorScheme == .dark ? Color.heftDarkSurface1 : Color.white)
-                    .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 2)
+                    .fill(Color.heftSurface)
+                    .shadow(color: (colorScheme == .dark || contrast == .increased) ? Color.clear : Color.heftNavy.opacity(0.04), radius: 8, x: 0, y: 2)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .stroke(
-                        isError ? Color.heftError : (isFocused ? accent : (colorScheme == .dark ? Color.heftDarkDivider : Color.heftDivider)),
-                        lineWidth: isFocused || isError ? 1.5 : 1
+                        isError ? Color.heftError : (isFocused ? accent : Color.heftDivider),
+                        lineWidth: (isFocused || isError || contrast == .increased) ? 1.5 : 1
                     )
             }
 
@@ -296,7 +296,9 @@ struct HeftTextInputCard: View {
 struct HeftGenderSelector: View {
     @Binding var selectedGender: Gender
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.heftAccent) private var accent
+    @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var minHeight: CGFloat = 50
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 30
 
@@ -329,7 +331,7 @@ struct HeftGenderSelector: View {
             HStack(spacing: 8) {
                 ZStack {
                     Circle()
-                        .fill(isSelected ? accent : (colorScheme == .dark ? Color.heftDarkSurface2 : Color.heftSurfaceSub))
+                        .fill(isSelected ? accentFill : Color.heftSurfaceSub)
                         .frame(width: circleSize, height: circleSize)
 
                     Image(systemName: icon)
@@ -339,7 +341,7 @@ struct HeftGenderSelector: View {
 
                 Text(title)
                     .font(.heftBodySemibold)
-                    .foregroundStyle(isSelected ? (colorScheme == .dark ? Color.white : accent) : Color.primary)
+                    .foregroundStyle(isSelected ? accent : Color.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.85)
             }
@@ -348,13 +350,13 @@ struct HeftGenderSelector: View {
             .padding(.horizontal, 8)
             .background {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(isSelected ? (colorScheme == .dark ? accent.opacity(0.18) : accent.opacity(0.08)) : Color(.secondarySystemGroupedBackground))
+                    .fill(isSelected ? (colorScheme == .dark ? accent.opacity(0.15) : accent.opacity(0.08)) : Color.heftSurface)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .stroke(
-                        isSelected ? accent : Color.heftDivider.opacity(colorScheme == .dark ? 0.4 : 0.8),
-                        lineWidth: isSelected ? 1.5 : 1.0
+                        isSelected ? accent : Color.heftDivider,
+                        lineWidth: (isSelected || contrast == .increased) ? 1.5 : 1.0
                     )
             }
             .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
@@ -367,7 +369,9 @@ struct HeftGenderSelector: View {
 struct HeftGoalSelector: View {
     @Binding var selectedGoal: GoalType
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.heftAccent) private var accent
+    @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var minHeight: CGFloat = 50
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 30
 
@@ -406,7 +410,7 @@ struct HeftGoalSelector: View {
             HStack(spacing: 8) {
                 ZStack {
                     Circle()
-                        .fill(isSelected ? accent : (colorScheme == .dark ? Color.heftDarkSurface2 : Color.heftSurfaceSub))
+                        .fill(isSelected ? accentFill : Color.heftSurfaceSub)
                         .frame(width: circleSize, height: circleSize)
 
                     Image(systemName: icon)
@@ -416,7 +420,7 @@ struct HeftGoalSelector: View {
 
                 Text(title)
                     .font(.heftBodySemibold)
-                    .foregroundStyle(isSelected ? (colorScheme == .dark ? Color.white : accent) : Color.primary)
+                    .foregroundStyle(isSelected ? accent : Color.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.85)
             }
@@ -425,13 +429,13 @@ struct HeftGoalSelector: View {
             .padding(.horizontal, 8)
             .background {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(isSelected ? (colorScheme == .dark ? accent.opacity(0.18) : accent.opacity(0.08)) : Color(.secondarySystemGroupedBackground))
+                    .fill(isSelected ? (colorScheme == .dark ? accent.opacity(0.15) : accent.opacity(0.08)) : Color.heftSurface)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .stroke(
-                        isSelected ? accent : Color.heftDivider.opacity(colorScheme == .dark ? 0.4 : 0.8),
-                        lineWidth: isSelected ? 1.5 : 1.0
+                        isSelected ? accent : Color.heftDivider,
+                        lineWidth: (isSelected || contrast == .increased) ? 1.5 : 1.0
                     )
             }
             .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
@@ -455,7 +459,7 @@ struct HeftTickPicker: View {
 
     @Environment(\.heftAccent) private var accent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var contrast
 
     @State private var scrolledID: Int?
     @State private var feedbackGenerator: UIImpactFeedbackGenerator?
@@ -589,8 +593,8 @@ struct HeftTickPicker: View {
                     HStack {
                         LinearGradient(
                             colors: [
-                                Color(.secondarySystemGroupedBackground),
-                                Color(.secondarySystemGroupedBackground).opacity(0)
+                                Color.heftSurface,
+                                Color.heftSurface.opacity(0)
                             ],
                             startPoint: .leading,
                             endPoint: .trailing
@@ -601,8 +605,8 @@ struct HeftTickPicker: View {
 
                         LinearGradient(
                             colors: [
-                                Color(.secondarySystemGroupedBackground).opacity(0),
-                                Color(.secondarySystemGroupedBackground)
+                                Color.heftSurface.opacity(0),
+                                Color.heftSurface
                             ],
                             startPoint: .leading,
                             endPoint: .trailing
@@ -617,11 +621,11 @@ struct HeftTickPicker: View {
         .padding(.vertical, 10)
         .background {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground))
+                .fill(Color.heftSurface)
         }
         .overlay {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.heftDivider.opacity(colorScheme == .dark ? 0.4 : 0.8), lineWidth: 1)
+                .stroke(Color.heftDivider, lineWidth: contrast == .increased ? 1.5 : 1)
         }
         .onAppear {
             feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
@@ -683,6 +687,7 @@ struct HeftTickPicker: View {
     }
     .padding()
     .environment(\.heftAccent, .heftBlue)
+    .environment(\.heftAccentFill, .heftBlueFill)
     .environment(\.heftAccentPressed, .heftBluePressed)
 }
 
@@ -695,6 +700,7 @@ struct HeftTickPicker: View {
     }
     .padding()
     .environment(\.heftAccent, .heftPink)
+    .environment(\.heftAccentFill, .heftPinkFill)
     .environment(\.heftAccentPressed, .heftPinkPressed)
 }
 

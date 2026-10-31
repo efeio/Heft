@@ -16,9 +16,6 @@ struct TargetProjectionCard: View {
     var targetWeeklyPace: Double = 0.5
 
     @Environment(\.heftAccent) private var accent
-    @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric(relativeTo: .body) private var cardPadding: CGFloat = 16
-    @ScaledMetric(relativeTo: .body) private var cardRadius: CGFloat = 18
 
     @State private var showFeedbackBadge = false
     @State private var feedbackBadgeText: String? = nil
@@ -87,12 +84,12 @@ struct TargetProjectionCard: View {
 
                     Spacer()
                 }
-                .foregroundStyle(feedbackBadgeIsPositive ? Color.heftSuccess : Color.orange)
+                .foregroundStyle(feedbackBadgeIsPositive ? Color.heftSuccess : Color.heftWarning)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
                 .background {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(feedbackBadgeIsPositive ? Color.heftSuccess.opacity(0.12) : Color.orange.opacity(0.12))
+                        .fill(feedbackBadgeIsPositive ? Color.heftSuccess.opacity(0.12) : Color.heftWarning.opacity(0.12))
                 }
                 .transition(.opacity.combined(with: .scale(scale: 0.95)))
             }
@@ -155,17 +152,9 @@ struct TargetProjectionCard: View {
             // Medical Disclaimer
             Text("Bilgilendirme amaçlıdır; tıbbi teşhis veya klinik tavsiye niteliği taşımaz.")
                 .font(.caption2)
-                .foregroundStyle(Color.secondary.opacity(0.6))
+                .foregroundStyle(Color.secondary)
         }
-        .padding(cardPadding)
-        .background {
-            RoundedRectangle(cornerRadius: cardRadius, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: cardRadius, style: .continuous)
-                .stroke(Color.heftDivider.opacity(0.6), lineWidth: 1)
-        }
+        .heftCard()
         .onAppear {
             evaluateMicroFeedback()
         }
@@ -182,8 +171,8 @@ struct TargetProjectionCard: View {
             let statusColor: Color = {
                 switch status {
                 case .ideal: return Color.heftSuccess
-                case .slow: return Color.orange
-                case .tooFast: return Color.orange
+                case .slow: return Color.heftWarning
+                case .tooFast: return Color.heftWarning
                 case .moderate: return accent
                 case .notApplicable: return Color.secondary
                 }
@@ -319,14 +308,14 @@ struct TargetProjectionCard: View {
         case .plateau:
             return accent
         case .weightGainAnomaly:
-            return Color.orange
+            return Color.heftWarning
         case .goalReached:
             return Color.heftSuccess
         case .maintainActive:
             return Color.heftSuccess
         case .normal:
             if output.catchUpInfo != nil {
-                return Color.orange
+                return Color.heftWarning
             }
             return accent
         }
@@ -335,18 +324,18 @@ struct TargetProjectionCard: View {
     private var insightBackgroundColor: Color {
         switch output.condition {
         case .plateau:
-            return Color(.tertiarySystemGroupedBackground)
+            return Color.heftSurfaceSub
         case .weightGainAnomaly:
-            return Color.orange.opacity(0.08)
+            return Color.heftWarning.opacity(0.10)
         case .goalReached:
-            return Color.heftSuccess.opacity(0.1)
+            return Color.heftSuccess.opacity(0.10)
         case .maintainActive:
-            return Color.heftSuccess.opacity(0.08)
+            return Color.heftSuccess.opacity(0.10)
         case .normal:
             if output.catchUpInfo != nil {
-                return Color.orange.opacity(0.08)
+                return Color.heftWarning.opacity(0.10)
             }
-            return Color(.tertiarySystemGroupedBackground)
+            return Color.heftSurfaceSub
         }
     }
 

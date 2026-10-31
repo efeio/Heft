@@ -16,7 +16,7 @@ struct BMIChartView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.heftAccent) private var accent
-    @ScaledMetric(relativeTo: .body) private var cardPadding: CGFloat = 16
+    @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var insightIconSize: CGFloat = 28
 
     @State private var selectedRange: ChartTimeRange = {
@@ -198,8 +198,6 @@ struct BMIChartView: View {
                         .foregroundStyle(Color.secondary)
                 }
             }
-            .padding(.horizontal, cardPadding)
-            .padding(.top, cardPadding)
 
             // MARK: - Scalable Time Range Picker
             HStack(spacing: 6) {
@@ -223,7 +221,7 @@ struct BMIChartView: View {
                             .background {
                                 if isSelected {
                                     Capsule()
-                                        .fill(accent)
+                                        .fill(accentFill)
                                 }
                             }
                     }
@@ -236,9 +234,8 @@ struct BMIChartView: View {
             .padding(4)
             .background {
                 Capsule()
-                    .fill(Color(.tertiarySystemGroupedBackground))
+                    .fill(Color.heftSurfaceSub)
             }
-            .padding(.horizontal, cardPadding)
 
             // MARK: - Pure, Clean Chart Canvas (Proportional Height)
             if allBmiPoints.count == 1, let single = allBmiPoints.first {
@@ -282,12 +279,11 @@ struct BMIChartView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
-                .padding(.horizontal, cardPadding)
             } else if activeBmiPoints.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "heart.text.square")
                         .font(.title)
-                        .foregroundStyle(Color.secondary.opacity(0.5))
+                        .foregroundStyle(Color.secondary)
 
                     Text(allBmiPoints.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
                         .font(.footnote.weight(.medium))
@@ -296,7 +292,6 @@ struct BMIChartView: View {
                 .frame(maxWidth: .infinity)
                 .aspectRatio(2.0, contentMode: .fit)
                 .frame(minHeight: 130, maxHeight: 220)
-                .padding(.horizontal, cardPadding)
             } else {
                 Chart {
                     // Vertical Guideline on Selected Point (only while actively touching/scrubbing)
@@ -426,7 +421,6 @@ struct BMIChartView: View {
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
                 .frame(height: activeBmiPoints.count <= 1 ? 160 : 200)
-                .padding(.horizontal, cardPadding)
 
                 if activeBmiPoints.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
@@ -435,7 +429,6 @@ struct BMIChartView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.top, 4)
                         .padding(.bottom, 6)
-                        .padding(.horizontal, cardPadding)
                 }
             }
 
@@ -462,7 +455,7 @@ struct BMIChartView: View {
 
                         Text("Bilgilendirme amaçlıdır; tıbbi teşhis ve tedavi tavsiyesi değildir.")
                             .font(.caption2)
-                            .foregroundStyle(Color.secondary.opacity(0.6))
+                            .foregroundStyle(Color.secondary)
                             .padding(.top, 2)
                     }
                 }
@@ -470,14 +463,11 @@ struct BMIChartView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color(.tertiarySystemGroupedBackground))
+                        .fill(Color.heftSurfaceSub)
                 )
-                .padding(.horizontal, cardPadding)
-                .padding(.bottom, cardPadding)
             }
         }
-        .background(Color(.secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .heftCard()
         .onAppear {
             cachedBmiPoints = Self.computeBmiPoints(entries: entries, height: height)
             if selectedPoint == nil {

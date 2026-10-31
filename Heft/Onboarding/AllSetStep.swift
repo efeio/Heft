@@ -132,30 +132,22 @@ struct AllSetStep: View {
                     // Summary Card
                     VStack(spacing: 16) {
                         SummaryRow(label: "İSİM", value: name.isEmpty ? "—" : name)
-                        Divider().background(Color.heftDivider)
+                        Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "HEDEF TÜRÜ", value: goalType == .gain ? "Kilo Almak (Bulk/Kas)" : (goalType == .maintain ? "Kilo Korumak (Mevcut Form)" : "Kilo Vermek (Fit/Yağ Yakımı)"))
-                        Divider().background(Color.heftDivider)
+                        Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "BOY & YAŞ", value: "\(Int(height)) cm • \(age) yaş")
-                        Divider().background(Color.heftDivider)
+                        Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "CİNSİYET", value: gender == .male ? "Erkek" : "Kadın")
-                        Divider().background(Color.heftDivider)
+                        Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "BAŞLANGIÇ KİLOSU", value: String(format: "%.1f kg", currentWeight))
-                        Divider().background(Color.heftDivider)
+                        Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "HEDEF KİLO", value: String(format: "%.1f kg", targetWeight))
-                        Divider().background(Color.heftDivider)
+                        Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "BAŞLANGIÇ BMI", value: "\(bmiValueText) \(bmiCategoryText)")
-                        Divider().background(Color.heftDivider)
+                        Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "TARTIM TAKVİMİ", value: scheduleSummaryText)
                     }
-                    .padding(cardPadding)
-                    .background {
-                        RoundedRectangle(cornerRadius: 18)
-                            .fill(Color(.secondarySystemGroupedBackground))
-                    }
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 18)
-                            .stroke(Color.heftDivider, lineWidth: 1)
-                    }
+                    .heftCard(padding: cardPadding)
 
                     Spacer(minLength: 16)
                 }

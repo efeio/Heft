@@ -38,6 +38,7 @@ struct ContentView: View {
             }
         }
         .environment(\.heftAccent, profile?.gender == .female ? .heftPink : .heftBlue)
+        .environment(\.heftAccentFill, profile?.gender == .female ? .heftPinkFill : .heftBlueFill)
         .environment(\.heftAccentPressed, profile?.gender == .female ? .heftPinkPressed : .heftBluePressed)
         .animation(.easeInOut(duration: 0.35), value: isOnboardingCompleted)
     }

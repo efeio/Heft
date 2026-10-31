@@ -15,7 +15,7 @@ struct WeightChartView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.heftAccent) private var accent
-    @ScaledMetric(relativeTo: .body) private var cardPadding: CGFloat = 16
+    @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var insightIconSize: CGFloat = 28
 
     @State private var selectedRange: ChartTimeRange = {
@@ -184,7 +184,7 @@ struct WeightChartView: View {
                 } else if current < prev {
                     return MotivationInsight(
                         icon: "flame.fill",
-                        color: .orange,
+                        color: .heftWarning,
                         title: "İstikrarınızı Koruyun",
                         message: String(format: "Hedefe %.1f kg kaldı. Günlük kalori ve su dalgalanmaları doğaldır.", distanceToTarget)
                     )
@@ -232,7 +232,7 @@ struct WeightChartView: View {
                 } else if current > prev {
                     return MotivationInsight(
                         icon: "flame.fill",
-                        color: .orange,
+                        color: .heftWarning,
                         title: "İstikrarınızı Koruyun",
                         message: String(format: "Hedefinize %.1f kg kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır.", distanceToTarget)
                     )
@@ -316,8 +316,6 @@ struct WeightChartView: View {
                         .foregroundStyle(Color.secondary)
                 }
             }
-            .padding(.horizontal, cardPadding)
-            .padding(.top, cardPadding)
 
             // MARK: - Scalable Time Range Picker
             HStack(spacing: 6) {
@@ -341,7 +339,7 @@ struct WeightChartView: View {
                             .background {
                                 if isSelected {
                                     Capsule()
-                                        .fill(accent)
+                                        .fill(accentFill)
                                 }
                             }
                     }
@@ -354,9 +352,8 @@ struct WeightChartView: View {
             .padding(4)
             .background {
                 Capsule()
-                    .fill(Color(.tertiarySystemGroupedBackground))
+                    .fill(Color.heftSurfaceSub)
             }
-            .padding(.horizontal, cardPadding)
 
             // MARK: - Pure, Clean Chart Canvas (Proportional Height)
             if allSortedEntries.count == 1 {
@@ -397,12 +394,11 @@ struct WeightChartView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
-                .padding(.horizontal, cardPadding)
             } else if activeEntries.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                         .font(.title)
-                        .foregroundStyle(Color.secondary.opacity(0.5))
+                        .foregroundStyle(Color.secondary)
 
                     Text(allSortedEntries.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
                         .font(.footnote.weight(.medium))
@@ -411,7 +407,6 @@ struct WeightChartView: View {
                 .frame(maxWidth: .infinity)
                 .aspectRatio(2.0, contentMode: .fit)
                 .frame(minHeight: 130, maxHeight: 220)
-                .padding(.horizontal, cardPadding)
             } else {
                 Chart {
                     // Target Weight RuleMark (Item 11)
@@ -540,7 +535,6 @@ struct WeightChartView: View {
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
                 .frame(height: activeEntries.count <= 1 ? 160 : 200)
-                .padding(.horizontal, cardPadding)
 
                 if activeEntries.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
@@ -549,7 +543,6 @@ struct WeightChartView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.top, 4)
                         .padding(.bottom, 6)
-                        .padding(.horizontal, cardPadding)
                 }
             }
 
@@ -579,14 +572,11 @@ struct WeightChartView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color(.tertiarySystemGroupedBackground))
+                        .fill(Color.heftSurfaceSub)
                 )
-                .padding(.horizontal, cardPadding)
-                .padding(.bottom, cardPadding)
             }
         }
-        .background(Color(.secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .heftCard()
         .onAppear {
             sortedEntries = entries.sorted { $0.date < $1.date }
             if selectedEntry == nil {

@@ -39,6 +39,7 @@ struct ScheduleStep: View {
     let onNext: () -> Void
 
     @Environment(\.heftAccent) private var accent
+    @Environment(\.heftAccentFill) private var accentFill
     @ScaledMetric(relativeTo: .body) private var circleSize: CGFloat = 54
     @ScaledMetric(relativeTo: .body) private var sectionSpacing: CGFloat = 20
 
@@ -265,7 +266,7 @@ struct ScheduleStep: View {
                                             .frame(height: 44)
                                             .background {
                                                 RoundedRectangle(cornerRadius: 10)
-                                                    .fill(isSelected ? accent : Color(.secondarySystemGroupedBackground))
+                                                    .fill(isSelected ? accentFill : Color.heftSurface)
                                             }
                                     }
                                     .buttonStyle(.plain)

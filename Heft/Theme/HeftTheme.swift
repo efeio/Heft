@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct HeftThemeModifier: ViewModifier {
-    @Environment(\.colorScheme) private var colorScheme
-
     func body(content: Content) -> some View {
         content
-            .background(colorScheme == .dark ? Color.heftDarkCanvas : Color.heftCanvas)
-            .foregroundStyle(colorScheme == .dark ? Color.heftTextPrimaryDark : Color.heftTextPrimary)
+            .background(Color.heftCanvas)
+            .foregroundStyle(Color.heftTextPrimary)
     }
 }
 
 struct HeftCardStyle: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var contrast
     @ScaledMetric(relativeTo: .body) var cornerRadius: CGFloat = 18
     @ScaledMetric(relativeTo: .body) var padding: CGFloat = 16
 
@@ -27,17 +26,20 @@ struct HeftCardStyle: ViewModifier {
             .padding(padding)
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(colorScheme == .dark ? Color.heftDarkSurface1 : Color.heftSurface)
+                    .fill(Color.heftSurface)
             }
             .overlay {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .stroke(colorScheme == .dark ? Color.heftDarkDivider : Color.heftDivider, lineWidth: 1)
+                    .stroke(
+                        Color.heftDivider,
+                        lineWidth: contrast == .increased ? 1.5 : 1.0
+                    )
             }
             .shadow(
-                color: colorScheme == .dark ? Color.clear : Color.heftNavy.opacity(0.06),
-                radius: colorScheme == .dark ? 0 : 14,
+                color: (colorScheme == .dark || contrast == .increased) ? Color.clear : Color.heftNavy.opacity(0.05),
+                radius: 12,
                 x: 0,
-                y: colorScheme == .dark ? 0 : 4
+                y: 4
             )
     }
 }
@@ -56,27 +58,27 @@ extension View {
 
 extension Color {
     static func heftAdaptiveCanvas(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? .heftDarkCanvas : .heftCanvas
+        .heftCanvas
     }
 
     static func heftAdaptiveSurface(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? .heftDarkSurface1 : .heftSurface
+        .heftSurface
     }
 
     static func heftAdaptiveSurfaceSub(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? .heftDarkSurface2 : .heftSurfaceSub
+        .heftSurfaceSub
     }
 
     static func heftAdaptiveDivider(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? .heftDarkDivider : .heftDivider
+        .heftDivider
     }
 
     static func heftAdaptiveTextPrimary(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? .heftTextPrimaryDark : .heftTextPrimary
+        .heftTextPrimary
     }
 
     static func heftAdaptiveTextSecondary(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? .heftTextSecondaryDark : .heftTextSecondary
+        .heftTextSecondary
     }
 }
 

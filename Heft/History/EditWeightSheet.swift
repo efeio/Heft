@@ -11,7 +11,6 @@ import SwiftData
 struct EditWeightSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.heftAccent) private var accent
 
     let entry: WeightEntry
@@ -145,7 +144,7 @@ struct EditWeightSheet: View {
                 .padding(.horizontal, horizontalPadding)
                 .padding(.bottom, 20)
             }
-            .background(colorScheme == .dark ? Color.heftDarkCanvas : Color.heftCanvas)
+            .background(Color.heftCanvas)
             .navigationTitle("Tartımı Düzenle")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

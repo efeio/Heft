@@ -94,6 +94,7 @@ struct OnboardingContainerView: View {
             }
         }
         .environment(\.heftAccent, gender == .female ? .heftPink : .heftBlue)
+        .environment(\.heftAccentFill, gender == .female ? .heftPinkFill : .heftBlueFill)
         .environment(\.heftAccentPressed, gender == .female ? .heftPinkPressed : .heftBluePressed)
         .animation(reduceMotion ? .linear(duration: 0.2) : .easeOut(duration: 0.3), value: currentStep)
     }

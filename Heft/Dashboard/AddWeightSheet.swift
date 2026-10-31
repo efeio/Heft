@@ -12,8 +12,8 @@ import SwiftData
 struct AddWeightSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.heftAccent) private var accent
+    @Environment(\.heftAccentFill) private var accentFill
     @Query(sort: \WeightEntry.date, order: .reverse) private var existingEntries: [WeightEntry]
     @Query private var profiles: [UserProfile]
 
@@ -163,7 +163,7 @@ struct AddWeightSheet: View {
                     }
                 }
             }
-            .background(colorScheme == .dark ? Color.heftDarkCanvas : Color.heftCanvas)
+            .background(Color.heftCanvas)
             .sheet(isPresented: $showCustomDatePicker) {
                 customDatePickerSheet
             }
@@ -207,7 +207,7 @@ struct AddWeightSheet: View {
                     .padding(.vertical, 8)
                     .background {
                         Capsule()
-                            .fill(isTodaySelected ? accent : Color(.secondarySystemGroupedBackground))
+                            .fill(isTodaySelected ? accentFill : Color.heftSurface)
                     }
             }
             .buttonStyle(.plain)
@@ -224,7 +224,7 @@ struct AddWeightSheet: View {
                         .padding(.vertical, 8)
                         .background {
                             Capsule()
-                                .fill(isYesterdaySelected ? accent : Color(.secondarySystemGroupedBackground))
+                                .fill(isYesterdaySelected ? accentFill : Color.heftSurface)
                         }
                 }
                 .buttonStyle(.plain)
@@ -249,7 +249,7 @@ struct AddWeightSheet: View {
                 .padding(.vertical, 8)
                 .background {
                     Capsule()
-                        .fill(!isTodaySelected && !isYesterdaySelected ? accent : accent.opacity(0.12))
+                        .fill(!isTodaySelected && !isYesterdaySelected ? accentFill : accent.opacity(0.12))
                 }
             }
             .buttonStyle(.plain)
@@ -262,7 +262,7 @@ struct AddWeightSheet: View {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(weightText.isEmpty ? "0.0" : weightText)
                     .font(.system(size: 56, weight: .bold, design: .rounded))
-                    .foregroundStyle(weightText.isEmpty ? Color.secondary.opacity(0.35) : Color.primary)
+                    .foregroundStyle(weightText.isEmpty ? Color.secondary : Color.primary)
                     .minimumScaleFactor(0.7)
                     .lineLimit(1)
                     .contentTransition(.numericText())
@@ -334,12 +334,12 @@ struct AddWeightSheet: View {
                     Text(isGain ? String(format: "Son tartıma göre +%.1f kg", delta) : (isLoss ? String(format: "Son tartıma göre -%.1f kg", abs(delta)) : "Son tartımla aynı"))
                         .font(.caption.weight(.semibold))
                 }
-                .foregroundStyle(isPositiveDirection ? Color.heftSuccess : (isGain || isLoss ? Color.orange : Color.secondary))
+                .foregroundStyle(isPositiveDirection ? Color.heftSuccess : (isGain || isLoss ? Color.heftWarning : Color.secondary))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 5)
                 .background {
                     Capsule()
-                        .fill(isPositiveDirection ? Color.heftSuccess.opacity(0.12) : (isGain || isLoss ? Color.orange.opacity(0.12) : Color(.tertiarySystemGroupedBackground)))
+                        .fill(isPositiveDirection ? Color.heftSuccess.opacity(0.12) : (isGain || isLoss ? Color.heftWarning.opacity(0.12) : Color.heftSurfaceSub))
                 }
             } else if let target = profile?.targetWeight {
                 let diff = current - target
@@ -361,7 +361,7 @@ struct AddWeightSheet: View {
             // Subtle guidance placeholder
             Text("Tartıdaki kilonuzu girin")
                 .font(.caption)
-                .foregroundStyle(Color.secondary.opacity(0.6))
+                .foregroundStyle(Color.secondary)
                 .frame(height: 24)
         }
     }

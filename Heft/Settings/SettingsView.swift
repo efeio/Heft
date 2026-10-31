@@ -14,6 +14,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.heftAccent) private var accent
+    @Environment(\.heftAccentFill) private var accentFill
     @Query private var profiles: [UserProfile]
     @Query(sort: \WeightEntry.date, order: .reverse) private var existingEntries: [WeightEntry]
 
@@ -360,7 +361,7 @@ struct SettingsView: View {
                     Spacer()
                     Image(systemName: "chevron.right")
                         .font(.footnote.weight(.semibold))
-                        .foregroundStyle(Color.secondary.opacity(0.6))
+                        .foregroundStyle(Color.secondary)
                 }
             }
 
@@ -372,7 +373,7 @@ struct SettingsView: View {
                     Spacer()
                     Image(systemName: "arrow.up.right")
                         .font(.footnote.weight(.semibold))
-                        .foregroundStyle(Color.secondary.opacity(0.6))
+                        .foregroundStyle(Color.secondary)
                 }
             }
         } header: {
@@ -449,7 +450,7 @@ struct SettingsView: View {
                                     .frame(height: 36)
                                     .background {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(isSelected ? accent : Color(.tertiarySystemGroupedBackground))
+                                            .fill(isSelected ? accentFill : Color.heftSurfaceSub)
                                     }
                             }
                             .buttonStyle(.plain)
