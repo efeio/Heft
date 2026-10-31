@@ -133,7 +133,6 @@ struct SettingsView: View {
                     .foregroundStyle(isValid ? accent : Color.secondary)
                 }
             }
-            .toolbar(.hidden, for: .tabBar)
             .interactiveDismissDisabled(hasUnsavedChanges)
             .onAppear {
                 loadCurrentProfile()
@@ -148,6 +147,9 @@ struct SettingsView: View {
                 }
                 #endif
             }
+            .onDisappear {
+                focusedField = nil
+            }
             .onChange(of: scenePhase) { _, newPhase in
                 if newPhase == .active {
                     refreshNotificationStatus()
@@ -159,6 +161,7 @@ struct SettingsView: View {
         }
         .alert("Kaydedilmemiş Değişiklikler", isPresented: $showDiscardAlert) {
             Button("Değişiklikleri Sil", role: .destructive) {
+                focusedField = nil
                 dismiss()
             }
             Button("Düzenlemeye Devam Et", role: .cancel) {}
@@ -832,6 +835,7 @@ struct SettingsView: View {
                     await NotificationService.removeAllWeighInNotifications()
                 }
             }
+            focusedField = nil
             dismiss()
         } catch {
             showSaveError = true

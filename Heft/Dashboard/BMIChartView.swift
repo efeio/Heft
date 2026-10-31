@@ -57,44 +57,14 @@ struct BMIChartView: View {
         return cachedBmiPoints
     }
 
-    private var referenceDate: Date {
-        max(Date(), allBmiPoints.last?.date ?? Date())
-    }
-
-    private var xDomain: ClosedRange<Date> {
-        selectedRange.dateRange(relativeTo: referenceDate, allDates: allBmiPoints.map(\.date))
-    }
-
     private var activeBmiPoints: [BMIPoint] {
-        let filteredEntries = selectedRange.filter(entries: entries, relativeTo: referenceDate)
-        return filteredEntries
-            .compactMap { entry in
-                guard let val = BMICalculator.calculate(weightKg: entry.weight, heightCm: height) else { return nil }
-                return BMIPoint(date: entry.date, bmi: val, weight: entry.weight)
-            }
-    }
-
-    private var activePoint: BMIPoint? {
-        if let selected = selectedPoint, activeBmiPoints.contains(where: { $0.id == selected.id }) {
-            return selected
+        let allPoints = allBmiPoints
+        guard let days = selectedRange.days else {
+            return allPoints
         }
-        return activeBmiPoints.last ?? allBmiPoints.last
-    }
-
-    private var yMin: Double {
-        let bmis = activeBmiPoints.map(\.bmi)
-        let minB = bmis.min() ?? (allBmiPoints.map(\.bmi).min() ?? 20.0)
-        return max(10.0, minB - 1.5)
-    }
-
-    private var yMax: Double {
-        let bmis = activeBmiPoints.map(\.bmi)
-        let maxB = bmis.max() ?? (allBmiPoints.map(\.bmi).max() ?? 25.0)
-        return max(yMin + 2.0, min(45.0, maxB + 1.5))
-    }
-
-    private var xAxisDates: [Date] {
-        selectedRange.xAxisDates(referenceDate: referenceDate, allDates: allBmiPoints.map(\.date))
+        let ref = max(Date(), allPoints.last?.date ?? Date())
+        let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: ref) ?? ref.addingTimeInterval(-Double(days) * 86400)
+        return allPoints.filter { $0.date >= cutoff }
     }
 
     private static let fullDateFormatter: DateFormatter = {
@@ -136,9 +106,9 @@ struct BMIChartView: View {
     }
 
     @ViewBuilder
-    private var bmiHeaderBadges: some View {
+    private func bmiHeaderBadges(active: BMIPoint?, activePoints: [BMIPoint]) -> some View {
         HStack(spacing: 6) {
-            if let active = activePoint {
+            if let active = active {
                 let cat = BMICalculator.category(for: active.bmi)
                 let catColor = BMICalculator.color(for: active.bmi)
 
@@ -150,11 +120,11 @@ struct BMIChartView: View {
                     .background(catColor.opacity(0.14), in: Capsule())
             }
 
-            if let selected = selectedPoint, selected.id != activeBmiPoints.last?.id {
+            if let selected = selectedPoint, selected.id != activePoints.last?.id {
                 Button {
                     withAnimation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.75)) {
-                        selectedPoint = activeBmiPoints.last
-                        rawSelectedDate = activeBmiPoints.last?.date
+                        selectedPoint = activePoints.last
+                        rawSelectedDate = activePoints.last?.date
                     }
                 } label: {
                     HStack(spacing: 4) {
@@ -178,9 +148,9 @@ struct BMIChartView: View {
     }
 
     @ViewBuilder
-    private func bmiRangeButton(range: ChartTimeRange, fixedHorizontal: Bool) -> some View {
+    private func bmiRangeButton(range: ChartTimeRange, fixedHorizontal: Bool, allDates: [Date]) -> some View {
         let isSelected = selectedRange == range
-        let isAvailable = range.isAvailable(for: allBmiPoints.map(\.date))
+        let isAvailable = range.isAvailable(for: allDates)
         Button {
             guard isAvailable else { return }
             withAnimation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.75)) {
@@ -213,6 +183,28 @@ struct BMIChartView: View {
     }
 
     var body: some View {
+        let allPoints = allBmiPoints
+        let allDates = allPoints.map(\.date)
+        let refDate = max(Date(), allPoints.last?.date ?? Date())
+        let currentActivePoints: [BMIPoint] = {
+            guard let days = selectedRange.days else { return allPoints }
+            let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: refDate) ?? refDate.addingTimeInterval(-Double(days) * 86400)
+            return allPoints.filter { $0.date >= cutoff }
+        }()
+        let currentActivePoint: BMIPoint? = {
+            if let selected = selectedPoint, currentActivePoints.contains(where: { $0.id == selected.id }) {
+                return selected
+            }
+            return currentActivePoints.last ?? allPoints.last
+        }()
+        let activeId = currentActivePoint?.id
+        let activeBmis = currentActivePoints.map(\.bmi)
+        let allBmis = allPoints.map(\.bmi)
+        let currentYMin = max(10.0, (activeBmis.min() ?? allBmis.min() ?? 20.0) - 1.5)
+        let currentYMax = max(currentYMin + 2.0, min(45.0, (activeBmis.max() ?? allBmis.max() ?? 25.0) + 1.5))
+        let currentXDomain = selectedRange.dateRange(relativeTo: refDate, allDates: allDates)
+        let currentXAxisDates = selectedRange.xAxisDates(referenceDate: refDate, allDates: allDates)
+
         VStack(alignment: .leading, spacing: 16) {
             // MARK: - Header (Apple Health Clean Stat)
             VStack(alignment: .leading, spacing: 4) {
@@ -226,7 +218,7 @@ struct BMIChartView: View {
 
                         Spacer()
 
-                        bmiHeaderBadges
+                        bmiHeaderBadges(active: currentActivePoint, activePoints: currentActivePoints)
                             .fixedSize(horizontal: true, vertical: false)
                     }
 
@@ -236,11 +228,11 @@ struct BMIChartView: View {
                             .foregroundStyle(Color.secondary)
                             .tracking(0.6)
 
-                        bmiHeaderBadges
+                        bmiHeaderBadges(active: currentActivePoint, activePoints: currentActivePoints)
                     }
                 }
 
-                if let active = activePoint {
+                if let active = currentActivePoint {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
                             Text(HeftFormat.weight(active.bmi))
@@ -264,7 +256,7 @@ struct BMIChartView: View {
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 6) {
                     ForEach(ChartTimeRange.allCases) { range in
-                        bmiRangeButton(range: range, fixedHorizontal: true)
+                        bmiRangeButton(range: range, fixedHorizontal: true, allDates: allDates)
                     }
                 }
                 .padding(4)
@@ -275,7 +267,7 @@ struct BMIChartView: View {
 
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 6)], spacing: 6) {
                     ForEach(ChartTimeRange.allCases) { range in
-                        bmiRangeButton(range: range, fixedHorizontal: false)
+                        bmiRangeButton(range: range, fixedHorizontal: false, allDates: allDates)
                     }
                 }
                 .padding(6)
@@ -286,7 +278,7 @@ struct BMIChartView: View {
             }
 
             // MARK: - Pure, Clean Chart Canvas (Proportional Height)
-            if allBmiPoints.count == 1, let single = allBmiPoints.first {
+            if allPoints.count == 1, let single = allPoints.first {
                 // MARK: - First Measurement Milestone Card (BMI)
                 let cat = BMICalculator.category(for: single.bmi)
                 let catColor = BMICalculator.color(for: single.bmi)
@@ -327,13 +319,13 @@ struct BMIChartView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
-            } else if activeBmiPoints.isEmpty {
+            } else if currentActivePoints.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "heart.text.square")
                         .font(.title)
                         .foregroundStyle(Color.secondary)
 
-                    Text(allBmiPoints.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
+                    Text(allPoints.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
                         .font(.footnote.weight(.medium))
                         .foregroundStyle(Color.secondary)
                 }
@@ -343,7 +335,7 @@ struct BMIChartView: View {
             } else {
                 Chart {
                     // Vertical Guideline on Selected Point (only while actively touching/scrubbing)
-                    if isScrubbing, let active = selectedPoint ?? activePoint {
+                    if isScrubbing, let active = selectedPoint ?? currentActivePoint {
                         RuleMark(x: .value("Seçilen Tarih", active.date))
                             .lineStyle(StrokeStyle(lineWidth: 1.2, dash: [4, 4]))
                             .foregroundStyle(Color.secondary.opacity(0.35))
@@ -351,7 +343,7 @@ struct BMIChartView: View {
                     }
 
                     // Subtle Reference Line for Normal BMI Threshold (25.0) if in range
-                    if yMin <= 25.0 && yMax >= 24.5 {
+                    if currentYMin <= 25.0 && currentYMax >= 24.5 {
                         RuleMark(y: .value("Normal Sınır", 25.0))
                             .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
                             .foregroundStyle(Color.heftBMINormal.opacity(0.55))
@@ -363,11 +355,11 @@ struct BMIChartView: View {
                     }
 
                     // AreaMark subtle gradient fill (when 2 or more entries)
-                    if activeBmiPoints.count >= 2 {
-                        ForEach(activeBmiPoints) { point in
+                    if currentActivePoints.count >= 2 {
+                        ForEach(currentActivePoints) { point in
                             AreaMark(
                                 x: .value("Tarih", point.date),
-                                yStart: .value("Taban", yMin),
+                                yStart: .value("Taban", currentYMin),
                                 yEnd: .value("BMI", point.bmi)
                             )
                             .interpolationMethod(.catmullRom)
@@ -382,8 +374,8 @@ struct BMIChartView: View {
                     }
 
                     // Line & Data Points (LineMark when 2 or more entries)
-                    if activeBmiPoints.count >= 2 {
-                        ForEach(activeBmiPoints) { point in
+                    if currentActivePoints.count >= 2 {
+                        ForEach(currentActivePoints) { point in
                             LineMark(
                                 x: .value("Tarih", point.date),
                                 y: .value("BMI", point.bmi)
@@ -395,8 +387,8 @@ struct BMIChartView: View {
                     }
 
                     // PointMarks for each entry (1 or more)
-                    ForEach(activeBmiPoints) { point in
-                        let isSelected = activePoint?.id == point.id
+                    ForEach(currentActivePoints) { point in
+                        let isSelected = activeId == point.id
                         let pointColor = BMICalculator.color(for: point.bmi)
 
                         PointMark(
@@ -428,8 +420,8 @@ struct BMIChartView: View {
                         }
                     }
                 }
-                .chartXScale(domain: xDomain)
-                .chartYScale(domain: yMin...max(yMin + 1.0, yMax))
+                .chartXScale(domain: currentXDomain)
+                .chartYScale(domain: currentYMin...max(currentYMin + 1.0, currentYMax))
                 .chartPlotStyle { plotArea in
                     plotArea.clipped()
                 }
@@ -447,11 +439,11 @@ struct BMIChartView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: xAxisDates) { value in
+                    AxisMarks(values: currentXAxisDates) { value in
                         if let date = value.as(Date.self) {
-                            let isSelected = activePoint.map { Calendar.current.isDate(date, inSameDayAs: $0.date) } ?? false
+                            let isSelected = currentActivePoint.map { Calendar.current.isDate(date, inSameDayAs: $0.date) } ?? false
                             AxisValueLabel(anchor: .top) {
-                                Text(selectedRange.format(date: date, relativeTo: referenceDate))
+                                Text(selectedRange.format(date: date, relativeTo: refDate))
                                     .font(.caption2.weight(isSelected ? .bold : .semibold))
                                     .foregroundStyle(isSelected ? accent : Color.secondary)
                             }
@@ -470,16 +462,16 @@ struct BMIChartView: View {
                         }
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
-                .frame(minHeight: activeBmiPoints.count <= 1 ? singleChartHeight : fullChartHeight)
+                .frame(minHeight: currentActivePoints.count <= 1 ? singleChartHeight : fullChartHeight)
                 .accessibilityLabel({
-                    let minBMI = activeBmiPoints.map(\.bmi).min() ?? 0
-                    let maxBMI = activeBmiPoints.map(\.bmi).max() ?? 0
-                    let currentBMI = activePoint?.bmi ?? 0
+                    let minBMI = activeBmis.min() ?? 0
+                    let maxBMI = activeBmis.max() ?? 0
+                    let currentBMI = currentActivePoint?.bmi ?? 0
                     let currentCategory = BMICalculator.category(for: currentBMI)
-                    return "Vücut kitle indeksi grafiği, \(selectedRange.accessibilityTitle). \(activeBmiPoints.count) kayıt. Mevcut BMI: \(HeftFormat.weight(currentBMI)) (\(currentCategory)). En düşük \(HeftFormat.weight(minBMI)), en yüksek \(HeftFormat.weight(maxBMI))."
+                    return "Vücut kitle indeksi grafiği, \(selectedRange.accessibilityTitle). \(currentActivePoints.count) kayıt. Mevcut BMI: \(HeftFormat.weight(currentBMI)) (\(currentCategory)). En düşük \(HeftFormat.weight(minBMI)), en yüksek \(HeftFormat.weight(maxBMI))."
                 }())
 
-                if activeBmiPoints.count == 1 {
+                if currentActivePoints.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsin.")
                         .font(.footnote)
                         .foregroundStyle(Color.secondary)
@@ -490,7 +482,7 @@ struct BMIChartView: View {
             }
 
             // MARK: - BMI Health Insight Banner
-            if allBmiPoints.count >= 2 {
+            if allPoints.count >= 2 {
                 let insight = healthInsight
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: insight.icon)
@@ -522,7 +514,9 @@ struct BMIChartView: View {
         }
         .heftCard()
         .onAppear {
-            cachedBmiPoints = Self.computeBmiPoints(entries: entries, height: height)
+            if cachedBmiPoints.count != entries.count || cachedBmiPoints.last?.date != entries.first?.date {
+                cachedBmiPoints = Self.computeBmiPoints(entries: entries, height: height)
+            }
             if selectedPoint == nil {
                 selectedPoint = activeBmiPoints.last
             }

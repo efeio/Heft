@@ -22,29 +22,28 @@ struct TargetProjectionCard: View {
     @State private var showFeedbackBadge = false
     @State private var feedbackBadgeText: String? = nil
     @State private var feedbackBadgeIsPositive = true
+    @State private var lastEvaluatedCount: Int = -1
 
     @AppStorage("heft_last_projected_timestamp") private var lastProjectedTimestamp: Double = 0.0
 
     private var effectiveInitialWeight: Double {
-        initialWeight ?? entries.sorted(by: { $0.date < $1.date }).first?.weight ?? targetWeight
+        initialWeight ?? entries.min(by: { $0.date < $1.date })?.weight ?? targetWeight
     }
 
-    private var projectionInput: ProjectionInput {
-        ProjectionInput(
-            entries: entries,
-            targetWeight: targetWeight,
-            initialWeight: effectiveInitialWeight,
-            goalType: goalType,
-            onboardingWeeklyPace: targetWeeklyPace,
-            referenceDate: Date()
+    private func computeOutput() -> ProjectionOutput {
+        ProjectionEngine.calculate(
+            input: ProjectionInput(
+                entries: entries,
+                targetWeight: targetWeight,
+                initialWeight: effectiveInitialWeight,
+                goalType: goalType,
+                onboardingWeeklyPace: targetWeeklyPace,
+                referenceDate: Date()
+            )
         )
     }
 
-    private var output: ProjectionOutput {
-        ProjectionEngine.calculate(input: projectionInput)
-    }
-
-    private var weeksBadgeText: String {
+    private func weeksBadgeText(for output: ProjectionOutput) -> String {
         let weeks = output.primaryWeeksRemaining
         if weeks <= 0 {
             return "Tebrikler"
@@ -53,7 +52,7 @@ struct TargetProjectionCard: View {
         return "~\(rounded) Hafta"
     }
 
-    private var informalPrimaryDateRangeString: String {
+    private func informalPrimaryDateRangeString(for output: ProjectionOutput) -> String {
         if output.isMaintainGoal {
             let diff = abs(output.currentWeight - output.targetWeight)
             if diff <= 0.5 {
@@ -64,7 +63,7 @@ struct TargetProjectionCard: View {
         return output.primaryDateRangeString
     }
 
-    private var informalGeneralMessage: String {
+    private func informalGeneralMessage(for output: ProjectionOutput) -> String {
         switch output.condition {
         case .plateau(let days, let avgW):
             return "Kilon \(days) gündür \(HeftFormat.weight(avgW)) ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir."
@@ -92,6 +91,10 @@ struct TargetProjectionCard: View {
     }
 
     var body: some View {
+        let output = computeOutput()
+        let primaryRangeText = informalPrimaryDateRangeString(for: output)
+        let weeksBadge = weeksBadgeText(for: output)
+
         VStack(alignment: .leading, spacing: 14) {
             // MARK: - Header Row (Title & Pace Indicator)
             ViewThatFits(in: .horizontal) {
@@ -111,7 +114,7 @@ struct TargetProjectionCard: View {
                     Spacer()
 
                     if !output.isGoalReached && !output.isMaintainGoal {
-                        paceIndicatorView
+                        paceIndicatorView(for: output)
                             .fixedSize(horizontal: true, vertical: false)
                     }
                 }
@@ -129,7 +132,7 @@ struct TargetProjectionCard: View {
                     }
 
                     if !output.isGoalReached && !output.isMaintainGoal {
-                        paceIndicatorView
+                        paceIndicatorView(for: output)
                     }
                 }
             }
@@ -159,45 +162,45 @@ struct TargetProjectionCard: View {
             if !output.isGoalReached && !output.isMaintainGoal {
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .firstTextBaseline) {
-                        Text(informalPrimaryDateRangeString)
+                        Text(primaryRangeText)
                             .font(.title2.weight(.bold))
                             .foregroundStyle(Color.primary)
                             .fixedSize(horizontal: true, vertical: false)
 
                         Spacer()
 
-                        badgeView(badge: weeksBadgeText, color: accent)
+                        badgeView(badge: weeksBadge, color: accent)
                             .fixedSize(horizontal: true, vertical: false)
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(informalPrimaryDateRangeString)
+                        Text(primaryRangeText)
                             .font(.title2.weight(.bold))
                             .foregroundStyle(Color.primary)
 
-                        badgeView(badge: weeksBadgeText, color: accent)
+                        badgeView(badge: weeksBadge, color: accent)
                     }
                 }
             } else {
-                Text(informalPrimaryDateRangeString)
+                Text(primaryRangeText)
                     .font(.title2.weight(.bold))
                     .foregroundStyle(Color.primary)
             }
 
             // MARK: - Milestone Progress Bar
             if !output.isGoalReached && !output.isMaintainGoal {
-                milestoneProgressBar
+                milestoneProgressBar(for: output)
                     .padding(.vertical, 2)
             }
 
             // MARK: - Dynamic Context Insight (Single Smart Message)
             HStack(alignment: .top, spacing: 10) {
-                Image(systemName: insightIcon)
+                Image(systemName: insightIcon(for: output))
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(insightIconColor)
+                    .foregroundStyle(insightIconColor(for: output))
                     .padding(.top, 1)
 
-                Text(informalGeneralMessage)
+                Text(informalGeneralMessage(for: output))
                     .font(.heftMeta)
                     .foregroundStyle(Color.primary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -208,21 +211,25 @@ struct TargetProjectionCard: View {
             .padding(12)
             .background {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(insightBackgroundColor)
+                    .fill(insightBackgroundColor(for: output))
             }
         }
         .heftCard()
         .onAppear {
-            evaluateMicroFeedback()
+            guard lastEvaluatedCount != entries.count else { return }
+            lastEvaluatedCount = entries.count
+            evaluateMicroFeedback(with: computeOutput())
         }
-        .onChange(of: entries.count) { _, _ in
-            evaluateMicroFeedback()
+        .onChange(of: entries.count) { _, newCount in
+            guard lastEvaluatedCount != newCount else { return }
+            lastEvaluatedCount = newCount
+            evaluateMicroFeedback(with: computeOutput())
         }
     }
 
     // MARK: - Pace Indicator
     @ViewBuilder
-    private var paceIndicatorView: some View {
+    private func paceIndicatorView(for output: ProjectionOutput) -> some View {
         let status = output.paceStatus
         if status != .notApplicable {
             let statusColor: Color = {
@@ -249,7 +256,7 @@ struct TargetProjectionCard: View {
 
     // MARK: - Minimal Milestone Progress Bar
     @ViewBuilder
-    private var milestoneProgressBar: some View {
+    private func milestoneProgressBar(for output: ProjectionOutput) -> some View {
         let milestone = output.milestone
         let hasCoveredProgress = abs(milestone.startWeight - milestone.currentWeight) >= 0.2
 
@@ -384,7 +391,7 @@ struct TargetProjectionCard: View {
     }
 
     // MARK: - Insight Styling Helpers
-    private var insightIcon: String {
+    private func insightIcon(for output: ProjectionOutput) -> String {
         switch output.condition {
         case .plateau:
             return "figure.cooldown"
@@ -402,7 +409,7 @@ struct TargetProjectionCard: View {
         }
     }
 
-    private var insightIconColor: Color {
+    private func insightIconColor(for output: ProjectionOutput) -> Color {
         switch output.condition {
         case .plateau:
             return accent
@@ -420,7 +427,7 @@ struct TargetProjectionCard: View {
         }
     }
 
-    private var insightBackgroundColor: Color {
+    private func insightBackgroundColor(for output: ProjectionOutput) -> Color {
         switch output.condition {
         case .plateau:
             return Color.heftSurfaceSub
@@ -450,7 +457,7 @@ struct TargetProjectionCard: View {
     }
 
     // MARK: - Micro-Feedback Evaluation
-    private func evaluateMicroFeedback() {
+    private func evaluateMicroFeedback(with output: ProjectionOutput) {
         guard !output.isGoalReached && !output.isMaintainGoal else { return }
 
         let currentTargetTimestamp = output.primaryProjectedDate.timeIntervalSince1970

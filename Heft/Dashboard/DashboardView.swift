@@ -185,6 +185,7 @@ struct DashboardView: View {
             .background(Color.heftAdaptiveCanvas(colorScheme).ignoresSafeArea())
             .navigationTitle(greetingTitle)
             .navigationBarTitleDisplayMode(.large)
+            .toolbar(showingSettings ? .hidden : .visible, for: .tabBar)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {

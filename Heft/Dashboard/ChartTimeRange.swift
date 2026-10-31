@@ -103,12 +103,35 @@ enum ChartTimeRange: String, CaseIterable, Identifiable {
         return bufferedStart...safeEnd
     }
 
+    private static let dayMonthFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "tr_TR")
+        df.dateFormat = "d MMM"
+        return df
+    }()
+
+    private static let monthFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "tr_TR")
+        df.dateFormat = "MMM"
+        return df
+    }()
+
+    private static let monthYearFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "tr_TR")
+        df.dateFormat = "MMM ''yy"
+        return df
+    }()
+
     func filter(entries: [WeightEntry], relativeTo referenceDate: Date) -> [WeightEntry] {
+        let isAlreadySorted = zip(entries, entries.dropFirst()).allSatisfy { $0.date <= $1.date }
         guard let days = days else {
-            return entries.sorted { $0.date < $1.date }
+            return isAlreadySorted ? entries : entries.sorted { $0.date < $1.date }
         }
         let cutoff = Calendar.current.date(byAdding: .day, value: -days, to: referenceDate) ?? referenceDate.addingTimeInterval(-Double(days) * 86400)
-        return entries.filter { $0.date >= cutoff }.sorted { $0.date < $1.date }
+        let filtered = entries.filter { $0.date >= cutoff }
+        return isAlreadySorted ? filtered : filtered.sorted { $0.date < $1.date }
     }
 
     func xAxisDates(referenceDate: Date, allDates: [Date]) -> [Date] {
@@ -165,40 +188,26 @@ enum ChartTimeRange: String, CaseIterable, Identifiable {
         let currentYear = calendar.component(.year, from: referenceDate)
         let dateYear = calendar.component(.year, from: date)
 
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-
         switch self {
         case .oneMonth:
-            df.dateFormat = "d MMM"
-            return df.string(from: date)
+            return Self.dayMonthFormatter.string(from: date)
 
-        case .threeMonths, .sixMonths:
+        case .threeMonths, .sixMonths, .oneYear:
             if dateYear != currentYear {
-                df.dateFormat = "MMM ''yy"
+                return Self.monthYearFormatter.string(from: date)
             } else {
-                df.dateFormat = "MMM"
+                return Self.monthFormatter.string(from: date)
             }
-            return df.string(from: date)
-
-        case .oneYear:
-            if dateYear != currentYear {
-                df.dateFormat = "MMM ''yy"
-            } else {
-                df.dateFormat = "MMM"
-            }
-            return df.string(from: date)
 
         case .all:
             let spanDays = calendar.dateComponents([.day], from: date, to: referenceDate).day ?? 1
             if spanDays <= 45 {
-                df.dateFormat = "d MMM"
+                return Self.dayMonthFormatter.string(from: date)
             } else if dateYear != currentYear {
-                df.dateFormat = "MMM ''yy"
+                return Self.monthYearFormatter.string(from: date)
             } else {
-                df.dateFormat = "MMM"
+                return Self.monthFormatter.string(from: date)
             }
-            return df.string(from: date)
         }
     }
 }

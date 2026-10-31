@@ -52,35 +52,8 @@ struct WeightChartView: View {
         max(Date(), allSortedEntries.last?.date ?? Date())
     }
 
-    private var xDomain: ClosedRange<Date> {
-        selectedRange.dateRange(relativeTo: referenceDate, allDates: allSortedEntries.map(\.date))
-    }
-
     private var activeEntries: [WeightEntry] {
-        selectedRange.filter(entries: entries, relativeTo: referenceDate)
-    }
-
-    private var activeEntry: WeightEntry? {
-        if let selected = selectedEntry, activeEntries.contains(where: { $0.id == selected.id }) {
-            return selected
-        }
-        return activeEntries.last ?? allSortedEntries.last
-    }
-
-    private var yMin: Double {
-        let weights = activeEntries.map(\.weight)
-        let minW = weights.min() ?? (allSortedEntries.map(\.weight).min() ?? 50.0)
-        return minW - 1.5
-    }
-
-    private var yMax: Double {
-        let weights = activeEntries.map(\.weight)
-        let maxW = weights.max() ?? (allSortedEntries.map(\.weight).max() ?? 100.0)
-        return max(yMin + 2.0, maxW + 1.5)
-    }
-
-    private var xAxisDates: [Date] {
-        selectedRange.xAxisDates(referenceDate: referenceDate, allDates: allSortedEntries.map(\.date))
+        selectedRange.filter(entries: allSortedEntries, relativeTo: referenceDate)
     }
 
     private static let fullDateFormatter: DateFormatter = {
@@ -91,8 +64,8 @@ struct WeightChartView: View {
     }()
 
     // MARK: - Selected Entry Delta
-    private var activeDeltaText: (text: String, isSuccess: Bool)? {
-        guard let active = activeEntry, let first = activeEntries.first ?? allSortedEntries.first else { return nil }
+    private func computeActiveDeltaText(active: WeightEntry?, activeEntries: [WeightEntry], allSortedEntries: [WeightEntry]) -> (text: String, isSuccess: Bool)? {
+        guard let active = active, let first = activeEntries.first ?? allSortedEntries.first else { return nil }
         guard (activeEntries.count >= 2 || allSortedEntries.count >= 2) else { return nil }
 
         let delta = active.weight - first.weight
@@ -119,7 +92,7 @@ struct WeightChartView: View {
         let message: String
     }
 
-    private var currentInsight: MotivationInsight {
+    private func currentInsight(for allSortedEntries: [WeightEntry]) -> MotivationInsight {
         guard let current = allSortedEntries.last?.weight else {
             return MotivationInsight(
                 icon: "chart.line.uptrend.xyaxis",
@@ -250,9 +223,9 @@ struct WeightChartView: View {
     }
 
     @ViewBuilder
-    private var headerBadges: some View {
+    private func headerBadges(active: WeightEntry?, activeEntries: [WeightEntry], allSortedEntries: [WeightEntry]) -> some View {
         HStack(spacing: 6) {
-            if let delta = activeDeltaText {
+            if let delta = computeActiveDeltaText(active: active, activeEntries: activeEntries, allSortedEntries: allSortedEntries) {
                 let isStart = delta.text == "Başlangıç"
                 let badgeColor = isStart ? Color.secondary : (delta.isSuccess ? Color.heftSuccess : Color.heftError)
 
@@ -295,9 +268,9 @@ struct WeightChartView: View {
     }
 
     @ViewBuilder
-    private func rangeButton(range: ChartTimeRange, fixedHorizontal: Bool) -> some View {
+    private func rangeButton(range: ChartTimeRange, fixedHorizontal: Bool, allDates: [Date]) -> some View {
         let isSelected = selectedRange == range
-        let isAvailable = range.isAvailable(for: allSortedEntries.map(\.date))
+        let isAvailable = range.isAvailable(for: allDates)
         Button {
             guard isAvailable else { return }
             withAnimation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.75)) {
@@ -330,6 +303,24 @@ struct WeightChartView: View {
     }
 
     var body: some View {
+        let allSorted = allSortedEntries
+        let allDates = allSorted.map(\.date)
+        let refDate = max(Date(), allSorted.last?.date ?? Date())
+        let currentActiveEntries = selectedRange.filter(entries: allSorted, relativeTo: refDate)
+        let currentActiveEntry: WeightEntry? = {
+            if let selected = selectedEntry, currentActiveEntries.contains(where: { $0.id == selected.id }) {
+                return selected
+            }
+            return currentActiveEntries.last ?? allSorted.last
+        }()
+        let activeId = currentActiveEntry?.id
+        let activeWeights = currentActiveEntries.map(\.weight)
+        let allWeights = allSorted.map(\.weight)
+        let currentYMin = (activeWeights.min() ?? allWeights.min() ?? 50.0) - 1.5
+        let currentYMax = max(currentYMin + 2.0, (activeWeights.max() ?? allWeights.max() ?? 100.0) + 1.5)
+        let currentXDomain = selectedRange.dateRange(relativeTo: refDate, allDates: allDates)
+        let currentXAxisDates = selectedRange.xAxisDates(referenceDate: refDate, allDates: allDates)
+
         VStack(alignment: .leading, spacing: 16) {
             // MARK: - Header (Apple Health Clean Stat)
             VStack(alignment: .leading, spacing: 4) {
@@ -343,7 +334,7 @@ struct WeightChartView: View {
 
                         Spacer()
 
-                        headerBadges
+                        headerBadges(active: currentActiveEntry, activeEntries: currentActiveEntries, allSortedEntries: allSorted)
                             .fixedSize(horizontal: true, vertical: false)
                     }
 
@@ -353,11 +344,11 @@ struct WeightChartView: View {
                             .foregroundStyle(Color.secondary)
                             .tracking(0.6)
 
-                        headerBadges
+                        headerBadges(active: currentActiveEntry, activeEntries: currentActiveEntries, allSortedEntries: allSorted)
                     }
                 }
 
-                if let active = activeEntry {
+                if let active = currentActiveEntry {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
                             Text(HeftFormat.weight(active.weight))
@@ -381,7 +372,7 @@ struct WeightChartView: View {
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 6) {
                     ForEach(ChartTimeRange.allCases) { range in
-                        rangeButton(range: range, fixedHorizontal: true)
+                        rangeButton(range: range, fixedHorizontal: true, allDates: allDates)
                     }
                 }
                 .padding(4)
@@ -392,7 +383,7 @@ struct WeightChartView: View {
 
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 6)], spacing: 6) {
                     ForEach(ChartTimeRange.allCases) { range in
-                        rangeButton(range: range, fixedHorizontal: false)
+                        rangeButton(range: range, fixedHorizontal: false, allDates: allDates)
                     }
                 }
                 .padding(6)
@@ -403,7 +394,7 @@ struct WeightChartView: View {
             }
 
             // MARK: - Pure, Clean Chart Canvas (Proportional Height)
-            if allSortedEntries.count == 1 {
+            if allSorted.count == 1 {
                 // MARK: - First Measurement Milestone Card
                 VStack(spacing: 12) {
                     ZStack {
@@ -441,13 +432,13 @@ struct WeightChartView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
-            } else if activeEntries.isEmpty {
+            } else if currentActiveEntries.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                         .font(.title)
                         .foregroundStyle(Color.secondary)
 
-                    Text(allSortedEntries.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
+                    Text(allSorted.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
                         .font(.footnote.weight(.medium))
                         .foregroundStyle(Color.secondary)
                 }
@@ -457,7 +448,7 @@ struct WeightChartView: View {
             } else {
                 Chart {
                     // Target Weight RuleMark (Item 11)
-                    if targetWeight >= yMin && targetWeight <= yMax {
+                    if targetWeight >= currentYMin && targetWeight <= currentYMax {
                         RuleMark(y: .value("Hedef", targetWeight))
                             .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
                             .foregroundStyle(Color.heftTeal)
@@ -469,7 +460,7 @@ struct WeightChartView: View {
                     }
 
                     // Vertical Guideline for Selected Point (only while actively touching/scrubbing)
-                    if isScrubbing, let selected = selectedEntry ?? activeEntry {
+                    if isScrubbing, let selected = selectedEntry ?? currentActiveEntry {
                         RuleMark(x: .value("Seçilen", selected.date))
                             .lineStyle(StrokeStyle(lineWidth: 1.2, dash: [4, 4]))
                             .foregroundStyle(Color.secondary.opacity(0.35))
@@ -477,11 +468,11 @@ struct WeightChartView: View {
                     }
 
                     // AreaMark subtle gradient fill (when 2 or more entries)
-                    if activeEntries.count >= 2 {
-                        ForEach(activeEntries) { entry in
+                    if currentActiveEntries.count >= 2 {
+                        ForEach(currentActiveEntries) { entry in
                             AreaMark(
                                 x: .value("Tarih", entry.date),
-                                yStart: .value("Taban", yMin),
+                                yStart: .value("Taban", currentYMin),
                                 yEnd: .value("Kilo", entry.weight)
                             )
                             .interpolationMethod(.catmullRom)
@@ -496,8 +487,8 @@ struct WeightChartView: View {
                     }
 
                     // Line & Data Points (LineMark when 2 or more entries)
-                    if activeEntries.count >= 2 {
-                        ForEach(activeEntries) { entry in
+                    if currentActiveEntries.count >= 2 {
+                        ForEach(currentActiveEntries) { entry in
                             LineMark(
                                 x: .value("Tarih", entry.date),
                                 y: .value("Kilo", entry.weight)
@@ -509,8 +500,8 @@ struct WeightChartView: View {
                     }
 
                     // PointMarks for each entry (1 or more)
-                    ForEach(activeEntries) { entry in
-                        let isSelected = activeEntry?.id == entry.id
+                    ForEach(currentActiveEntries) { entry in
+                        let isSelected = activeId == entry.id
 
                         PointMark(
                             x: .value("Tarih", entry.date),
@@ -541,8 +532,8 @@ struct WeightChartView: View {
                         }
                     }
                 }
-                .chartXScale(domain: xDomain)
-                .chartYScale(domain: yMin...max(yMin + 1.0, yMax))
+                .chartXScale(domain: currentXDomain)
+                .chartYScale(domain: currentYMin...max(currentYMin + 1.0, currentYMax))
                 .chartPlotStyle { plotArea in
                     plotArea.clipped()
                 }
@@ -560,11 +551,11 @@ struct WeightChartView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: xAxisDates) { value in
+                    AxisMarks(values: currentXAxisDates) { value in
                         if let date = value.as(Date.self) {
-                            let isSelected = activeEntry.map { Calendar.current.isDate(date, inSameDayAs: $0.date) } ?? false
+                            let isSelected = currentActiveEntry.map { Calendar.current.isDate(date, inSameDayAs: $0.date) } ?? false
                             AxisValueLabel(anchor: .top) {
-                                Text(selectedRange.format(date: date, relativeTo: referenceDate))
+                                Text(selectedRange.format(date: date, relativeTo: refDate))
                                     .font(.caption2.weight(isSelected ? .bold : .semibold))
                                     .foregroundStyle(isSelected ? accent : Color.secondary)
                             }
@@ -583,10 +574,10 @@ struct WeightChartView: View {
                         }
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
-                .frame(minHeight: activeEntries.count <= 1 ? singleChartHeight : fullChartHeight)
-                .accessibilityLabel("Kilo grafiği, \(selectedRange.accessibilityTitle). \(activeEntries.count) kayıt. En düşük \(HeftFormat.weightKg(activeEntries.map(\.weight).min() ?? 0)), en yüksek \(HeftFormat.weightKg(activeEntries.map(\.weight).max() ?? 0)).")
+                .frame(minHeight: currentActiveEntries.count <= 1 ? singleChartHeight : fullChartHeight)
+                .accessibilityLabel("Kilo grafiği, \(selectedRange.accessibilityTitle). \(currentActiveEntries.count) kayıt. En düşük \(HeftFormat.weightKg(activeWeights.min() ?? 0)), en yüksek \(HeftFormat.weightKg(activeWeights.max() ?? 0)).")
 
-                if activeEntries.count == 1 {
+                if currentActiveEntries.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsin.")
                         .font(.footnote)
                         .foregroundStyle(Color.secondary)
@@ -597,8 +588,8 @@ struct WeightChartView: View {
             }
 
             // MARK: - Motivational Insight Banner
-            if allSortedEntries.count >= 2 {
-                let insight = currentInsight
+            if allSorted.count >= 2 {
+                let insight = currentInsight(for: allSorted)
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: insight.icon)
                         .font(.subheadline.weight(.bold))
@@ -629,7 +620,9 @@ struct WeightChartView: View {
         }
         .heftCard()
         .onAppear {
-            sortedEntries = entries.sorted { $0.date < $1.date }
+            if sortedEntries.count != entries.count || sortedEntries.last?.id != entries.first?.id {
+                sortedEntries = entries.sorted { $0.date < $1.date }
+            }
             if selectedEntry == nil {
                 selectedEntry = activeEntries.last
             }
