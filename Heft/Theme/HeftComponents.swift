@@ -488,9 +488,9 @@ struct HeftTickPicker: View {
 
     private var formattedValue: String {
         if formatStyle == .integer {
-            return String(format: "%.0f", value)
+            return HeftFormat.integer(value)
         } else {
-            return String(format: "%.1f", value)
+            return HeftFormat.weight(value)
         }
     }
 
@@ -511,7 +511,7 @@ struct HeftTickPicker: View {
 
     private func labelText(for index: Int) -> String {
         let val = value(for: index)
-        return String(format: "%.0f", val)
+        return HeftFormat.integer(val)
     }
 
     private func tickHeight(for index: Int, centerIndex: Int) -> CGFloat {

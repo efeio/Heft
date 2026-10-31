@@ -44,7 +44,7 @@ struct AddWeightSheet: View {
     }
 
     private var parsedWeight: Double? {
-        Double(weightText.replacingOccurrences(of: ",", with: "."))
+        HeftFormat.parseDouble(weightText)
     }
 
     private var isWeightValid: Bool {
@@ -102,71 +102,56 @@ struct AddWeightSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                // MARK: - Header Bar
-                HStack {
-                    Text("Kilo Ekle")
-                        .font(.title2.weight(.bold))
-                        .foregroundStyle(Color.primary)
-
-                    Spacer()
-
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.subheadline.weight(.bold))
-                            .foregroundStyle(Color.secondary)
-                            .padding(8)
-                            .background(Circle().fill(Color(.secondarySystemGroupedBackground)))
-                    }
-                    .frame(minWidth: 44, minHeight: 44)
-                    .contentShape(Rectangle())
-                    .accessibilityLabel("Kapat")
-                }
-                .padding(.horizontal, horizontalPadding)
-                .padding(.top, 16)
-                .padding(.bottom, 12)
-
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 14) {
-                        // MARK: - Minimal Date Selector Segment
-                        dateSegmentRow
-                            .padding(.horizontal, horizontalPadding)
-
-                        // MARK: - Hero Weight Display & Steppers
-                        heroWeightSection
-                            .padding(.horizontal, horizontalPadding)
-
-                        // MARK: - Live Context / Delta Badge
-                        liveDeltaBadge
-                            .padding(.horizontal, horizontalPadding)
-
-                        // MARK: - Integrated Numeric Keypad
-                        WeightKeypadView(
-                            onDigit: handleDigit,
-                            onDecimal: handleDecimal,
-                            onDelete: handleDelete,
-                            onClear: handleClear
-                        )
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 14) {
+                    // MARK: - Minimal Date Selector Segment
+                    dateSegmentRow
                         .padding(.horizontal, horizontalPadding)
-                        .padding(.top, 2)
+                        .padding(.top, 8)
 
-                        // MARK: - Primary Save Button
-                        HeftPrimaryButton(
-                            title: saveButtonTitle,
-                            isEnabled: isSaveEnabled,
-                            action: handleSave
-                        )
-                        .padding(.horizontal, horizontalPadding)
-                        .padding(.top, 6)
-                        .padding(.bottom, 16)
+                    if showCustomDatePicker {
+                        inlineDatePickerCard
+                            .padding(.horizontal, horizontalPadding)
                     }
+
+                    // MARK: - Hero Weight Display & Steppers
+                    heroWeightSection
+                        .padding(.horizontal, horizontalPadding)
+
+                    // MARK: - Live Context / Delta Badge
+                    liveDeltaBadge
+                        .padding(.horizontal, horizontalPadding)
+
+                    // MARK: - Integrated Numeric Keypad
+                    WeightKeypadView(
+                        onDigit: handleDigit,
+                        onDecimal: handleDecimal,
+                        onDelete: handleDelete,
+                        onClear: handleClear
+                    )
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.top, 2)
+
+                    // MARK: - Primary Save Button
+                    HeftPrimaryButton(
+                        title: saveButtonTitle,
+                        isEnabled: isSaveEnabled,
+                        action: handleSave
+                    )
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.top, 6)
+                    .padding(.bottom, 16)
                 }
             }
             .background(Color.heftCanvas)
-            .sheet(isPresented: $showCustomDatePicker) {
-                customDatePickerSheet
+            .navigationTitle("Kilo Ekle")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Vazgeç") {
+                        dismiss()
+                    }
+                }
             }
             .sensoryFeedback(.success, trigger: saveSuccessTrigger)
             .onAppear {
@@ -181,7 +166,7 @@ struct AddWeightSheet: View {
                 }
             } message: {
                 if let conflict = conflictingEntry, let weight = parsedWeight {
-                    Text("\(Self.dayMonthFormatter.string(from: selectedDate)) tarihine ait mevcut kayıt (\(String(format: "%.1f kg", conflict.weight))), yeni değer olan \(String(format: "%.1f kg", weight)) ile güncellenecektir.")
+                    Text("\(Self.dayMonthFormatter.string(from: selectedDate)) tarihine ait mevcut kayıt (\(HeftFormat.weightKg(conflict.weight))), yeni değer olan \(HeftFormat.weightKg(weight)) ile güncellenecektir.")
                 } else {
                     Text("Bu tarihteki mevcut kayıt güncellenecektir.")
                 }
@@ -216,6 +201,7 @@ struct AddWeightSheet: View {
     private func dateButtons(fixedHorizontal: Bool) -> some View {
         // Bugün
         Button {
+            showCustomDatePicker = false
             selectDate(todayAnchor)
         } label: {
             Text("Bugün")
@@ -237,6 +223,7 @@ struct AddWeightSheet: View {
         // Dün
         if let yesterday = calendar.date(byAdding: .day, value: -1, to: todayAnchor) {
             Button {
+                showCustomDatePicker = false
                 selectDate(yesterday)
             } label: {
                 Text("Dün")
@@ -260,7 +247,9 @@ struct AddWeightSheet: View {
     @ViewBuilder
     private func customDateButton(fixedHorizontal: Bool) -> some View {
         Button {
-            showCustomDatePicker = true
+            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
+                showCustomDatePicker.toggle()
+            }
         } label: {
             HStack(spacing: 4) {
                 Image(systemName: "calendar")
@@ -268,7 +257,7 @@ struct AddWeightSheet: View {
                 Text(isTodaySelected || isYesterdaySelected ? "Diğer" : Self.dayMonthFormatter.string(from: selectedDate))
                     .font(.caption.weight(!isTodaySelected && !isYesterdaySelected ? .bold : .medium))
                     .fixedSize(horizontal: fixedHorizontal, vertical: false)
-                Image(systemName: "chevron.down")
+                Image(systemName: showCustomDatePicker ? "chevron.up" : "chevron.down")
                     .font(.caption2.weight(.bold))
             }
             .foregroundStyle(!isTodaySelected && !isYesterdaySelected ? Color.white : accent)
@@ -286,11 +275,44 @@ struct AddWeightSheet: View {
         .accessibilityAddTraits(!isTodaySelected && !isYesterdaySelected ? .isSelected : [])
     }
 
+    // MARK: - Inline Date Picker Card
+    private var inlineDatePickerCard: some View {
+        VStack(spacing: 12) {
+            DatePicker(
+                "Tarih Seç",
+                selection: $selectedDate,
+                in: ...Date(),
+                displayedComponents: .date
+            )
+            .datePickerStyle(.graphical)
+            .tint(accent)
+            .onChange(of: selectedDate) { _, newValue in
+                onDateChanged(newValue)
+            }
+
+            HStack {
+                Spacer()
+                Button("Tamam") {
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
+                        showCustomDatePicker = false
+                    }
+                    onDateChanged(selectedDate)
+                }
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(accent)
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
+            }
+        }
+        .padding(14)
+        .heftCard(cornerRadius: 16)
+    }
+
     // MARK: - Hero Weight Section
     private var heroWeightSection: some View {
         VStack(spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(weightText.isEmpty ? "0.0" : weightText)
+                Text(weightText.isEmpty ? "0,0" : weightText)
                     .font(.heftHeroStat)
                     .foregroundStyle(weightText.isEmpty ? Color.secondary : Color.primary)
                     .minimumScaleFactor(0.7)
@@ -306,7 +328,7 @@ struct AddWeightSheet: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Girilen kilo: \(weightText.isEmpty ? "0,0" : weightText) kilogram")
 
-            // Micro Steppers (-0.1 / +0.1)
+            // Micro Steppers (-0,1 / +0,1)
             HStack(spacing: 16) {
                 Button {
                     stepWeight(by: -0.1)
@@ -314,7 +336,7 @@ struct AddWeightSheet: View {
                     HStack(spacing: 4) {
                         Image(systemName: "minus")
                             .font(.caption.weight(.bold))
-                        Text("0.1")
+                        Text("0,1")
                             .font(.subheadline.weight(.semibold))
                     }
                     .fixedSize(horizontal: true, vertical: false)
@@ -337,7 +359,7 @@ struct AddWeightSheet: View {
                     HStack(spacing: 4) {
                         Image(systemName: "plus")
                             .font(.caption.weight(.bold))
-                        Text("0.1")
+                        Text("0,1")
                             .font(.subheadline.weight(.semibold))
                     }
                     .fixedSize(horizontal: true, vertical: false)
@@ -371,7 +393,7 @@ struct AddWeightSheet: View {
                     Image(systemName: isLoss ? "arrow.down.right" : (isGain ? "arrow.up.right" : "equal"))
                         .font(.caption2.weight(.bold))
 
-                    Text(isGain ? String(format: "Son tartıma göre +%.1f kg", delta) : (isLoss ? String(format: "Son tartıma göre -%.1f kg", abs(delta)) : "Son tartımla aynı"))
+                    Text(isGain ? "Son tartıma göre \(HeftFormat.signedWeightKg(delta))" : (isLoss ? "Son tartıma göre -\(HeftFormat.weightKg(abs(delta)))" : "Son tartımla aynı"))
                         .font(.caption.weight(.semibold))
                 }
                 .foregroundStyle(isPositiveDirection ? Color.heftSuccess : (isGain || isLoss ? Color.heftWarning : Color.secondary))
@@ -386,7 +408,7 @@ struct AddWeightSheet: View {
                 HStack(spacing: 6) {
                     Image(systemName: "target")
                         .font(.caption2.weight(.bold))
-                    Text(String(format: "Hedefe %.1f kg kaldı", abs(diff)))
+                    Text("Hedefe \(HeftFormat.weightKg(abs(diff))) kaldı")
                         .font(.caption.weight(.semibold))
                 }
                 .foregroundStyle(accent)
@@ -406,45 +428,13 @@ struct AddWeightSheet: View {
         }
     }
 
-    // MARK: - Custom Date Picker Sheet
-    private var customDatePickerSheet: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                DatePicker(
-                    "Tarih Seç",
-                    selection: $selectedDate,
-                    in: ...Date(),
-                    displayedComponents: .date
-                )
-                .datePickerStyle(.graphical)
-                .tint(accent)
-                .padding()
-
-                Spacer()
-            }
-            .navigationTitle("Tartım Tarihi")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Tamam") {
-                        showCustomDatePicker = false
-                        onDateChanged(selectedDate)
-                    }
-                    .font(.body.weight(.bold))
-                    .foregroundStyle(accent)
-                }
-            }
-        }
-        .presentationDetents([.medium])
-    }
-
     // MARK: - Save Button Title
     private var saveButtonTitle: String {
         if let weight = parsedWeight, isWeightValid {
             if selectedDayEntry != nil {
-                return String(format: "Kayıt Güncelle (%.1f kg)", weight)
+                return "Kayıt Güncelle (\(HeftFormat.weightKg(weight)))"
             }
-            return String(format: "Kaydet (%.1f kg)", weight)
+            return "Kaydet (\(HeftFormat.weightKg(weight)))"
         }
         return selectedDayEntry != nil ? "Kayıt Güncelle" : "Kaydet"
     }
@@ -457,11 +447,12 @@ struct AddWeightSheet: View {
             return
         }
 
-        // Limit to reasonable weight length (e.g. max 5 chars: "123.4")
+        // Limit to reasonable weight length (e.g. max 5 chars: "123,4")
         guard weightText.count < 5 else { return }
 
         // Prevent multiple decimals
-        if let dotIndex = weightText.firstIndex(of: ",") {
+        let sep = Character(HeftFormat.decimalSeparator)
+        if let dotIndex = weightText.firstIndex(of: sep) {
             let decimals = weightText[weightText.index(after: dotIndex)...]
             if decimals.count >= 1 {
                 return // allow only 1 decimal place
@@ -477,13 +468,14 @@ struct AddWeightSheet: View {
     }
 
     private func handleDecimal() {
+        let sep = HeftFormat.decimalSeparator
         if !hasUserTyped {
-            weightText = "0,"
+            weightText = "0" + sep
             hasUserTyped = true
             return
         }
         if !weightText.contains(",") && !weightText.contains(".") {
-            weightText += weightText.isEmpty ? "0," : ","
+            weightText += weightText.isEmpty ? "0" + sep : sep
         }
     }
 
@@ -506,7 +498,7 @@ struct AddWeightSheet: View {
     private func stepWeight(by delta: Double) {
         let current = parsedWeight ?? existingEntries.first?.weight ?? 70.0
         let newWeight = max(20.0, min(350.0, current + delta))
-        weightText = String(format: "%.1f", newWeight).replacingOccurrences(of: ".", with: ",")
+        weightText = HeftFormat.weight(newWeight)
         hasUserTyped = true
         UISelectionFeedbackGenerator().selectionChanged()
     }
@@ -518,11 +510,11 @@ struct AddWeightSheet: View {
         selectedDate = today
 
         if let existing = existingEntries.first(where: { calendar.isDate($0.date, inSameDayAs: today) }) {
-            weightText = String(format: "%.1f", existing.weight).replacingOccurrences(of: ".", with: ",")
+            weightText = HeftFormat.weight(existing.weight)
             hasUserTyped = true
         } else if let latest = existingEntries.first {
             // Smart suggestion: prefill with latest weight so user can easily adjust with stepper
-            weightText = String(format: "%.1f", latest.weight).replacingOccurrences(of: ".", with: ",")
+            weightText = HeftFormat.weight(latest.weight)
             hasUserTyped = false // next keypad digit will replace it
         }
     }
@@ -537,7 +529,7 @@ struct AddWeightSheet: View {
 
     private func onDateChanged(_ date: Date) {
         if let existing = existingEntries.first(where: { calendar.isDate($0.date, inSameDayAs: date) }) {
-            weightText = String(format: "%.1f", existing.weight).replacingOccurrences(of: ".", with: ",")
+            weightText = HeftFormat.weight(existing.weight)
             hasUserTyped = true
         }
     }

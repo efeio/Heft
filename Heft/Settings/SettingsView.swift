@@ -64,7 +64,7 @@ struct SettingsView: View {
     }
 
     private var heightValue: Double? {
-        Double(heightText.replacingOccurrences(of: ",", with: "."))
+        HeftFormat.parseDouble(heightText)
     }
 
     private var isHeightValid: Bool {
@@ -82,7 +82,7 @@ struct SettingsView: View {
     }
 
     private var targetWeightValue: Double? {
-        Double(targetWeightText.replacingOccurrences(of: ",", with: "."))
+        HeftFormat.parseDouble(targetWeightText)
     }
 
     private var isTargetWeightValid: Bool {
@@ -273,6 +273,12 @@ struct SettingsView: View {
                 }
             }
 
+            if !heightText.isEmpty && !isHeightValid {
+                Label("Boy 50 ile 300 cm arasında olmalıdır.", systemImage: "exclamationmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(Color.heftError)
+            }
+
             // Age
             ViewThatFits(in: .horizontal) {
                 HStack {
@@ -297,6 +303,12 @@ struct SettingsView: View {
                         .font(.heftListItem)
                         .focused($focusedField, equals: .age)
                 }
+            }
+
+            if !ageText.isEmpty && !isAgeValid {
+                Label("Yaş 1 ile 120 arasında olmalıdır.", systemImage: "exclamationmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(Color.heftError)
             }
 
             // Gender
@@ -332,7 +344,7 @@ struct SettingsView: View {
                     rowLabel("Hedef Kilo", systemImage: "target")
                         .fixedSize(horizontal: true, vertical: false)
                     Spacer()
-                    TextField("70.0", text: $targetWeightText)
+                    TextField("70,0", text: $targetWeightText)
                         .textFieldStyle(.plain)
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
@@ -348,7 +360,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     rowLabel("Hedef Kilo", systemImage: "target")
                     HStack {
-                        TextField("70.0", text: $targetWeightText)
+                        TextField("70,0", text: $targetWeightText)
                             .textFieldStyle(.plain)
                             .keyboardType(.decimalPad)
                             .font(.heftListItem)
@@ -358,6 +370,12 @@ struct SettingsView: View {
                             .foregroundStyle(Color.secondary)
                     }
                 }
+            }
+
+            if !targetWeightText.isEmpty && !isTargetWeightValid {
+                Label("Hedef kilo 20 ile 500 kg arasında olmalıdır.", systemImage: "exclamationmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(Color.heftError)
             }
         } header: {
             Text("HEDEF")
@@ -733,7 +751,7 @@ struct SettingsView: View {
         ageText = "\(p.age)"
         gender = p.gender
         goalType = p.goalType
-        targetWeightText = String(format: "%.1f", p.targetWeight)
+        targetWeightText = HeftFormat.weight(p.targetWeight)
         weighInFrequency = p.weighInFrequency
         weighInDays = p.weighInDaysList
         weighInDay = p.weighInDay

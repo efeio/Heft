@@ -122,8 +122,8 @@ struct BMIChartView: View {
             return BMIInsight(
                 icon: "heart.text.square.fill",
                 color: BMICalculator.color(for: targetBMI),
-                title: "Hedef BMI: \(String(format: "%.1f", targetBMI))",
-                message: String(format: "%.0f kg hedefine ulaştığında BMI değerin %.1f (%@) olacak. Boyun için sağlıklı kilo aralığı %.0f - %.0f kg'dır.", target, targetBMI, targetCategory, normalMinWeight, normalMaxWeight)
+                title: "Hedef BMI: \(HeftFormat.weight(targetBMI))",
+                message: "\(HeftFormat.integer(target)) kg hedefine ulaştığında BMI değerin \(HeftFormat.weight(targetBMI)) (\(targetCategory)) olacak. Boyun için sağlıklı kilo aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg'dır."
             )
         }
 
@@ -131,7 +131,7 @@ struct BMIChartView: View {
             icon: "figure.walk",
             color: accent,
             title: "Sağlıklı Kilo Aralığı",
-            message: String(format: "%.0f cm boy için normal BMI (18.5 - 24.9) aralığı %.0f - %.0f kg arasındadır.", height, normalMinWeight, normalMaxWeight)
+            message: "\(HeftFormat.integer(height)) cm boy için normal BMI (18,5 - 24,9) aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg arasındadır."
         )
     }
 
@@ -243,7 +243,7 @@ struct BMIChartView: View {
                 if let active = activePoint {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
-                            Text(String(format: "%.1f", active.bmi))
+                            Text(HeftFormat.weight(active.bmi))
                                 .font(.title.weight(.bold))
                                 .foregroundStyle(Color.primary)
 
@@ -303,7 +303,7 @@ struct BMIChartView: View {
                     }
 
                     VStack(spacing: 4) {
-                        Text("Mevcut BMI: \(String(format: "%.1f", single.bmi)) (\(cat))")
+                        Text("Mevcut BMI: \(HeftFormat.weight(single.bmi)) (\(cat))")
                             .font(.subheadline.weight(.bold))
                             .foregroundStyle(Color.primary)
 
@@ -356,7 +356,7 @@ struct BMIChartView: View {
                             .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
                             .foregroundStyle(Color.heftBMINormal.opacity(0.55))
                             .annotation(position: .top, alignment: .trailing) {
-                                Text("Normal Sınırı (25.0)")
+                                Text("Normal Sınırı (\(HeftFormat.weight(25.0)))")
                                     .font(.caption2.weight(.medium))
                                     .foregroundStyle(Color.heftBMINormal)
                             }
@@ -404,7 +404,7 @@ struct BMIChartView: View {
                             y: .value("BMI", point.bmi)
                         )
                         .accessibilityLabel(Self.fullDateFormatter.string(from: point.date))
-                        .accessibilityValue(String(format: "BMI %.1f, %@", point.bmi, BMICalculator.category(for: point.bmi)))
+                        .accessibilityValue("BMI \(HeftFormat.weight(point.bmi)), \(BMICalculator.category(for: point.bmi))")
                         .symbol {
                             ZStack {
                                 if isSelected {
@@ -439,7 +439,7 @@ struct BMIChartView: View {
                             .foregroundStyle(Color.secondary.opacity(0.12))
                         if let bmi = value.as(Double.self) {
                             AxisValueLabel(anchor: .leading) {
-                                Text(String(format: "%.1f", bmi))
+                                Text(HeftFormat.weight(bmi))
                                     .font(.caption2)
                                     .foregroundStyle(Color.secondary)
                             }
@@ -476,7 +476,7 @@ struct BMIChartView: View {
                     let maxBMI = activeBmiPoints.map(\.bmi).max() ?? 0
                     let currentBMI = activePoint?.bmi ?? 0
                     let currentCategory = BMICalculator.category(for: currentBMI)
-                    return "Vücut kitle indeksi grafiği, \(selectedRange.accessibilityTitle). \(activeBmiPoints.count) kayıt. Mevcut BMI: \(String(format: "%.1f", currentBMI)) (\(currentCategory)). En düşük \(String(format: "%.1f", minBMI)), en yüksek \(String(format: "%.1f", maxBMI))."
+                    return "Vücut kitle indeksi grafiği, \(selectedRange.accessibilityTitle). \(activeBmiPoints.count) kayıt. Mevcut BMI: \(HeftFormat.weight(currentBMI)) (\(currentCategory)). En düşük \(HeftFormat.weight(minBMI)), en yüksek \(HeftFormat.weight(maxBMI))."
                 }())
 
                 if activeBmiPoints.count == 1 {

@@ -48,21 +48,21 @@ struct SummaryCardView: View {
         if isMaintainGoal {
             let diff = latestWeight - targetWeight
             if diff > 0 {
-                return String(format: "+%.1f kg fark", diff)
+                return "+\(HeftFormat.weightKg(diff)) fark"
             } else {
-                return String(format: "−%.1f kg fark", abs(diff))
+                return "−\(HeftFormat.weightKg(abs(diff))) fark"
             }
         } else if isGainGoal {
             if diffToTarget > 0 {
-                return String(format: "+%.1f kg kaldı", diffToTarget)
+                return "+\(HeftFormat.weightKg(diffToTarget)) kaldı"
             } else {
-                return String(format: "+%.1f kg hedef üstü", abs(diffToTarget))
+                return "+\(HeftFormat.weightKg(abs(diffToTarget))) hedef üstü"
             }
         } else {
             if diffToTarget > 0 {
-                return String(format: "−%.1f kg kaldı", diffToTarget)
+                return "−\(HeftFormat.weightKg(diffToTarget)) kaldı"
             } else {
-                return String(format: "−%.1f kg hedef altı", abs(diffToTarget))
+                return "−\(HeftFormat.weightKg(abs(diffToTarget))) hedef altı"
             }
         }
     }
@@ -81,11 +81,11 @@ struct SummaryCardView: View {
             return "Bu hafta: —"
         }
         if abs(diff) < 0.05 {
-            return "Bu hafta: 0.0 kg"
+            return "Bu hafta: \(HeftFormat.weightKg(0))"
         } else if diff < 0 {
-            return String(format: "Bu hafta: −%.1f kg", abs(diff))
+            return "Bu hafta: −\(HeftFormat.weightKg(abs(diff)))"
         } else {
-            return String(format: "Bu hafta: +%.1f kg", diff)
+            return "Bu hafta: +\(HeftFormat.weightKg(diff))"
         }
     }
 
@@ -118,11 +118,11 @@ struct SummaryCardView: View {
     private var accessibilityAnnouncement: String {
         let weeklyStr: String
         if let diff = weeklyDiff {
-            weeklyStr = String(format: "%@%.1f kg", (diff >= 0 ? "+" : "−"), abs(diff))
+            weeklyStr = "\(diff >= 0 ? "+" : "−")\(HeftFormat.weightKg(abs(diff)))"
         } else {
             weeklyStr = "değişim yok"
         }
-        return "Mevcut kilo \(String(format: "%.1f", latestWeight)) kg, hedef \(String(format: "%.1f", targetWeight)) kg, \(remainingPillText), bu hafta \(weeklyStr)."
+        return "Mevcut kilo \(HeftFormat.weightKg(latestWeight)), hedef \(HeftFormat.weightKg(targetWeight)), \(remainingPillText), bu hafta \(weeklyStr)."
     }
 
     // MARK: - Pill Views
@@ -171,7 +171,7 @@ struct SummaryCardView: View {
                             .fixedSize(horizontal: true, vertical: false)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(String(format: "%.1f", latestWeight))
+                            Text(HeftFormat.weight(latestWeight))
                                 .font(.heftHeroStat)
                                 .foregroundStyle(Color.primary)
 
@@ -192,7 +192,7 @@ struct SummaryCardView: View {
                             .fixedSize(horizontal: true, vertical: false)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(String(format: "%.1f", targetWeight))
+                            Text(HeftFormat.weight(targetWeight))
                                 .font(.heftCardTitle)
                                 .foregroundStyle(Color.primary)
 
@@ -211,7 +211,7 @@ struct SummaryCardView: View {
                             .foregroundStyle(Color.secondary)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(String(format: "%.1f", latestWeight))
+                            Text(HeftFormat.weight(latestWeight))
                                 .font(.heftHeroStat)
                                 .foregroundStyle(Color.primary)
                                 .minimumScaleFactor(0.8)
@@ -228,7 +228,7 @@ struct SummaryCardView: View {
                             .foregroundStyle(Color.secondary)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(String(format: "%.1f", targetWeight))
+                            Text(HeftFormat.weight(targetWeight))
                                 .font(.heftCardTitle)
                                 .foregroundStyle(Color.primary)
 

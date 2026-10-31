@@ -18,12 +18,6 @@ struct BodyInfoStep: View {
 
     @ScaledMetric(relativeTo: .body) private var sectionSpacing: CGFloat = 22
 
-    @State private var hasInteractedName = false
-
-    private var isNameValid: Bool {
-        !nameText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-
     private var isHeightValid: Bool {
         height >= 50 && height <= 300
     }
@@ -33,7 +27,7 @@ struct BodyInfoStep: View {
     }
 
     private var isValid: Bool {
-        isNameValid && isHeightValid && isAgeValid
+        isHeightValid && isAgeValid
     }
 
     var body: some View {
@@ -51,7 +45,7 @@ struct BodyInfoStep: View {
                         Text("Kişisel Bilgiler")
                             .font(.heftScreenTitle)
 
-                        Text("Seni daha iyi tanımamız ve doğru analizler için temel bilgilerinizi girin.")
+                        Text("Seni daha iyi tanımamız ve doğru analizler için temel bilgilerini gir.")
                             .font(.heftBody)
                             .foregroundStyle(Color.secondary)
                     }
@@ -65,13 +59,10 @@ struct BodyInfoStep: View {
 
                         HeftTextInputCard(
                             icon: "person.fill",
-                            title: "Adınız",
-                            subtitle: "Hitap ve bildirimler için",
+                            title: "Adın",
+                            subtitle: "İsteğe bağlı • Hitap ve bildirimler için",
                             placeholder: "Örn: Efe",
-                            text: $nameText,
-                            isError: hasInteractedName && !isNameValid,
-                            errorMessage: "Lütfen adınızı girin.",
-                            onTextChange: { hasInteractedName = true }
+                            text: $nameText
                         )
                     }
 

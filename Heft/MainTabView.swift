@@ -21,21 +21,29 @@ struct MainTabView: View {
         TabView(selection: $selectedTab) {
             DashboardView()
                 .tabItem {
-                    Label(
-                        "Ana Sayfa",
-                        systemImage: selectedTab == 0 ? "house.fill" : "house"
-                    )
+                    Label("Ana Sayfa", systemImage: "chart.line.uptrend.xyaxis")
                 }
                 .tag(0)
 
             HistoryView()
                 .tabItem {
-                    Label("Geçmiş", systemImage: "list.bullet")
+                    Label("Geçmiş", systemImage: "clock.arrow.circlepath")
                 }
                 .tag(1)
         }
         .tint(accent)
         .sensoryFeedback(.selection, trigger: selectedTab)
+        .modifier(SidebarAdaptableTabModifier())
+    }
+}
+
+private struct SidebarAdaptableTabModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content.tabViewStyle(.sidebarAdaptable)
+        } else {
+            content
+        }
     }
 }
 

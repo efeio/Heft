@@ -30,7 +30,7 @@ struct HistoryRow: View {
 
     private var bmiText: String {
         if let bmi = BMICalculator.calculate(weightKg: weight, heightCm: height) {
-            return String(format: "BMI: %.1f", bmi)
+            return "BMI: \(HeftFormat.weight(bmi))"
         }
         return "BMI: —"
     }
@@ -41,12 +41,12 @@ struct HistoryRow: View {
             if abs(delta) < 0.05 {
                 deltaPart = "değişim yok"
             } else {
-                deltaPart = String(format: "değişim %@%.1f kilogram", delta > 0 ? "+" : "", delta)
+                deltaPart = "değişim \(HeftFormat.signedWeight(delta)) kilogram"
             }
         } else {
             deltaPart = "başlangıç kaydı"
         }
-        return "\(formattedDate), \(String(format: "%.1f", weight)) kilogram, \(bmiText), \(deltaPart)"
+        return "\(formattedDate), \(HeftFormat.weight(weight)) kilogram, \(bmiText), \(deltaPart)"
     }
 
     @ViewBuilder
@@ -59,9 +59,9 @@ struct HistoryRow: View {
 
             let text: String = {
                 if abs(delta) < 0.05 {
-                    return "0.0 kg"
+                    return HeftFormat.weightKg(0)
                 }
-                return String(format: "%@%.1f kg", delta > 0 ? "+" : "", delta)
+                return HeftFormat.signedWeightKg(delta)
             }()
 
             Text(text)
@@ -100,7 +100,7 @@ struct HistoryRow: View {
 
                 VStack(alignment: .trailing, spacing: rowSpacing) {
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(String(format: "%.1f", weight))
+                        Text(HeftFormat.weight(weight))
                             .font(.heftCardTitle)
                             .foregroundStyle(Color.primary)
 
@@ -122,7 +122,7 @@ struct HistoryRow: View {
                     .foregroundStyle(Color.primary)
 
                 HStack {
-                    Text(String(format: "%.1f kg", weight))
+                    Text(HeftFormat.weightKg(weight))
                         .font(.heftCardTitle)
                         .foregroundStyle(Color.primary)
                     Spacer()

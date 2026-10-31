@@ -14,6 +14,7 @@ struct DashboardView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @ScaledMetric(relativeTo: .body) private var verticalSpacing: CGFloat = 20
 
     @State private var showingAddWeight: Bool = {
@@ -71,21 +72,41 @@ struct DashboardView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(spacing: verticalSpacing) {
-                        // Hero Summary Card
-                        SummaryCardView(
-                            latestWeight: latestWeight,
-                            targetWeight: targetWeight,
-                            weekAgoWeight: weekAgoWeight,
-                            goalType: userGoalType
-                        )
+                        if horizontalSizeClass == .regular {
+                            HStack(alignment: .top, spacing: verticalSpacing) {
+                                SummaryCardView(
+                                    latestWeight: latestWeight,
+                                    targetWeight: targetWeight,
+                                    weekAgoWeight: weekAgoWeight,
+                                    goalType: userGoalType
+                                )
+                                .frame(maxWidth: .infinity, alignment: .top)
 
-                        // Target Projection Card
-                        TargetProjectionCard(
-                            entries: entries,
-                            targetWeight: targetWeight,
-                            initialWeight: profile?.initialWeight ?? entries.last?.weight ?? latestWeight,
-                            goalType: userGoalType
-                        )
+                                TargetProjectionCard(
+                                    entries: entries,
+                                    targetWeight: targetWeight,
+                                    initialWeight: profile?.initialWeight ?? entries.last?.weight ?? latestWeight,
+                                    goalType: userGoalType
+                                )
+                                .frame(maxWidth: .infinity, alignment: .top)
+                            }
+                        } else {
+                            // Hero Summary Card
+                            SummaryCardView(
+                                latestWeight: latestWeight,
+                                targetWeight: targetWeight,
+                                weekAgoWeight: weekAgoWeight,
+                                goalType: userGoalType
+                            )
+
+                            // Target Projection Card
+                            TargetProjectionCard(
+                                entries: entries,
+                                targetWeight: targetWeight,
+                                initialWeight: profile?.initialWeight ?? entries.last?.weight ?? latestWeight,
+                                goalType: userGoalType
+                            )
+                        }
 
                         // Quick Log Button
                         HeftPrimaryButton(
@@ -96,22 +117,40 @@ struct DashboardView: View {
                             showingAddWeight = true
                         }
 
-                        // Charts Stack
-                        WeightChartView(
-                            entries: entries,
-                            targetWeight: targetWeight,
-                            goalType: userGoalType
-                        )
-                        .id("weightChart")
+                        // Charts Stack / Grid
+                        if horizontalSizeClass == .regular {
+                            HStack(alignment: .top, spacing: verticalSpacing) {
+                                WeightChartView(
+                                    entries: entries,
+                                    targetWeight: targetWeight,
+                                    goalType: userGoalType
+                                )
+                                .frame(maxWidth: .infinity, alignment: .top)
+                                .id("weightChart")
 
-                        BMIChartView(
-                            entries: entries,
-                            height: userHeight,
-                            targetWeight: targetWeight
-                        )
-                        .id("bmiChart")
+                                BMIChartView(
+                                    entries: entries,
+                                    height: userHeight,
+                                    targetWeight: targetWeight
+                                )
+                                .frame(maxWidth: .infinity, alignment: .top)
+                                .id("bmiChart")
+                            }
+                        } else {
+                            WeightChartView(
+                                entries: entries,
+                                targetWeight: targetWeight,
+                                goalType: userGoalType
+                            )
+                            .id("weightChart")
 
-                        Spacer(minLength: 80)
+                            BMIChartView(
+                                entries: entries,
+                                height: userHeight,
+                                targetWeight: targetWeight
+                            )
+                            .id("bmiChart")
+                        }
                     }
                     .scenePadding(.horizontal)
                     .padding(.vertical, 16)
@@ -137,15 +176,13 @@ struct DashboardView: View {
             }
             .background(Color.heftAdaptiveCanvas(colorScheme).ignoresSafeArea())
             .navigationTitle(greetingTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color.heftAdaptiveCanvas(colorScheme), for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showingSettings = true
                     } label: {
-                        Image(systemName: "gearshape")
+                        Label("Ayarlar", systemImage: "gearshape")
                             .font(.headline)
                             .foregroundStyle(Color.primary)
                     }
@@ -157,7 +194,7 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showingAddWeight) {
                 AddWeightSheet()
-                    .presentationDetents([.fraction(0.82), .large])
+                    .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
             .alert("Hata", isPresented: $showSaveError) {

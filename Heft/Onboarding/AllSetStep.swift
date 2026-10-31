@@ -89,7 +89,8 @@ struct AllSetStep: View {
     }
 
     private var bmiValueText: String {
-        BMICalculator.formatted(weightKg: currentWeight, heightCm: height)
+        guard let bmi = BMICalculator.calculate(weightKg: currentWeight, heightCm: height) else { return "—" }
+        return HeftFormat.weight(bmi)
     }
 
     private var bmiCategoryText: String {
@@ -126,7 +127,7 @@ struct AllSetStep: View {
                         Text("Her Şey Hazır!")
                             .font(.heftScreenTitle)
 
-                        Text("Bilgileriniz kaydedildi. Yolculuğunuz şimdi başlıyor.")
+                        Text("Bilgilerin kaydedildi. Yolculuğun şimdi başlıyor.")
                             .font(.heftBody)
                             .foregroundStyle(Color.secondary)
                             .multilineTextAlignment(.center)
@@ -138,13 +139,13 @@ struct AllSetStep: View {
                         Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "HEDEF TÜRÜ", value: goalType == .gain ? "Kilo Almak (Bulk/Kas)" : (goalType == .maintain ? "Kilo Korumak (Mevcut Form)" : "Kilo Vermek (Fit/Yağ Yakımı)"))
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "BOY & YAŞ", value: "\(Int(height)) cm • \(age) yaş")
+                        SummaryRow(label: "BOY & YAŞ", value: "\(HeftFormat.integer(height)) cm • \(age) yaş")
                         Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "CİNSİYET", value: gender == .male ? "Erkek" : "Kadın")
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "BAŞLANGIÇ KİLOSU", value: String(format: "%.1f kg", currentWeight))
+                        SummaryRow(label: "BAŞLANGIÇ KİLOSU", value: HeftFormat.weightKg(currentWeight))
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "HEDEF KİLO", value: String(format: "%.1f kg", targetWeight))
+                        SummaryRow(label: "HEDEF KİLO", value: HeftFormat.weightKg(targetWeight))
                         Divider().overlay(Color.heftDivider)
                         SummaryRow(label: "BAŞLANGIÇ BMI", value: "\(bmiValueText) \(bmiCategoryText)")
                         Divider().overlay(Color.heftDivider)

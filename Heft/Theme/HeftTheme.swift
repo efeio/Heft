@@ -82,6 +82,66 @@ extension Color {
     }
 }
 
+// MARK: - Locale-Aware Number Formatting & Parsing
+enum HeftFormat {
+    static let locale = Locale(identifier: "tr_TR")
+
+    static let decimalSeparator: String = locale.decimalSeparator ?? ","
+
+    private static let oneDecimalFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "tr_TR")
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 1
+        formatter.usesGroupingSeparator = false
+        return formatter
+    }()
+
+    private static let integerFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "tr_TR")
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 0
+        formatter.usesGroupingSeparator = false
+        return formatter
+    }()
+
+    static func weight(_ value: Double) -> String {
+        oneDecimalFormatter.string(from: NSNumber(value: value)) ?? String(format: "%.1f", value)
+    }
+
+    static func weightKg(_ value: Double) -> String {
+        "\(weight(value)) kg"
+    }
+
+    static func signedWeight(_ delta: Double, showZeroSign: Bool = false) -> String {
+        let absFormatted = weight(abs(delta))
+        if abs(delta) < 0.05 {
+            return showZeroSign ? "+\(weight(0))" : weight(0)
+        }
+        return delta > 0 ? "+\(absFormatted)" : "−\(absFormatted)"
+    }
+
+    static func signedWeightKg(_ delta: Double, showZeroSign: Bool = false) -> String {
+        "\(signedWeight(delta, showZeroSign: showZeroSign)) kg"
+    }
+
+    static func integer(_ value: Double) -> String {
+        integerFormatter.string(from: NSNumber(value: value.rounded())) ?? String(format: "%.0f", value)
+    }
+
+    static func parseDouble(_ text: String) -> Double? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        if let number = oneDecimalFormatter.number(from: trimmed) {
+            return number.doubleValue
+        }
+        return Double(trimmed.replacingOccurrences(of: ",", with: "."))
+    }
+}
+
 // MARK: - Previews
 #Preview("iPhone SE (3rd gen)", traits: .fixedLayout(width: 375, height: 667)) {
     VStack {

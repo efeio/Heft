@@ -18,6 +18,7 @@ struct HistoryView: View {
     @State private var entryToDelete: WeightEntry?
     @State private var deleteTrigger = false
     @State private var showSaveError = false
+    @State private var showAddWeightSheet = false
 
     private static let monthFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -146,17 +147,16 @@ struct HistoryView: View {
         NavigationStack {
             Group {
                 if entries.isEmpty {
-                    // Empty State
-                    VStack(spacing: 16) {
-                        Image(systemName: "scale.3d")
-                            .font(.largeTitle)
-                            .foregroundStyle(Color.secondary)
-
-                        Text("Henüz kayıt yok")
-                            .font(.heftMeta)
-                            .foregroundStyle(Color.secondary)
+                    ContentUnavailableView {
+                        Label("Henüz Tartım Kaydı Yok", systemImage: "scalemass")
+                    } description: {
+                        Text("Kilo geçmişini ve değişim istatistiklerini görmek için ilk tartımını ekle.")
+                    } actions: {
+                        Button("Kilo Ekle") {
+                            showAddWeightSheet = true
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     List {
                         // Summary Stats Header Card
@@ -165,13 +165,13 @@ struct HistoryView: View {
                             Section {
                                 ViewThatFits(in: .horizontal) {
                                     HStack(spacing: 0) {
-                                        statColumn(title: "Başlangıç", value: String(format: "%.1f", stats.initial), unit: "kg", fixedHorizontal: true)
+                                        statColumn(title: "Başlangıç", value: HeftFormat.weight(stats.initial), unit: "kg", fixedHorizontal: true)
                                         Divider().frame(height: 28)
-                                        statColumn(title: stats.extremeLabel, value: String(format: "%.1f", stats.extreme), unit: "kg", fixedHorizontal: true)
+                                        statColumn(title: stats.extremeLabel, value: HeftFormat.weight(stats.extreme), unit: "kg", fixedHorizontal: true)
                                         Divider().frame(height: 28)
                                         statColumn(
                                             title: "Toplam Değişim",
-                                            value: String(format: "%@%.1f", stats.delta > 0 ? "+" : "", stats.delta),
+                                            value: HeftFormat.signedWeight(stats.delta),
                                             unit: "kg",
                                             highlightColor: deltaColor,
                                             fixedHorizontal: true
@@ -179,13 +179,13 @@ struct HistoryView: View {
                                     }
 
                                     VStack(alignment: .leading, spacing: 8) {
-                                        statRow(title: "Başlangıç", value: String(format: "%.1f", stats.initial), unit: "kg")
+                                        statRow(title: "Başlangıç", value: HeftFormat.weight(stats.initial), unit: "kg")
                                         Divider()
-                                        statRow(title: stats.extremeLabel, value: String(format: "%.1f", stats.extreme), unit: "kg")
+                                        statRow(title: stats.extremeLabel, value: HeftFormat.weight(stats.extreme), unit: "kg")
                                         Divider()
                                         statRow(
                                             title: "Toplam Değişim",
-                                            value: String(format: "%@%.1f", stats.delta > 0 ? "+" : "", stats.delta),
+                                            value: HeftFormat.signedWeight(stats.delta),
                                             unit: "kg",
                                             highlightColor: deltaColor
                                         )
@@ -229,14 +229,16 @@ struct HistoryView: View {
                     }
                     .listStyle(.insetGrouped)
                     .scrollContentBackground(.hidden)
-                    .safeAreaInset(edge: .bottom) {
-                        Color.clear.frame(height: 60)
-                    }
                 }
             }
             .background(Color.heftAdaptiveCanvas(colorScheme).ignoresSafeArea())
             .navigationTitle("Geçmiş")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $showAddWeightSheet) {
+                AddWeightSheet()
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
+            }
             .sheet(item: $selectedEntryForEdit) { entry in
                 EditWeightSheet(entry: entry)
                     .presentationDetents([.fraction(0.60), .large])

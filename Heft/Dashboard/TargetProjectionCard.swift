@@ -267,7 +267,7 @@ struct TargetProjectionCard: View {
                             Text("Başlangıç:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(String(format: "%.1f", milestone.startWeight))
+                            Text(HeftFormat.weight(milestone.startWeight))
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
                         }
@@ -279,7 +279,7 @@ struct TargetProjectionCard: View {
                             Text("Bugün:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(String(format: "%.1f", milestone.currentWeight))
+                            Text(HeftFormat.weight(milestone.currentWeight))
                                 .font(.caption2.weight(.bold))
                                 .foregroundStyle(Color.primary)
                         }
@@ -291,7 +291,7 @@ struct TargetProjectionCard: View {
                             Text("Bugün:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(String(format: "%.1f", milestone.currentWeight))
+                            Text(HeftFormat.weight(milestone.currentWeight))
                                 .font(.caption2.weight(.bold))
                                 .foregroundStyle(Color.primary)
                         }
@@ -304,7 +304,7 @@ struct TargetProjectionCard: View {
                         Text("Hedef:")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.secondary)
-                        Text(String(format: "%.1f", milestone.targetWeight))
+                        Text(HeftFormat.weight(milestone.targetWeight))
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(accent)
                     }
@@ -317,7 +317,7 @@ struct TargetProjectionCard: View {
                             Text("Başlangıç:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(String(format: "%.1f", milestone.startWeight))
+                            Text(HeftFormat.weight(milestone.startWeight))
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
                         }
@@ -327,7 +327,7 @@ struct TargetProjectionCard: View {
                         Text("Bugün:")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.secondary)
-                        Text(String(format: "%.1f", milestone.currentWeight))
+                        Text(HeftFormat.weight(milestone.currentWeight))
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(Color.primary)
                     }
@@ -336,7 +336,7 @@ struct TargetProjectionCard: View {
                         Text("Hedef:")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.secondary)
-                        Text(String(format: "%.1f", milestone.targetWeight))
+                        Text(HeftFormat.weight(milestone.targetWeight))
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(accent)
                     }
@@ -346,13 +346,7 @@ struct TargetProjectionCard: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Hedef ilerlemesi")
         .accessibilityValue(
-            String(
-                format: "Başlangıç %.1f kilogram, güncel %.1f kilogram, hedef %.1f kilogram, yüzde %.0f tamamlandı",
-                milestone.startWeight,
-                milestone.currentWeight,
-                milestone.targetWeight,
-                milestone.progressFraction * 100
-            )
+            "Başlangıç \(HeftFormat.weight(milestone.startWeight)) kilogram, güncel \(HeftFormat.weight(milestone.currentWeight)) kilogram, hedef \(HeftFormat.weight(milestone.targetWeight)) kilogram, yüzde \(HeftFormat.integer(milestone.progressFraction * 100)) tamamlandı"
         )
     }
 

@@ -30,7 +30,7 @@ struct EditWeightSheet: View {
     @FocusState private var isWeightFocused: Bool
 
     private var parsedWeight: Double? {
-        Double(weightText.replacingOccurrences(of: ",", with: "."))
+        HeftFormat.parseDouble(weightText)
     }
 
     private var isWeightValid: Bool {
@@ -63,7 +63,7 @@ struct EditWeightSheet: View {
                     // Weight Input Card (Dynamic Height)
                     VStack(spacing: 6) {
                         HStack {
-                            TextField("0.0", text: $weightText)
+                            TextField("0,0", text: $weightText)
                                 .textFieldStyle(.plain)
                                 .keyboardType(.decimalPad)
                                 .focused($isWeightFocused)
@@ -175,7 +175,7 @@ struct EditWeightSheet: View {
                 }
             }
             .onAppear {
-                weightText = String(format: "%.1f", entry.weight)
+                weightText = HeftFormat.weight(entry.weight)
                 selectedDate = entry.date
             }
             .confirmationDialog(
@@ -210,7 +210,7 @@ struct EditWeightSheet: View {
                 }
             } message: {
                 if let conflict = conflictingEntry, let weight = parsedWeight {
-                    Text(String(format: "Bu tarihe ait mevcut kayıt (%.1f kg), yeni değer olan %.1f kg ile güncellenecek.", conflict.weight, weight))
+                    Text("Bu tarihe ait mevcut kayıt (\(HeftFormat.weightKg(conflict.weight))), yeni değer olan \(HeftFormat.weightKg(weight)) ile güncellenecek.")
                 } else {
                     Text("Bu tarihteki mevcut kayıt güncellenecek.")
                 }

@@ -108,8 +108,7 @@ struct WeightChartView: View {
         } else {
             isSuccess = delta < 0
         }
-        let sign = delta > 0 ? "+" : ""
-        return ("\(sign)\(String(format: "%.1f", delta)) kg", isSuccess)
+        return (HeftFormat.signedWeightKg(delta), isSuccess)
     }
 
     // MARK: - Motivational Insight
@@ -140,15 +139,15 @@ struct WeightChartView: View {
                     icon: "checkmark.seal.fill",
                     color: .heftSuccess,
                     title: "Formunuzu Koruyorsunuz",
-                    message: String(format: "Hedef kilonuz olan %.1f kg seviyesini başarıyla koruyorsunuz. İstikrarınızı sürdürün.", targetWeight)
+                    message: "Hedef kilonuz olan \(HeftFormat.weightKg(targetWeight)) seviyesini başarıyla koruyorsunuz. İstikrarınızı sürdürün."
                 )
             } else {
-                let status = current > targetWeight ? String(format: "+%.1f kg fazla", diff) : String(format: "−%.1f kg eksik", diff)
+                let status = current > targetWeight ? "+\(HeftFormat.weightKg(diff)) fazla" : "−\(HeftFormat.weightKg(diff)) eksik"
                 return MotivationInsight(
                     icon: "equal.circle.fill",
                     color: accent,
                     title: "Kilo Koruma Takibi",
-                    message: String(format: "Hedef kilonuzdan (%@) bir fark var. Dengeli beslenme ve düzenli tartımla hedefinizi koruyun.", status)
+                    message: "Hedef kilonuzdan (\(status)) bir fark var. Dengeli beslenme ve düzenli tartımla hedefinizi koruyun."
                 )
             }
         } else if isGainGoal {
@@ -160,7 +159,7 @@ struct WeightChartView: View {
                     icon: "trophy.fill",
                     color: .heftSuccess,
                     title: "Hedefinize Ulaştınız",
-                    message: String(format: "%.1f kg hedefinize başarıyla ulaştınız. Formunuzu korumak için aynı kararlılıkla devam edin.", targetWeight)
+                    message: "\(HeftFormat.weightKg(targetWeight)) hedefinize başarıyla ulaştınız. Formunuzu korumak için aynı kararlılıkla devam edin."
                 )
             }
 
@@ -169,7 +168,7 @@ struct WeightChartView: View {
                     icon: "chart.line.uptrend.xyaxis",
                     color: .heftSuccess,
                     title: "En Yüksek Kilo Kaydı",
-                    message: String(format: "Heft'teki en yüksek kilonuza ulaştınız. Hedefe yalnızca %.1f kg kaldı.", distanceToTarget)
+                    message: "Heft'teki en yüksek kilonuza ulaştınız. Hedefe yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                 )
             }
 
@@ -181,14 +180,14 @@ struct WeightChartView: View {
                         icon: "arrow.up.right.circle.fill",
                         color: .heftSuccess,
                         title: "İlerleme Devam Ediyor",
-                        message: String(format: "Son tartıma göre +%.1f kg kaydettiniz. Hedefe %.1f kg kaldı.", gained, distanceToTarget)
+                        message: "Son tartıma göre +\(HeftFormat.weightKg(gained)) kaydettiniz. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                     )
                 } else if current < prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
                         title: "İstikrarınızı Koruyun",
-                        message: String(format: "Hedefe %.1f kg kaldı. Günlük kalori ve su dalgalanmaları doğaldır.", distanceToTarget)
+                        message: "Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük kalori ve su dalgalanmaları doğaldır."
                     )
                 }
             }
@@ -197,7 +196,7 @@ struct WeightChartView: View {
                 icon: "target",
                 color: accent,
                 title: "Hedefe Doğru",
-                message: String(format: "Kilo alma hedefine ulaşmak için %.1f kg mesafe var. Düzenli tartılarak ilerlemenizi takip edin.", distanceToTarget)
+                message: "Kilo alma hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemenizi takip edin."
             )
         } else {
             let minWeight = allWeights.min() ?? current
@@ -208,7 +207,7 @@ struct WeightChartView: View {
                     icon: "trophy.fill",
                     color: .heftSuccess,
                     title: "Hedefinize Ulaştınız",
-                    message: String(format: "%.1f kg hedefinize ulaştınız. Sağlıklı kilonuzu korumak için aynı kararlılıkla devam edin.", targetWeight)
+                    message: "\(HeftFormat.weightKg(targetWeight)) hedefinize ulaştınız. Sağlıklı kilonuzu korumak için aynı kararlılıkla devam edin."
                 )
             }
 
@@ -217,7 +216,7 @@ struct WeightChartView: View {
                     icon: "chart.line.downtrend.xyaxis",
                     color: .heftSuccess,
                     title: "En Düşük Kilo Kaydı",
-                    message: String(format: "Heft'teki en düşük kilonuzu kaydettiniz. Hedefinize yalnızca %.1f kg kaldı.", distanceToTarget)
+                    message: "Heft'teki en düşük kilonuzu kaydettiniz. Hedefinize yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                 )
             }
 
@@ -229,14 +228,14 @@ struct WeightChartView: View {
                         icon: "arrow.down.right.circle.fill",
                         color: .heftSuccess,
                         title: "İlerleme Devam Ediyor",
-                        message: String(format: "Son tartıma göre %.1f kg kaydettiniz. Hedefe %.1f kg kaldı.", lost, distanceToTarget)
+                        message: "Son tartıma göre \(HeftFormat.weightKg(lost)) kaydettiniz. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
                     )
                 } else if current > prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
                         title: "İstikrarınızı Koruyun",
-                        message: String(format: "Hedefinize %.1f kg kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır.", distanceToTarget)
+                        message: "Hedefinize \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır."
                     )
                 }
             }
@@ -245,7 +244,7 @@ struct WeightChartView: View {
                 icon: "target",
                 color: accent,
                 title: "Hedefe Doğru",
-                message: String(format: "Hedefine ulaşmak için %.1f kg mesafe var. Düzenli tartılarak ilerlemeni izle.", distanceToTarget)
+                message: "Hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni izle."
             )
         }
     }
@@ -361,7 +360,7 @@ struct WeightChartView: View {
                 if let active = activeEntry {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
-                            Text(String(format: "%.1f", active.weight))
+                            Text(HeftFormat.weight(active.weight))
                                 .font(.title.weight(.bold))
                                 .foregroundStyle(Color.primary)
 
@@ -518,7 +517,7 @@ struct WeightChartView: View {
                             y: .value("Kilo", entry.weight)
                         )
                         .accessibilityLabel(Self.fullDateFormatter.string(from: entry.date))
-                        .accessibilityValue(String(format: "%.1f kilogram", entry.weight))
+                        .accessibilityValue("\(HeftFormat.weight(entry.weight)) kilogram")
                         .symbol {
                             ZStack {
                                 if isSelected {
@@ -553,7 +552,7 @@ struct WeightChartView: View {
                             .foregroundStyle(Color.secondary.opacity(0.12))
                         if let weight = value.as(Double.self) {
                             AxisValueLabel(anchor: .leading) {
-                                Text(String(format: "%.1f", weight))
+                                Text(HeftFormat.weight(weight))
                                     .font(.caption2)
                                     .foregroundStyle(Color.secondary)
                             }
@@ -585,7 +584,7 @@ struct WeightChartView: View {
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
                 .frame(minHeight: activeEntries.count <= 1 ? singleChartHeight : fullChartHeight)
-                .accessibilityLabel("Kilo grafiği, \(selectedRange.accessibilityTitle). \(activeEntries.count) kayıt. En düşük \(String(format: "%.1f", activeEntries.map(\.weight).min() ?? 0)) kg, en yüksek \(String(format: "%.1f", activeEntries.map(\.weight).max() ?? 0)) kg.")
+                .accessibilityLabel("Kilo grafiği, \(selectedRange.accessibilityTitle). \(activeEntries.count) kayıt. En düşük \(HeftFormat.weightKg(activeEntries.map(\.weight).min() ?? 0)), en yüksek \(HeftFormat.weightKg(activeEntries.map(\.weight).max() ?? 0)).")
 
                 if activeEntries.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsiniz.")
