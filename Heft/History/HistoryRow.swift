@@ -17,12 +17,13 @@ struct HistoryRow: View {
     @ScaledMetric(relativeTo: .body) private var minRowHeight: CGFloat = 52
     @ScaledMetric(relativeTo: .body) private var rowSpacing: CGFloat = 2
 
-    private static let dateFormatter: DateFormatter = {
+    private static var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "tr_TR")
-        formatter.dateFormat = "dd MMM yyyy"
+        let loc = Locale.autoupdatingCurrent
+        formatter.locale = loc
+        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "dd MMM yyyy", options: 0, locale: loc)
         return formatter
-    }()
+    }
 
     private var formattedDate: String {
         Self.dateFormatter.string(from: date)

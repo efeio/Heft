@@ -16,13 +16,23 @@ enum ChartTimeRange: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    var localizedLabel: String {
+        switch self {
+        case .oneMonth: return String(localized: "1A", comment: "1 Month chart range button")
+        case .threeMonths: return String(localized: "3A", comment: "3 Months chart range button")
+        case .sixMonths: return String(localized: "6A", comment: "6 Months chart range button")
+        case .oneYear: return String(localized: "1Y", comment: "1 Year chart range button")
+        case .all: return String(localized: "Tümü", comment: "All Time chart range button")
+        }
+    }
+
     var accessibilityTitle: String {
         switch self {
-        case .oneMonth: return "1 Ay"
-        case .threeMonths: return "3 Ay"
-        case .sixMonths: return "6 Ay"
-        case .oneYear: return "1 Yıl"
-        case .all: return "Tüm Zamanlar"
+        case .oneMonth: return String(localized: "1 Ay", comment: "1 Month chart range a11y title")
+        case .threeMonths: return String(localized: "3 Ay", comment: "3 Months chart range a11y title")
+        case .sixMonths: return String(localized: "6 Ay", comment: "6 Months chart range a11y title")
+        case .oneYear: return String(localized: "1 Yıl", comment: "1 Year chart range a11y title")
+        case .all: return String(localized: "Tüm Zamanlar", comment: "All Time chart range a11y title")
         }
     }
 
@@ -103,26 +113,59 @@ enum ChartTimeRange: String, CaseIterable, Identifiable {
         return bufferedStart...safeEnd
     }
 
-    private static let dayMonthFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "d MMM"
-        return df
-    }()
+    private static var cachedFormattersLocaleId: String = ""
+    private static var _dayMonthFormatter: DateFormatter = makeDayMonthFormatter()
+    private static var _monthFormatter: DateFormatter = makeMonthFormatter()
+    private static var _monthYearFormatter: DateFormatter = makeMonthYearFormatter()
 
-    private static let monthFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "MMM"
-        return df
-    }()
+    private static func updateFormattersIfNeeded() {
+        let currentId = Locale.autoupdatingCurrent.identifier
+        if cachedFormattersLocaleId != currentId {
+            cachedFormattersLocaleId = currentId
+            _dayMonthFormatter = makeDayMonthFormatter()
+            _monthFormatter = makeMonthFormatter()
+            _monthYearFormatter = makeMonthYearFormatter()
+        }
+    }
 
-    private static let monthYearFormatter: DateFormatter = {
+    private static func makeDayMonthFormatter() -> DateFormatter {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "MMM ''yy"
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "dMMM", options: 0, locale: loc)
         return df
-    }()
+    }
+
+    private static func makeMonthFormatter() -> DateFormatter {
+        let df = DateFormatter()
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "MMM", options: 0, locale: loc)
+        return df
+    }
+
+    private static func makeMonthYearFormatter() -> DateFormatter {
+        let df = DateFormatter()
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "MMMyy", options: 0, locale: loc)
+        return df
+    }
+
+    private static var dayMonthFormatter: DateFormatter {
+        updateFormattersIfNeeded()
+        return _dayMonthFormatter
+    }
+
+    private static var monthFormatter: DateFormatter {
+        updateFormattersIfNeeded()
+        return _monthFormatter
+    }
+
+    private static var monthYearFormatter: DateFormatter {
+        updateFormattersIfNeeded()
+        return _monthYearFormatter
+    }
 
     func filter(entries: [WeightEntry], relativeTo referenceDate: Date) -> [WeightEntry] {
         let isAlreadySorted = zip(entries, entries.dropFirst()).allSatisfy { $0.date <= $1.date }

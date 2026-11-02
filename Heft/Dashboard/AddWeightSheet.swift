@@ -32,12 +32,13 @@ struct AddWeightSheet: View {
 
     private let calendar = Calendar.current
 
-    private static let dayMonthFormatter: DateFormatter = {
+    private static var dayMonthFormatter: DateFormatter {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "d MMMM"
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "dMMMM", options: 0, locale: loc)
         return df
-    }()
+    }
 
     private var profile: UserProfile? {
         profiles.first

@@ -84,29 +84,55 @@ extension Color {
 
 // MARK: - Locale-Aware Number Formatting & Parsing
 enum HeftFormat {
-    static let locale = Locale(identifier: "tr_TR")
+    static var locale: Locale { Locale.autoupdatingCurrent }
 
-    static let decimalSeparator: String = locale.decimalSeparator ?? ","
+    static var decimalSeparator: String {
+        locale.decimalSeparator ?? "."
+    }
 
-    private static let oneDecimalFormatter: NumberFormatter = {
+    private static func createOneDecimalFormatter(for locale: Locale) -> NumberFormatter {
         let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "tr_TR")
+        formatter.locale = locale
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 1
         formatter.maximumFractionDigits = 1
         formatter.usesGroupingSeparator = false
         return formatter
-    }()
+    }
 
-    private static let integerFormatter: NumberFormatter = {
+    private static func createIntegerFormatter(for locale: Locale) -> NumberFormatter {
         let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "tr_TR")
+        formatter.locale = locale
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 0
         formatter.usesGroupingSeparator = false
         return formatter
-    }()
+    }
+
+    private static var cachedLocaleId: String = ""
+    private static var cachedOneDecimalFormatter: NumberFormatter = createOneDecimalFormatter(for: Locale.autoupdatingCurrent)
+    private static var cachedIntegerFormatter: NumberFormatter = createIntegerFormatter(for: Locale.autoupdatingCurrent)
+
+    private static var oneDecimalFormatter: NumberFormatter {
+        let currentId = Locale.autoupdatingCurrent.identifier
+        if cachedLocaleId != currentId {
+            cachedLocaleId = currentId
+            cachedOneDecimalFormatter = createOneDecimalFormatter(for: Locale.autoupdatingCurrent)
+            cachedIntegerFormatter = createIntegerFormatter(for: Locale.autoupdatingCurrent)
+        }
+        return cachedOneDecimalFormatter
+    }
+
+    private static var integerFormatter: NumberFormatter {
+        let currentId = Locale.autoupdatingCurrent.identifier
+        if cachedLocaleId != currentId {
+            cachedLocaleId = currentId
+            cachedOneDecimalFormatter = createOneDecimalFormatter(for: Locale.autoupdatingCurrent)
+            cachedIntegerFormatter = createIntegerFormatter(for: Locale.autoupdatingCurrent)
+        }
+        return cachedIntegerFormatter
+    }
 
     static func weight(_ value: Double) -> String {
         oneDecimalFormatter.string(from: NSNumber(value: value)) ?? String(format: "%.1f", value)

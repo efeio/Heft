@@ -56,12 +56,13 @@ struct WeightChartView: View {
         selectedRange.filter(entries: allSortedEntries, relativeTo: referenceDate)
     }
 
-    private static let fullDateFormatter: DateFormatter = {
+    private static var fullDateFormatter: DateFormatter {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "d MMMM yyyy, EEEE"
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "d MMMM yyyy, EEEE", options: 0, locale: loc)
         return df
-    }()
+    }
 
     // MARK: - Selected Entry Delta
     private func computeActiveDeltaText(active: WeightEntry?, activeEntries: [WeightEntry], allSortedEntries: [WeightEntry]) -> (text: String, isSuccess: Bool)? {
@@ -280,7 +281,7 @@ struct WeightChartView: View {
             }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
-            Text(range.rawValue)
+            Text(range.localizedLabel)
                 .font(.caption.weight(isSelected ? .bold : .semibold))
                 .foregroundStyle(isSelected ? Color.white : (isAvailable ? Color.secondary : Color.secondary.opacity(0.35)))
                 .fixedSize(horizontal: fixedHorizontal, vertical: false)

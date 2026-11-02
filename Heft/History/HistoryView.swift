@@ -20,12 +20,13 @@ struct HistoryView: View {
     @State private var showSaveError = false
     @State private var showAddWeightSheet = false
 
-    private static let monthFormatter: DateFormatter = {
+    private static var monthFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "tr_TR")
-        formatter.dateFormat = "LLLL yyyy"
+        let loc = Locale.autoupdatingCurrent
+        formatter.locale = loc
+        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "LLLL yyyy", options: 0, locale: loc)
         return formatter
-    }()
+    }
 
     private var userHeight: Double {
         profiles.first?.height ?? 175.0
