@@ -24,10 +24,10 @@ struct BMIChartView: View {
     @State private var selectedRange: ChartTimeRange = {
         #if DEBUG
         if let idx = CommandLine.arguments.firstIndex(of: "--chart-range"), idx + 1 < CommandLine.arguments.count {
-            return ChartTimeRange(rawValue: CommandLine.arguments[idx + 1]) ?? .oneMonth
+            return ChartTimeRange(rawValue: CommandLine.arguments[idx + 1]) ?? .all
         }
         #endif
-        return .oneMonth
+        return .all
     }()
     @State private var selectedPoint: BMIPoint?
     @State private var rawSelectedDate: Date?
