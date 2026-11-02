@@ -81,13 +81,7 @@ struct TargetProjectionCard: View {
             if let catchUp = output.catchUpInfo {
                 return String(localized: "Hedef tarihine yetişmek için haftalık \(HeftFormat.weightKg(catchUp.requiredWeeklyPace)) tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor.", comment: "Catch up pace message")
             }
-            if output.generalMessage.contains("hafta daha erken") || output.generalMessage.contains("gün daha erken") {
-                return output.generalMessage
-                    .replacingOccurrences(of: "temponuzla hedefinize", with: "temponla hedefine")
-                    .replacingOccurrences(of: "ulaşacaksınız", with: "ulaşacaksın")
-            }
-            let actionWord = goalType == .gain ? String(localized: "kilo alarak", comment: "gaining weight action") : String(localized: "kilo vererek", comment: "losing weight action")
-            return String(localized: "Mevcut temponla (haftada ortalama \(HeftFormat.weightKg(output.currentWeeklyPace)) \(actionWord)) bu aralıkta hedefine ulaşman öngörülüyor.", comment: "Pace projection message")
+            return output.generalMessage
         }
     }
 
@@ -95,6 +89,7 @@ struct TargetProjectionCard: View {
         let output = computeOutput()
         let primaryRangeText = informalPrimaryDateRangeString(for: output)
         let weeksBadge = weeksBadgeText(for: output)
+        let headerTitle = output.isGoalReached ? String(localized: "HEDEFE ULAŞILDI", comment: "Goal reached title") : (output.isMaintainGoal ? String(localized: "KİLO KORUMA", comment: "Maintain weight title") : String(localized: "TAHMİNİ BİTİŞ", comment: "Estimated completion title"))
 
         VStack(alignment: .leading, spacing: 14) {
             // MARK: - Header Row (Title & Pace Indicator)
@@ -105,7 +100,7 @@ struct TargetProjectionCard: View {
                             .font(.subheadline.weight(.bold))
                             .foregroundStyle(output.isGoalReached ? Color.heftSuccess : accent)
 
-                        Text(output.isGoalReached ? "HEDEFE ULAŞILDI" : (output.isMaintainGoal ? "KİLO KORUMA" : "TAHMİNİ BİTİŞ"))
+                        Text(headerTitle)
                             .font(.caption2.weight(.bold))
                             .tracking(0.8)
                             .foregroundStyle(Color.secondary)
@@ -126,7 +121,7 @@ struct TargetProjectionCard: View {
                             .font(.subheadline.weight(.bold))
                             .foregroundStyle(output.isGoalReached ? Color.heftSuccess : accent)
 
-                        Text(output.isGoalReached ? "HEDEFE ULAŞILDI" : (output.isMaintainGoal ? "KİLO KORUMA" : "TAHMİNİ BİTİŞ"))
+                        Text(headerTitle)
                             .font(.caption2.weight(.bold))
                             .tracking(0.8)
                             .foregroundStyle(Color.secondary)

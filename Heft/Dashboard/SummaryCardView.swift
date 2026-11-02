@@ -120,9 +120,9 @@ struct SummaryCardView: View {
         if let diff = weeklyDiff {
             weeklyStr = "\(diff >= 0 ? "+" : "−")\(HeftFormat.weightKg(abs(diff)))"
         } else {
-            weeklyStr = "değişim yok"
+            weeklyStr = String(localized: "değişim yok", comment: "No change")
         }
-        return "Mevcut kilo \(HeftFormat.weightKg(latestWeight)), hedef \(HeftFormat.weightKg(targetWeight)), \(remainingPillText), bu hafta \(weeklyStr)."
+        return String(localized: "Mevcut kilo \(HeftFormat.weightKg(latestWeight)), hedef \(HeftFormat.weightKg(targetWeight)), \(remainingPillText), bu hafta \(weeklyStr).", comment: "Summary card a11y announcement")
     }
 
     // MARK: - Pill Views

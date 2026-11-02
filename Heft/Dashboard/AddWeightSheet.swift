@@ -255,7 +255,7 @@ struct AddWeightSheet: View {
             HStack(spacing: 4) {
                 Image(systemName: "calendar")
                     .font(.caption)
-                Text(isTodaySelected || isYesterdaySelected ? "Diğer" : Self.dayMonthFormatter.string(from: selectedDate))
+                Text(isTodaySelected || isYesterdaySelected ? String(localized: "Diğer", comment: "Other date button") : Self.dayMonthFormatter.string(from: selectedDate))
                     .font(.caption.weight(!isTodaySelected && !isYesterdaySelected ? .bold : .medium))
                     .fixedSize(horizontal: fixedHorizontal, vertical: false)
                 Image(systemName: showCustomDatePicker ? "chevron.up" : "chevron.down")
@@ -272,7 +272,7 @@ struct AddWeightSheet: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(isTodaySelected || isYesterdaySelected ? "Diğer tarih seç" : "Seçili tarih: \(Self.dayMonthFormatter.string(from: selectedDate))")
+        .accessibilityLabel(isTodaySelected || isYesterdaySelected ? String(localized: "Diğer tarih seç", comment: "Other date select a11y") : String(localized: "Seçili tarih: \(Self.dayMonthFormatter.string(from: selectedDate))", comment: "Selected date a11y"))
         .accessibilityAddTraits(!isTodaySelected && !isYesterdaySelected ? .isSelected : [])
     }
 
@@ -316,7 +316,7 @@ struct AddWeightSheet: View {
                 .padding(.bottom, 2)
 
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(weightText.isEmpty ? "0,0" : weightText)
+                Text(weightText.isEmpty ? HeftFormat.weight(0) : weightText)
                     .font(.heftHeroStat)
                     .foregroundStyle(weightText.isEmpty ? Color.secondary : Color.primary)
                     .minimumScaleFactor(0.7)
@@ -397,8 +397,16 @@ struct AddWeightSheet: View {
                     Image(systemName: isLoss ? "arrow.down.right" : (isGain ? "arrow.up.right" : "equal"))
                         .font(.caption2.weight(.bold))
 
-                    Text(isGain ? "Son tartıma göre \(HeftFormat.signedWeightKg(delta))" : (isLoss ? "Son tartıma göre -\(HeftFormat.weightKg(abs(delta)))" : "Son tartımla aynı"))
-                        .font(.caption.weight(.semibold))
+                    if isGain {
+                        Text("Son tartıma göre \(HeftFormat.signedWeightKg(delta))")
+                            .font(.caption.weight(.semibold))
+                    } else if isLoss {
+                        Text("Son tartıma göre -\(HeftFormat.weightKg(abs(delta)))")
+                            .font(.caption.weight(.semibold))
+                    } else {
+                        Text("Son tartımla aynı")
+                            .font(.caption.weight(.semibold))
+                    }
                 }
                 .foregroundStyle(isPositiveDirection ? Color.heftSuccess : (isGain || isLoss ? Color.heftWarning : Color.secondary))
                 .padding(.horizontal, 12)
@@ -412,7 +420,7 @@ struct AddWeightSheet: View {
                 HStack(spacing: 6) {
                     Image(systemName: "target")
                         .font(.caption2.weight(.bold))
-                    Text("Hedefe \(HeftFormat.weightKg(abs(diff))) kaldı")
+                    Text(String(localized: "Hedefe \(HeftFormat.weightKg(abs(diff))) kaldı", comment: "Remaining to goal badge"))
                         .font(.caption.weight(.semibold))
                 }
                 .foregroundStyle(accent)

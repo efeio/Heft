@@ -305,7 +305,7 @@ enum ProjectionEngine {
         let adaptiveScenario = ScenarioDetail(
             scenario: .adaptive,
             icon: "chart.xyaxis.line",
-            title: "Adaptif",
+            title: ProjectionScenario.adaptive.title,
             weeklyRate: emaRate,
             projectedDate: adaptiveDate,
             dateRangeString: adaptiveRange,
@@ -315,7 +315,7 @@ enum ProjectionEngine {
         let shortTermScenario = ScenarioDetail(
             scenario: .shortTerm,
             icon: "bolt.fill",
-            title: "Son 14 Gün",
+            title: ProjectionScenario.shortTerm.title,
             weeklyRate: effectiveShortRate,
             projectedDate: shortDate,
             dateRangeString: shortRange,
@@ -325,7 +325,7 @@ enum ProjectionEngine {
         let longTermScenario = ScenarioDetail(
             scenario: .longTerm,
             icon: "scale.3d",
-            title: "Genel Ortalama",
+            title: ProjectionScenario.longTerm.title,
             weeklyRate: effectiveLongRate,
             projectedDate: longDate,
             dateRangeString: longRange,
@@ -335,7 +335,7 @@ enum ProjectionEngine {
         let plannedScenario = ScenarioDetail(
             scenario: .planned,
             icon: "target",
-            title: "Hedef Plan",
+            title: ProjectionScenario.planned.title,
             weeklyRate: onboardingPace,
             projectedDate: plannedDate,
             dateRangeString: plannedRange,
@@ -373,7 +373,7 @@ enum ProjectionEngine {
                 let plateauDays = max(14, Int(refDate.timeIntervalSince(oldestInPlateau.date) / 86400))
                 let avgW = weights.reduce(0, +) / Double(weights.count)
                 condition = .plateau(days: plateauDays, averageWeight: avgW)
-                conditionMessage = "Kilonuz \(plateauDays) gündür \(String(format: "%.1f", avgW)) ± 0.4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizma alıştığında temponuz yeniden hareketlenecektir."
+                conditionMessage = String(localized: "Kilon \(plateauDays) gündür \(HeftFormat.weight(avgW)) ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir.", comment: "Plateau message")
             }
         }
 
@@ -388,8 +388,7 @@ enum ProjectionEngine {
                 let gain = currentWeight - minRecent
                 let days = max(2, Int(refDate.timeIntervalSince(recentWindow.first?.date ?? refDate) / 86400))
                 condition = .weightGainAnomaly(days: days, gainKg: gain)
-                let dateStr = Self.monthYearFormatter.string(from: longDate)
-                conditionMessage = "Son \(days) günde +\(String(format: "%.1f", gain)) kg artış var — muhtemelen geçici su tutulumu. Genel temponuzla hedefiniz hâlâ \(dateStr) civarında."
+                conditionMessage = String(localized: "Son \(days) günde +\(HeftFormat.weightKg(gain)) artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında.", comment: "Water retention message")
             }
         }
 
@@ -405,7 +404,7 @@ enum ProjectionEngine {
         if adaptiveDate > originalTargetDate && daysRemainingToPlan >= 7 {
             let requiredRate = remainingKg / (Double(daysRemainingToPlan) / 7.0)
             let formattedDate = Self.fullDateFormatter.string(from: adaptiveDate)
-            let msg = "Hedef tarihinize (\(Self.dayMonthFormatter.string(from: originalTargetDate))) yetişmek için haftalık \(String(format: "%.1f", requiredRate)) kg tempoya ihtiyacınız var. Mevcut temponuzla bitiş \(formattedDate) tarihine sarkıyor."
+            let msg = String(localized: "Hedef tarihine yetişmek için haftalık \(HeftFormat.weightKg(requiredRate)) tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor.", comment: "Catch up pace message")
             catchUpInfo = CatchUpInfo(
                 isBehind: true,
                 originalTargetDate: originalTargetDate,
@@ -423,13 +422,13 @@ enum ProjectionEngine {
             generalMsg = catchUp.message
         } else if daysDiffFromPlan >= 7 {
             let weeksAhead = max(1, Int(round(Double(daysDiffFromPlan) / 7.0)))
-            generalMsg = "Mevcut temponuzla hedefinize planlanandan \(weeksAhead) hafta daha erken ulaşacaksınız."
+            generalMsg = String(localized: "Mevcut temponla hedefine planlanandan \(weeksAhead) hafta daha erken ulaşacaksın.", comment: "Weeks ahead of plan projection message")
         } else if daysDiffFromPlan >= 3 {
-            generalMsg = "Mevcut temponuzla hedefinize planlanandan \(daysDiffFromPlan) gün daha erken ulaşacaksınız."
+            generalMsg = String(localized: "Mevcut temponla hedefine planlanandan \(daysDiffFromPlan) gün daha erken ulaşacaksın.", comment: "Days ahead of plan projection message")
         } else {
-            let actionWord = isGain ? "kilo alarak" : "kilo vererek"
-            let rateStr = String(format: "%.1f", emaRate)
-            generalMsg = "Mevcut temponuzla (haftada ortalama \(rateStr) kg \(actionWord)) bu aralıkta hedefinize ulaşmanız öngörülüyor."
+            let actionWord = isGain ? String(localized: "kilo alarak", comment: "gaining weight action") : String(localized: "kilo vererek", comment: "losing weight action")
+            let rateStr = HeftFormat.weight(emaRate)
+            generalMsg = String(localized: "Mevcut temponla (haftada ortalama \(rateStr) kg \(actionWord)) bu aralıkta hedefine ulaşman öngörülüyor.", comment: "Pace projection message")
         }
 
         return ProjectionOutput(

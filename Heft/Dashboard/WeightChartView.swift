@@ -439,9 +439,15 @@ struct WeightChartView: View {
                         .font(.title)
                         .foregroundStyle(Color.secondary)
 
-                    Text(allSorted.isEmpty ? "Grafik için henüz kilo kaydı yok" : "Son \(selectedRange.rawValue) içinde ölçüm bulunamadı")
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(Color.secondary)
+                    if allSorted.isEmpty {
+                        Text("Grafik için henüz kilo kaydı yok")
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(Color.secondary)
+                    } else {
+                        Text("Son \(selectedRange.localizedLabel) içinde ölçüm bulunamadı")
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(Color.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .aspectRatio(2.0, contentMode: .fit)

@@ -1426,6 +1426,26 @@ TRANSLATIONS = {
         "en": "For a weight loss goal, your target weight must be lower than your current weight.",
         "comment": "Goal lose validation error"
     },
+    "Diğer": {
+        "en": "Other",
+        "comment": "Other date option"
+    },
+    "Mevcut kilo %@, hedef %@, %@, bu hafta %@.": {
+        "en": "Current weight %@, goal %@, %@, this week %@.",
+        "comment": "Summary card accessibility announcement"
+    },
+    "Mevcut temponla (haftada ortalama %@ kg %@) bu aralıkta hedefine ulaşman öngörülüyor.": {
+        "en": "At your current pace (average %@ kg %@ per week), you are projected to reach your goal within this range.",
+        "comment": "Pace projection message with kg"
+    },
+    "Mevcut temponla hedefine planlanandan %lld gün daha erken ulaşacaksın.": {
+        "en": "At your current pace, you will reach your goal %lld days earlier than planned.",
+        "comment": "Days ahead of plan projection message"
+    },
+    "Mevcut temponla hedefine planlanandan %lld hafta daha erken ulaşacaksın.": {
+        "en": "At your current pace, you will reach your goal %lld weeks earlier than planned.",
+        "comment": "Weeks ahead of plan projection message"
+    },
 }
 
 def extract_format_specifiers(s):
