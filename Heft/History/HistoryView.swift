@@ -72,7 +72,7 @@ struct HistoryView: View {
         guard let first = sorted.first, let latest = sorted.last else { return nil }
         let weights = sorted.map(\.weight)
         let extreme = isGainGoal ? (weights.max() ?? latest.weight) : (weights.min() ?? latest.weight)
-        let label = isGainGoal ? "En Yüksek" : "En Düşük"
+        let label = isGainGoal ? String(localized: "En Yüksek", comment: "Highest weight stat") : String(localized: "En Düşük", comment: "Lowest weight stat")
         let totalDelta = latest.weight - first.weight
         return (initial: first.weight, extreme: extreme, extremeLabel: label, delta: totalDelta)
     }
@@ -166,12 +166,12 @@ struct HistoryView: View {
                             Section {
                                 ViewThatFits(in: .horizontal) {
                                     HStack(spacing: 0) {
-                                        statColumn(title: "Başlangıç", value: HeftFormat.weight(stats.initial), unit: "kg", fixedHorizontal: true)
+                                        statColumn(title: String(localized: "Başlangıç", comment: "Initial weight stat"), value: HeftFormat.weight(stats.initial), unit: "kg", fixedHorizontal: true)
                                         Divider().frame(height: 28)
                                         statColumn(title: stats.extremeLabel, value: HeftFormat.weight(stats.extreme), unit: "kg", fixedHorizontal: true)
                                         Divider().frame(height: 28)
                                         statColumn(
-                                            title: "Toplam Değişim",
+                                            title: String(localized: "Toplam Değişim", comment: "Total change stat"),
                                             value: HeftFormat.signedWeight(stats.delta),
                                             unit: "kg",
                                             highlightColor: deltaColor,
@@ -180,12 +180,12 @@ struct HistoryView: View {
                                     }
 
                                     VStack(alignment: .leading, spacing: 8) {
-                                        statRow(title: "Başlangıç", value: HeftFormat.weight(stats.initial), unit: "kg")
+                                        statRow(title: String(localized: "Başlangıç", comment: "Initial weight stat"), value: HeftFormat.weight(stats.initial), unit: "kg")
                                         Divider()
                                         statRow(title: stats.extremeLabel, value: HeftFormat.weight(stats.extreme), unit: "kg")
                                         Divider()
                                         statRow(
-                                            title: "Toplam Değişim",
+                                            title: String(localized: "Toplam Değişim", comment: "Total change stat"),
                                             value: HeftFormat.signedWeight(stats.delta),
                                             unit: "kg",
                                             highlightColor: deltaColor

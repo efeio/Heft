@@ -176,7 +176,11 @@ struct SettingsView: View {
         .alert("İçe Aktarma Tamamlandı", isPresented: $importResultAlert) {
             Button("Tamam") {}
         } message: {
-            Text(importCount > 0 ? "\(importCount) adet yeni tartım Apple Sağlık'tan Heft'e aktarıldı." : "Apple Sağlık'ta içe aktarılacak yeni bir tartım bulunamadı.")
+            if importCount > 0 {
+                Text("\(importCount) adet yeni tartım Apple Sağlık'tan Heft'e aktarıldı.")
+            } else {
+                Text("Apple Sağlık'ta içe aktarılacak yeni bir tartım bulunamadı.")
+            }
         }
         .alert("Dışa Aktarma Tamamlandı", isPresented: $exportResultAlert) {
             Button("Tamam") {}
@@ -202,7 +206,7 @@ struct SettingsView: View {
     }
 
     @ViewBuilder
-    private func rowLabel(_ title: String, systemImage: String) -> some View {
+    private func rowLabel(_ title: LocalizedStringKey, systemImage: String) -> some View {
         HStack(spacing: 10) {
             Image(systemName: systemImage)
                 .foregroundStyle(accent)
@@ -316,8 +320,8 @@ struct SettingsView: View {
 
             // Gender
             Picker(selection: $gender) {
-                Label("Erkek", systemImage: "figure.stand").tag(Gender.male)
-                Label("Kadın", systemImage: "figure.stand.dress").tag(Gender.female)
+                Label(Gender.male.label, systemImage: "figure.stand").tag(Gender.male)
+                Label(Gender.female.label, systemImage: "figure.stand.dress").tag(Gender.female)
             } label: {
                 rowLabel("Cinsiyet", systemImage: "person.fill")
             }
@@ -335,9 +339,9 @@ struct SettingsView: View {
     private var goalSection: some View {
         Section {
             Picker(selection: $goalType) {
-                Label("Kilo Vermek", systemImage: "flame.fill").tag(GoalType.lose)
-                Label("Kilo Korumak", systemImage: "equal.circle.fill").tag(GoalType.maintain)
-                Label("Kilo Almak", systemImage: "figure.strengthtraining.traditional").tag(GoalType.gain)
+                Label(GoalType.lose.fullLabel, systemImage: "flame.fill").tag(GoalType.lose)
+                Label(GoalType.maintain.fullLabel, systemImage: "equal.circle.fill").tag(GoalType.maintain)
+                Label(GoalType.gain.fullLabel, systemImage: "figure.strengthtraining.traditional").tag(GoalType.gain)
             } label: {
                 rowLabel("Hedef Türü", systemImage: "flag.fill")
             }
@@ -384,7 +388,7 @@ struct SettingsView: View {
             Text("HEDEF")
                 .heftEyebrowStyle()
         } footer: {
-            Text(goalType == .gain ? "Kilo alma modunda artışlar pozitif olarak değerlendirilir." : (goalType == .maintain ? "Kilo koruma modunda mevcut kilonu dengede tutman hedeflenir." : "Kilo verme modunda azalışlar başarı olarak değerlendirilir."))
+            Text(goalType.explanation)
                 .font(.heftMeta)
                 .foregroundStyle(Color.secondary)
         }
@@ -1034,7 +1038,7 @@ struct PrivacyPolicyView: View {
     }
 
     @ViewBuilder
-    private func policyCard(icon: String, title: String, content: String) -> some View {
+    private func policyCard(icon: String, title: LocalizedStringKey, content: LocalizedStringKey) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: icon)

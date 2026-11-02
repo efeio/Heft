@@ -40,14 +40,16 @@ struct HistoryRow: View {
         let deltaPart: String
         if let delta = delta {
             if abs(delta) < 0.05 {
-                deltaPart = "değişim yok"
+                deltaPart = String(localized: "değişim yok", comment: "No weight change delta a11y")
             } else {
-                deltaPart = "değişim \(HeftFormat.signedWeight(delta)) kilogram"
+                let formattedDelta = HeftFormat.signedWeight(delta)
+                deltaPart = String(localized: "değişim \(formattedDelta) kilogram", comment: "Weight change delta a11y")
             }
         } else {
-            deltaPart = "başlangıç kaydı"
+            deltaPart = String(localized: "başlangıç kaydı", comment: "Initial record a11y")
         }
-        return "\(formattedDate), \(HeftFormat.weight(weight)) kilogram, \(bmiText), \(deltaPart)"
+        let formattedWeight = HeftFormat.weight(weight)
+        return "\(formattedDate), \(formattedWeight) kg, \(bmiText), \(deltaPart)"
     }
 
     @ViewBuilder

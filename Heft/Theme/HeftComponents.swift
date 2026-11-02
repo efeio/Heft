@@ -87,10 +87,24 @@ struct HeftPrimaryButtonStyle: ButtonStyle {
 
 // MARK: - Primary Button Component
 struct HeftPrimaryButton: View {
-    let title: String
+    let title: LocalizedStringKey
     var icon: String? = nil
     var isEnabled: Bool = true
     let action: () -> Void
+
+    init(title: LocalizedStringKey, icon: String? = nil, isEnabled: Bool = true, action: @escaping () -> Void) {
+        self.title = title
+        self.icon = icon
+        self.isEnabled = isEnabled
+        self.action = action
+    }
+
+    init(title: String, icon: String? = nil, isEnabled: Bool = true, action: @escaping () -> Void) {
+        self.title = LocalizedStringKey(title)
+        self.icon = icon
+        self.isEnabled = isEnabled
+        self.action = action
+    }
 
     var body: some View {
         Button(action: action) {
