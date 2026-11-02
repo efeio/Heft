@@ -1,41 +1,6041 @@
 {
-  "sourceLanguage" : "tr",
-  "strings" : {
-    "Ana Sayfa" : {
-      "comment" : "Bottom tab bar title for Home tab",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Home"
+  "sourceLanguage": "tr",
+  "strings": {
+    " ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " "
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ana Sayfa"
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " "
           }
         }
-      }
+      },
+      "comment": "Empty space"
     },
-    "Geçmiş" : {
-      "comment" : "Bottom tab bar title for History tab",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "History"
+    "%@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geçmiş"
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
           }
         }
-      }
+      },
+      "comment": "Pace value and action"
+    },
+    "%@ cm boy için normal BMI (18,5 - 24,9) aralığı %@ - %@ kg arasındadır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For %@ cm height, the normal BMI range (18.5 - 24.9) is %@ - %@ kg."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ cm boy için normal BMI (18,5 - 24,9) aralığı %@ - %@ kg arasındadır."
+          }
+        }
+      },
+      "comment": "Healthy weight range message"
+    },
+    "%@ hedefine başarıyla ulaştın. Formunu korumak için aynı kararlılıkla devam et.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've successfully reached your %@ goal. Keep up the consistency to maintain your form."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ hedefine başarıyla ulaştın. Formunu korumak için aynı kararlılıkla devam et."
+          }
+        }
+      },
+      "comment": "Insight goal reached gain msg"
+    },
+    "%@ hedefine ulaştın. Sağlıklı kilonu korumak için aynı kararlılıkla devam et.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've reached your %@ goal. Keep up the consistency to maintain your healthy weight."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ hedefine ulaştın. Sağlıklı kilonu korumak için aynı kararlılıkla devam et."
+          }
+        }
+      },
+      "comment": "Insight goal reached lose msg"
+    },
+    "%@ kg hedefine ulaştığında BMI değerin %@ (%@) olacak. Boyun için sağlıklı kilo aralığı %@ - %@ kg'dır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you reach your %@ kg goal, your BMI will be %@ (%@). The healthy weight range for your height is %@ - %@ kg."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kg hedefine ulaştığında BMI değerin %@ (%@) olacak. Boyun için sağlıklı kilo aralığı %@ - %@ kg'dır."
+          }
+        }
+      },
+      "comment": "Target BMI explanation"
+    },
+    "%@ kilogram": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kilograms"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kilogram"
+          }
+        }
+      },
+      "comment": "Kilograms accessibility value"
+    },
+    "%@ tarihine ait mevcut kayıt (%@), yeni değer olan %@ ile güncellenecektir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The existing entry for %@ (%@) will be updated with the new value of %@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ tarihine ait mevcut kayıt (%@), yeni değer olan %@ ile güncellenecektir."
+          }
+        }
+      },
+      "comment": "Overwrite entry alert message with date"
+    },
+    "%@, günaydın": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good morning, %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, günaydın"
+          }
+        }
+      },
+      "comment": "Daily reminder title with user name"
+    },
+    "%@, tartım zamanı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in time, %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, tartım zamanı"
+          }
+        }
+      },
+      "comment": "Reminder title with user name"
+    },
+    "%lld adet tartım kaydı Apple Sağlık'a başarıyla aktarıldı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld weight entries successfully exported to Apple Health."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld adet tartım kaydı Apple Sağlık'a başarıyla aktarıldı."
+          }
+        }
+      },
+      "comment": "Export healthkit count alert"
+    },
+    "%lld adet yeni tartım Apple Sağlık'tan Heft'e aktarıldı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld new weight entries imported from Apple Health."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld adet yeni tartım Apple Sağlık'tan Heft'e aktarıldı."
+          }
+        }
+      },
+      "comment": "Import healthkit count alert"
+    },
+    "0,0": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0.0"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0,0"
+          }
+        }
+      },
+      "comment": "Zero placeholder"
+    },
+    "0,1": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0.1"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0,1"
+          }
+        }
+      },
+      "comment": "Tenths placeholder"
+    },
+    "0,1 kilogram artır": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Increase by 0.1 kilogram"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0,1 kilogram artır"
+          }
+        }
+      },
+      "comment": "Accessibility step increment"
+    },
+    "0,1 kilogram azalt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decrease by 0.1 kilogram"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0,1 kilogram azalt"
+          }
+        }
+      },
+      "comment": "Accessibility step decrement"
+    },
+    "1 Ay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Month"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Ay"
+          }
+        }
+      },
+      "comment": "1 Month chart range a11y title"
+    },
+    "1 Yıl": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Year"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Yıl"
+          }
+        }
+      },
+      "comment": "1 Year chart range a11y title"
+    },
+    "1. Tamamen Cihaz İçi (On-Device) Depolama": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Completely On-Device Storage"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Tamamen Cihaz İçi (On-Device) Depolama"
+          }
+        }
+      },
+      "comment": "Privacy card title 1"
+    },
+    "175": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "175"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "175"
+          }
+        }
+      },
+      "comment": "Default height placeholder"
+    },
+    "1A": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1M"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1A"
+          }
+        }
+      },
+      "comment": "1 Month chart range button"
+    },
+    "1Y": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1Y"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1Y"
+          }
+        }
+      },
+      "comment": "1 Year chart range button"
+    },
+    "2. Apple Sağlık (HealthKit) Kullanımı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Apple Health (HealthKit) Integration"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Apple Sağlık (HealthKit) Kullanımı"
+          }
+        }
+      },
+      "comment": "Privacy card title 2"
+    },
+    "28": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "28"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "28"
+          }
+        }
+      },
+      "comment": "Default age placeholder"
+    },
+    "3 Ay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 Months"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 Ay"
+          }
+        }
+      },
+      "comment": "3 Months chart range a11y title"
+    },
+    "3. Takip ve Reklam Bulunmaz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. No Tracking or Ads"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Takip ve Reklam Bulunmaz"
+          }
+        }
+      },
+      "comment": "Privacy card title 3"
+    },
+    "3A": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3M"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3A"
+          }
+        }
+      },
+      "comment": "3 Months chart range button"
+    },
+    "4. Verileri Silme ve Kontrol Hakkı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. Right to Delete and Control Data"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. Verileri Silme ve Kontrol Hakkı"
+          }
+        }
+      },
+      "comment": "Privacy card title 4"
+    },
+    "5. Tıbbi Feragatname (Medical Disclaimer)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5. Medical Disclaimer"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5. Tıbbi Feragatname (Medical Disclaimer)"
+          }
+        }
+      },
+      "comment": "Privacy card title 5"
+    },
+    "6 Ay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 Months"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 Ay"
+          }
+        }
+      },
+      "comment": "6 Months chart range a11y title"
+    },
+    "6A": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6M"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6A"
+          }
+        }
+      },
+      "comment": "6 Months chart range button"
+    },
+    "70,0": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "70.0"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "70,0"
+          }
+        }
+      },
+      "comment": "Default target weight placeholder"
+    },
+    "AMACIN NEDİR?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WHAT IS YOUR GOAL?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AMACIN NEDİR?"
+          }
+        }
+      },
+      "comment": "Onboarding goal section header"
+    },
+    "APPLE SAĞLIK (HEALTHKIT)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APPLE HEALTH (HEALTHKIT)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APPLE SAĞLIK (HEALTHKIT)"
+          }
+        }
+      },
+      "comment": "HealthKit settings section header"
+    },
+    "Adaptif": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaptive"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adaptif"
+          }
+        }
+      },
+      "comment": "Projection scenario adaptive"
+    },
+    "Adım %lld / %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %lld of %lld"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adım %lld / %lld"
+          }
+        }
+      },
+      "comment": "Step progress accessibility label"
+    },
+    "Adın": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your name"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adın"
+          }
+        }
+      },
+      "comment": "Name input placeholder"
+    },
+    "Ana Sayfa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ana Sayfa"
+          }
+        }
+      },
+      "comment": "Home navigation title and tab item"
+    },
+    "Apple Sağlık'ta içe aktarılacak yeni bir tartım bulunamadı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new weigh-ins found to import from Apple Health."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Sağlık'ta içe aktarılacak yeni bir tartım bulunamadı."
+          }
+        }
+      },
+      "comment": "Empty import result message"
+    },
+    "Ayarlar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayarlar"
+          }
+        }
+      },
+      "comment": "Settings navigation title"
+    },
+    "Aşırı Obez (Tip 3)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Severely Obese (Class 3)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aşırı Obez (Tip 3)"
+          }
+        }
+      },
+      "comment": "BMI category Severely Obese Class 3"
+    },
+    "BAŞLANGIÇ BMI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "STARTING BMI"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BAŞLANGIÇ BMI"
+          }
+        }
+      },
+      "comment": "Summary starting BMI header"
+    },
+    "BAŞLANGIÇ KİLOSU": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "STARTING WEIGHT"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BAŞLANGIÇ KİLOSU"
+          }
+        }
+      },
+      "comment": "Onboarding starting weight header"
+    },
+    "BMI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BMI"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BMI"
+          }
+        }
+      },
+      "comment": "BMI abbreviation"
+    },
+    "BMI %@, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BMI %@, %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BMI %@, %@"
+          }
+        }
+      },
+      "comment": "BMI accessibility value"
+    },
+    "BOY": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEIGHT"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BOY"
+          }
+        }
+      },
+      "comment": "Body info height header"
+    },
+    "BOY & YAŞ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEIGHT & AGE"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BOY & YAŞ"
+          }
+        }
+      },
+      "comment": "Summary height and age header"
+    },
+    "Başla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Started"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başla"
+          }
+        }
+      },
+      "comment": "Welcome step button"
+    },
+    "Başlangıç": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başlangıç"
+          }
+        }
+      },
+      "comment": "Initial weight stat or badge"
+    },
+    "Başlangıç %@ kilogram, güncel %@ kilogram, hedef %@ kilogram, yüzde %@ tamamlandı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting weight %@ kg, current %@ kg, goal %@ kg, %@ percent complete"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başlangıç %@ kilogram, güncel %@ kilogram, hedef %@ kilogram, yüzde %@ tamamlandı"
+          }
+        }
+      },
+      "comment": "Goal progress accessibility value"
+    },
+    "Başlangıç:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başlangıç:"
+          }
+        }
+      },
+      "comment": "Starting weight prefix"
+    },
+    "Belirli Günler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Specific Days"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belirli Günler"
+          }
+        }
+      },
+      "comment": "Weigh-in custom days frequency"
+    },
+    "Bildirim Ayarlarını Aç": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Notification Settings"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bildirim Ayarlarını Aç"
+          }
+        }
+      },
+      "comment": "Notification settings action button"
+    },
+    "Bildirimler kapalı. Dilediğinde açabilirsin.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are off. You can enable them anytime."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bildirimler kapalı. Dilediğinde açabilirsin."
+          }
+        }
+      },
+      "comment": "Notifications off subtitle"
+    },
+    "Bilgilendirme amaçlıdır; tıbbi teşhis veya klinik tavsiye niteliği taşımaz.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For informational purposes only; does not constitute medical diagnosis or clinical advice."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilgilendirme amaçlıdır; tıbbi teşhis veya klinik tavsiye niteliği taşımaz."
+          }
+        }
+      },
+      "comment": "Medical disclaimer short footer"
+    },
+    "Bilgilerin kaydedildi. Yolculuğun şimdi başlıyor.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your profile is saved. Your journey begins now."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilgilerin kaydedildi. Yolculuğun şimdi başlıyor."
+          }
+        }
+      },
+      "comment": "All set step subtitle"
+    },
+    "Bir sonraki tartını eklediğinde grafik hazır": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your chart will appear after your next weigh-in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir sonraki tartını eklediğinde grafik hazır"
+          }
+        }
+      },
+      "comment": "Single entry chart message"
+    },
+    "Bitti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitti"
+          }
+        }
+      },
+      "comment": "Keyboard dismiss button"
+    },
+    "Body Text": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body Text"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body Text"
+          }
+        }
+      },
+      "comment": "Preview body text"
+    },
+    "Boy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boy"
+          }
+        }
+      },
+      "comment": "Height label and a11y title"
+    },
+    "Boy 50 ile 300 cm arasında olmalıdır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height must be between 50 and 300 cm."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boy 50 ile 300 cm arasında olmalıdır."
+          }
+        }
+      },
+      "comment": "Height validation error"
+    },
+    "Bu Kaydı Sil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete This Entry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu Kaydı Sil"
+          }
+        }
+      },
+      "comment": "Delete entry action button"
+    },
+    "Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsin.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only one entry in this range. Select 'All' to see all entries."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsin."
+          }
+        }
+      },
+      "comment": "Single entry in range message"
+    },
+    "Bu hafta: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hafta: %@"
+          }
+        }
+      },
+      "comment": "Weekly change zero"
+    },
+    "Bu hafta: +%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week: +%@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hafta: +%@"
+          }
+        }
+      },
+      "comment": "Weekly change gain"
+    },
+    "Bu hafta: —": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week: —"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hafta: —"
+          }
+        }
+      },
+      "comment": "Weekly change empty"
+    },
+    "Bu hafta: −%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week: −%@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hafta: −%@"
+          }
+        }
+      },
+      "comment": "Weekly change loss"
+    },
+    "Bu kaydı silmek istediğinden emin misin?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Are you sure you want to delete this entry?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kaydı silmek istediğinden emin misin?"
+          }
+        }
+      },
+      "comment": "Delete entry confirmation dialog title"
+    },
+    "Bu tarihe ait mevcut kayıt (%@), yeni değer olan %@ ile güncellenecek.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The existing entry for this date (%@) will be updated with the new value of %@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu tarihe ait mevcut kayıt (%@), yeni değer olan %@ ile güncellenecek."
+          }
+        }
+      },
+      "comment": "Overwrite entry alert message"
+    },
+    "Bu tarihteki mevcut kayıt güncellenecek.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The existing entry for this date will be updated."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu tarihteki mevcut kayıt güncellenecek."
+          }
+        }
+      },
+      "comment": "Overwrite generic alert message"
+    },
+    "Bu tarihteki mevcut kayıt güncellenecektir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The existing entry for this date will be updated."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu tarihteki mevcut kayıt güncellenecektir."
+          }
+        }
+      },
+      "comment": "Overwrite generic alert message future"
+    },
+    "Bugün": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugün"
+          }
+        }
+      },
+      "comment": "Relative date today"
+    },
+    "Bugün haftalık tartım günün. Yeni kilonu Heft'e kaydet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is your weekly weigh-in day. Log your new weight in Heft."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugün haftalık tartım günün. Yeni kilonu Heft'e kaydet."
+          }
+        }
+      },
+      "comment": "Weekly reminder body"
+    },
+    "Bugün tartım günün. Yeni kilonu Heft'e kaydet.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is your weigh-in day. Log your new weight in Heft."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugün tartım günün. Yeni kilonu Heft'e kaydet."
+          }
+        }
+      },
+      "comment": "Custom days reminder body"
+    },
+    "Bugün:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugün:"
+          }
+        }
+      },
+      "comment": "Relative date today label"
+    },
+    "Card Title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Card Title"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Card Title"
+          }
+        }
+      },
+      "comment": "Preview card title"
+    },
+    "Cinsiyet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gender"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cinsiyet"
+          }
+        }
+      },
+      "comment": "Gender picker label"
+    },
+    "Cmt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sat"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cmt"
+          }
+        }
+      },
+      "comment": "Saturday short"
+    },
+    "Cum": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fri"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cum"
+          }
+        }
+      },
+      "comment": "Friday short"
+    },
+    "Cuma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cuma"
+          }
+        }
+      },
+      "comment": "Friday"
+    },
+    "Cumartesi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cumartesi"
+          }
+        }
+      },
+      "comment": "Saturday"
+    },
+    "CİNSİYET": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GENDER"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CİNSİYET"
+          }
+        }
+      },
+      "comment": "Gender header"
+    },
+    "Dengeli": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balanced"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dengeli"
+          }
+        }
+      },
+      "comment": "Pace status moderate"
+    },
+    "Değişiklikleri Sil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard Changes"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Değişiklikleri Sil"
+          }
+        }
+      },
+      "comment": "Discard changes destructive button"
+    },
+    "Dilediğin anda tüm kilo kayıtlarını tek tek silebilir veya Ayarlar > Veri Yönetimi üzerinden profilini ve tüm kayıtlarını kalıcı olarak sıfırlayabilirsin.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can delete individual weight entries anytime or permanently reset your profile and all data via Settings > Data Management."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dilediğin anda tüm kilo kayıtlarını tek tek silebilir veya Ayarlar > Veri Yönetimi üzerinden profilini ve tüm kayıtlarını kalıcı olarak sıfırlayabilirsin."
+          }
+        }
+      },
+      "comment": "Privacy card content 4"
+    },
+    "Diğer tarih seç": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another date"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diğer tarih seç"
+          }
+        }
+      },
+      "comment": "Custom date picker button"
+    },
+    "Dün": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dün"
+          }
+        }
+      },
+      "comment": "Relative date yesterday"
+    },
+    "Düzenlemeye Devam Et": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep Editing"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzenlemeye Devam Et"
+          }
+        }
+      },
+      "comment": "Continue editing cancel button"
+    },
+    "Düzenli kilo kaydı yaparak eğilimini keşfetmeye başla.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start logging entries regularly to discover your true weight trend."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzenli kilo kaydı yaparak eğilimini keşfetmeye başla."
+          }
+        }
+      },
+      "comment": "Insight journey begins message"
+    },
+    "Düzenli tartılmak tutarlılık sağlar. Sana en uygun tartım sıklığını ve saatini seç.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weighing in consistently builds habits. Choose the schedule and time that fits you best."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzenli tartılmak tutarlılık sağlar. Sana en uygun tartım sıklığını ve saatini seç."
+          }
+        }
+      },
+      "comment": "Schedule step subtitle"
+    },
+    "Düşük Kilolu": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Underweight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düşük Kilolu"
+          }
+        }
+      },
+      "comment": "BMI category Underweight"
+    },
+    "Dışa Aktarma Tamamlandı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export Completed"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dışa Aktarma Tamamlandı"
+          }
+        }
+      },
+      "comment": "Export healthkit alert title"
+    },
+    "En Düşük": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lowest"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En Düşük"
+          }
+        }
+      },
+      "comment": "Lowest weight stat"
+    },
+    "En Düşük Kilo Kaydı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lowest Weight Logged"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En Düşük Kilo Kaydı"
+          }
+        }
+      },
+      "comment": "Insight lowest weight title"
+    },
+    "En Yüksek": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Highest"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En Yüksek"
+          }
+        }
+      },
+      "comment": "Highest weight stat"
+    },
+    "En Yüksek Kilo Kaydı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Highest Weight Logged"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En Yüksek Kilo Kaydı"
+          }
+        }
+      },
+      "comment": "Insight highest weight title"
+    },
+    "Erkek": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Male"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkek"
+          }
+        }
+      },
+      "comment": "Gender option male"
+    },
+    "Eyebrow": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eyebrow"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eyebrow"
+          }
+        }
+      },
+      "comment": "Preview eyebrow"
+    },
+    "Fazla Kilolu": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overweight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fazla Kilolu"
+          }
+        }
+      },
+      "comment": "BMI category Overweight"
+    },
+    "Formunu Koruyorsun": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintaining Form"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formunu Koruyorsun"
+          }
+        }
+      },
+      "comment": "Insight maintain title"
+    },
+    "Formunu koruyorsun": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintaining form"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formunu koruyorsun"
+          }
+        }
+      },
+      "comment": "Pill maintain success"
+    },
+    "Genel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overall"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genel"
+          }
+        }
+      },
+      "comment": "Projection scenario overall"
+    },
+    "Geri": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geri"
+          }
+        }
+      },
+      "comment": "Back button accessibility label"
+    },
+    "Geçersiz hedef kilo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid target weight."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçersiz hedef kilo."
+          }
+        }
+      },
+      "comment": "Invalid target weight error"
+    },
+    "Geçmiş": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçmiş"
+          }
+        }
+      },
+      "comment": "History navigation title and tab item"
+    },
+    "Girilen kilo: %@ kilogram": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entered weight: %@ kilograms"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Girilen kilo: %@ kilogram"
+          }
+        }
+      },
+      "comment": "Keypad entered weight accessibility label"
+    },
+    "Gizlilik Politikası": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gizlilik Politikası"
+          }
+        }
+      },
+      "comment": "Privacy policy title and button"
+    },
+    "Gizlilik ve Güvenlik İlkelerimiz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Our Privacy and Security Principles"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gizlilik ve Güvenlik İlkelerimiz"
+          }
+        }
+      },
+      "comment": "Privacy header card title"
+    },
+    "Grafik için henüz kilo kaydı yok": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No weight entries for the chart yet"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grafik için henüz kilo kaydı yok"
+          }
+        }
+      },
+      "comment": "Empty chart message"
+    },
+    "Günaydın": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good morning"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Günaydın"
+          }
+        }
+      },
+      "comment": "Daily reminder title"
+    },
+    "Güncel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Güncel"
+          }
+        }
+      },
+      "comment": "Current weight stat or mark"
+    },
+    "Güncel ölçüme dön": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to latest entry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Güncel ölçüme dön"
+          }
+        }
+      },
+      "comment": "Reset to latest entry a11y label"
+    },
+    "Güncelle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Güncelle"
+          }
+        }
+      },
+      "comment": "Update button"
+    },
+    "GİZLİLİK VE YASAL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRIVACY & LEGAL"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GİZLİLİK VE YASAL"
+          }
+        }
+      },
+      "comment": "Privacy and legal section header"
+    },
+    "HEDEF": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GOAL"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEDEF"
+          }
+        }
+      },
+      "comment": "Goal settings section header"
+    },
+    "HEDEF KİLO": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TARGET WEIGHT"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEDEF KİLO"
+          }
+        }
+      },
+      "comment": "Onboarding target weight header"
+    },
+    "HEDEF TÜRÜ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GOAL TYPE"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEDEF TÜRÜ"
+          }
+        }
+      },
+      "comment": "Goal type header"
+    },
+    "HEDEFE ULAŞILDI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GOAL REACHED"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEDEFE ULAŞILDI"
+          }
+        }
+      },
+      "comment": "Goal reached projection title"
+    },
+    "Hadi Başlayalım": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let's Get Started"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hadi Başlayalım"
+          }
+        }
+      },
+      "comment": "All set step button"
+    },
+    "Hafta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hafta"
+          }
+        }
+      },
+      "comment": "Week unit"
+    },
+    "Haftada 1 Gün": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once a Week"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haftada 1 Gün"
+          }
+        }
+      },
+      "comment": "Weigh-in weekly frequency option"
+    },
+    "Haftada Bir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once a Week"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haftada Bir"
+          }
+        }
+      },
+      "comment": "Weigh-in weekly frequency title"
+    },
+    "Haftalık": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haftalık"
+          }
+        }
+      },
+      "comment": "Weigh-in weekly frequency"
+    },
+    "Haftalık %@ tempo hedefiyle harika bir uyum yakaladın.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Great alignment with your weekly %@ pace target."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haftalık %@ tempo hedefiyle harika bir uyum yakaladın."
+          }
+        }
+      },
+      "comment": "Projection on target message"
+    },
+    "Haftalık hedef tempon %@. Mevcut tempon (%@) hedefine planlanandan daha erken ulaşacağını gösteriyor.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your weekly target pace is %@. Your current pace (%@) shows you will reach your goal earlier than planned."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haftalık hedef tempon %@. Mevcut tempon (%@) hedefine planlanandan daha erken ulaşacağını gösteriyor."
+          }
+        }
+      },
+      "comment": "Projection ahead of pace message"
+    },
+    "Haftalık hedef tempon %@. Mevcut tempon (%@) ile hedefine planlanan tarihten erken ulaşabilirsin.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your weekly target pace is %@. With your current pace (%@), you may reach your goal earlier than planned."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haftalık hedef tempon %@. Mevcut tempon (%@) ile hedefine planlanan tarihten erken ulaşabilirsin."
+          }
+        }
+      },
+      "comment": "Projection ahead of pace alternative message"
+    },
+    "Harika bir disiplin gösterdin. Şimdi mevcut formunu koruma zamanı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You showed great consistency. Now it's time to maintain your current form."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harika bir disiplin gösterdin. Şimdi mevcut formunu koruma zamanı."
+          }
+        }
+      },
+      "comment": "Goal reached discipline message"
+    },
+    "Hata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hata"
+          }
+        }
+      },
+      "comment": "Generic error alert title"
+    },
+    "Hatırlatıcı alabilmek için sistem ayarlarından Heft bildirimlerine izin ver.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Heft notifications in system settings to receive reminders."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hatırlatıcı alabilmek için sistem ayarlarından Heft bildirimlerine izin ver."
+          }
+        }
+      },
+      "comment": "Open notification settings explanation"
+    },
+    "Hazırsın!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're All Set!"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hazırsın!"
+          }
+        }
+      },
+      "comment": "All set step title"
+    },
+    "Hedef": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef"
+          }
+        }
+      },
+      "comment": "Target weight label"
+    },
+    "Hedef %lld gün öne çekildi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target moved %lld days earlier"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef %lld gün öne çekildi"
+          }
+        }
+      },
+      "comment": "Target moved earlier badge"
+    },
+    "Hedef %lld gün ötelendi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target delayed by %lld days"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef %lld gün ötelendi"
+          }
+        }
+      },
+      "comment": "Target delayed badge"
+    },
+    "Hedef BMI: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target BMI: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef BMI: %@"
+          }
+        }
+      },
+      "comment": "Target BMI accessibility label"
+    },
+    "Hedef Kilo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef Kilo"
+          }
+        }
+      },
+      "comment": "Target weight label and a11y title"
+    },
+    "Hedef Plan": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target Plan"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef Plan"
+          }
+        }
+      },
+      "comment": "Target projection scenario plan title"
+    },
+    "Hedef Tarihi:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target Date:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef Tarihi:"
+          }
+        }
+      },
+      "comment": "Target date label"
+    },
+    "Hedef Türü": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal Type"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef Türü"
+          }
+        }
+      },
+      "comment": "Goal type picker label"
+    },
+    "Hedef ilerlemesi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal progress"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef ilerlemesi"
+          }
+        }
+      },
+      "comment": "Goal progress accessibility title"
+    },
+    "Hedef kilo 20 ile 500 kg arasında olmalıdır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target weight must be between 20 and 500 kg."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef kilo 20 ile 500 kg arasında olmalıdır."
+          }
+        }
+      },
+      "comment": "Target weight validation error"
+    },
+    "Hedef kilon olan %@ seviyesini başarıyla koruyorsun. İstikrarını sürdür.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are successfully maintaining your target weight of %@. Keep it up."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef kilon olan %@ seviyesini başarıyla koruyorsun. İstikrarını sürdür."
+          }
+        }
+      },
+      "comment": "Maintain on track message"
+    },
+    "Hedef kilondan (%@) bir fark var. Dengeli beslenme ve düzenli tartımla hedefini koru.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is a difference from your target weight (%@). Stay on track with balanced nutrition and consistent weigh-ins."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef kilondan (%@) bir fark var. Dengeli beslenme ve düzenli tartımla hedefini koru."
+          }
+        }
+      },
+      "comment": "Maintain off track message"
+    },
+    "Hedef kilonu dengede tutmak için beslenmene dikkat et ve tartımları aksatma.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep an eye on your nutrition and stay consistent with your weigh-ins to balance your target weight."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef kilonu dengede tutmak için beslenmene dikkat et ve tartımları aksatma."
+          }
+        }
+      },
+      "comment": "Maintain attention message"
+    },
+    "Hedef tarihine yetişmek için haftalık %@ tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need a weekly pace of %@ to meet your target date. At your current pace, completion is pushed back."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef tarihine yetişmek için haftalık %@ tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor."
+          }
+        }
+      },
+      "comment": "Projection behind pace message"
+    },
+    "Hedef:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef:"
+          }
+        }
+      },
+      "comment": "Target weight prefix"
+    },
+    "Hedefe %@ kaldı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ to goal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe %@ kaldı"
+          }
+        }
+      },
+      "comment": "Target remaining badge"
+    },
+    "Hedefe %@ kaldı. Günlük kalori ve su dalgalanmaları doğaldır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ remaining to goal. Daily calorie and water fluctuations are natural."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe %@ kaldı. Günlük kalori ve su dalgalanmaları doğaldır."
+          }
+        }
+      },
+      "comment": "Insight slow pace message"
+    },
+    "Hedefe Doğru": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Towards Goal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe Doğru"
+          }
+        }
+      },
+      "comment": "Towards goal pace status"
+    },
+    "Hedefe Ulaştın": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal Reached"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe Ulaştın"
+          }
+        }
+      },
+      "comment": "Goal reached badge"
+    },
+    "Hedefe Ulaştın!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal Reached!"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe Ulaştın!"
+          }
+        }
+      },
+      "comment": "Goal reached card title"
+    },
+    "Hedefe Ulaşıldı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal Reached"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe Ulaşıldı"
+          }
+        }
+      },
+      "comment": "Goal reached insight title"
+    },
+    "Hedefe kalan: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remaining to goal: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe kalan: %@"
+          }
+        }
+      },
+      "comment": "Target remaining accessibility label"
+    },
+    "Hedefe ulaşıldı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal reached"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefe ulaşıldı"
+          }
+        }
+      },
+      "comment": "Pill goal reached success"
+    },
+    "Hedefine %@ kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ remaining to your goal. Daily water and sodium fluctuations are completely natural."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefine %@ kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır."
+          }
+        }
+      },
+      "comment": "Insight progress natural fluctuations message"
+    },
+    "Hedefine Ulaştın": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal Reached"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefine Ulaştın"
+          }
+        }
+      },
+      "comment": "Goal reached insight badge"
+    },
+    "Hedefine ulaşmak için %@ mesafe var. Düzenli tartılarak ilerlemeni izle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are %@ away from your goal. Weigh in consistently to track your progress."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefine ulaşmak için %@ mesafe var. Düzenli tartılarak ilerlemeni izle."
+          }
+        }
+      },
+      "comment": "Insight distance to goal message"
+    },
+    "Hedefini Belirle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set Your Goal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefini Belirle"
+          }
+        }
+      },
+      "comment": "Weight info step title"
+    },
+    "Hedefini güncellemek için ayarları ziyaret et.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visit Settings to update your goal."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefini güncellemek için ayarları ziyaret et."
+          }
+        }
+      },
+      "comment": "Goal reached settings hint"
+    },
+    "Hedefini ve ulaşmak istediğin kilonu belirle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Define your goal and the weight you want to reach."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefini ve ulaşmak istediğin kilonu belirle."
+          }
+        }
+      },
+      "comment": "Weight info step subtitle"
+    },
+    "Hedefinin Üzerindesin": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above Goal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedefinin Üzerindesin"
+          }
+        }
+      },
+      "comment": "Above goal insight title"
+    },
+    "Heft": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft"
+          }
+        }
+      },
+      "comment": "App name"
+    },
+    "Heft Verilerini Apple Sağlık'a Aktar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export Heft Data to Apple Health"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft Verilerini Apple Sağlık'a Aktar"
+          }
+        }
+      },
+      "comment": "Export to HealthKit button"
+    },
+    "Heft ile sade, tutarlı ve odaklı kilo takibi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clean, consistent, and focused weight tracking with Heft."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft ile sade, tutarlı ve odaklı kilo takibi."
+          }
+        }
+      },
+      "comment": "Welcome step subtitle"
+    },
+    "Heft tıbbi bir teşhis veya tedavi cihazı değildir. Uygulamadaki BMI hesaplamaları ve hedef projeksiyonları genel bilgilendirme amaçlıdır. Herhangi bir beslenme veya kilo kontrol programına başlamadan önce mutlaka bir hekime danış.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft is not a medical diagnostic or treatment device. BMI calculations and goal projections in the app are for general informational purposes only. Always consult a physician before starting any diet or weight management program."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft tıbbi bir teşhis veya tedavi cihazı değildir. Uygulamadaki BMI hesaplamaları ve hedef projeksiyonları genel bilgilendirme amaçlıdır. Herhangi bir beslenme veya kilo kontrol programına başlamadan önce mutlaka bir hekime danış."
+          }
+        }
+      },
+      "comment": "Medical disclaimer in Settings"
+    },
+    "Heft tıbbi bir teşhis, klinik tedavi veya profesyonel sağlık tavsiyesi aracı değildir. BMI değerleri ve hedef tahminleri genel bilgilendirme amaçlıdır. Herhangi bir kilo verme, alma veya beslenme programına başlamadan önce mutlaka bir doktora danış.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft is not a tool for medical diagnosis, clinical treatment, or professional medical advice. BMI values and goal projections are for general informational purposes only. Always consult a doctor before starting any weight loss, weight gain, or nutrition regimen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft tıbbi bir teşhis, klinik tedavi veya profesyonel sağlık tavsiyesi aracı değildir. BMI değerleri ve hedef tahminleri genel bilgilendirme amaçlıdır. Herhangi bir kilo verme, alma veya beslenme programına başlamadan önce mutlaka bir doktora danış."
+          }
+        }
+      },
+      "comment": "Privacy card content 5"
+    },
+    "Heft'e kaydedilen tartımlar Apple Sağlık'a aktarılır. Dilersen geçmiş Apple Sağlık tartımlarını Heft'e aktarabilir veya Heft kayıtlarını Apple Sağlık'a gönderebilirsin.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-ins logged in Heft are synced to Apple Health. You can also import past Apple Health weigh-ins or export Heft entries to Apple Health."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft'e kaydedilen tartımlar Apple Sağlık'a aktarılır. Dilersen geçmiş Apple Sağlık tartımlarını Heft'e aktarabilir veya Heft kayıtlarını Apple Sağlık'a gönderebilirsin."
+          }
+        }
+      },
+      "comment": "HealthKit settings footer"
+    },
+    "Heft'e kaydettiğin tüm bilgiler (kilo geçmişi, boy, yaş, hedefler ve hatırlatıcı saatleri) yalnızca cihazının yerel depolama alanında SwiftData kullanılarak saklanır. Verilerin hiçbir harici sunucuya veya bulut veritabanına aktarılmaz.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All information you record in Heft (weight history, height, age, goals, and reminder times) is stored exclusively on your device's local storage using SwiftData. Your data is never transmitted to any external server or cloud database."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft'e kaydettiğin tüm bilgiler (kilo geçmişi, boy, yaş, hedefler ve hatırlatıcı saatleri) yalnızca cihazının yerel depolama alanında SwiftData kullanılarak saklanır. Verilerin hiçbir harici sunucuya veya bulut veritabanına aktarılmaz."
+          }
+        }
+      },
+      "comment": "Privacy card content 1"
+    },
+    "Heft'teki en düşük kilonu kaydettin. Hedefine yalnızca %@ kaldı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You recorded your lowest weight in Heft. Only %@ to your goal."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft'teki en düşük kilonu kaydettin. Hedefine yalnızca %@ kaldı."
+          }
+        }
+      },
+      "comment": "Insight lowest weight message"
+    },
+    "Heft'teki en yüksek kilona ulaştın. Hedefe yalnızca %@ kaldı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You reached your highest weight in Heft. Only %@ to your goal."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft'teki en yüksek kilona ulaştın. Hedefe yalnızca %@ kaldı."
+          }
+        }
+      },
+      "comment": "Insight highest weight message"
+    },
+    "Heft, kişisel sağlık verilerinin gizliliğine ve güvenliğine en üst düzeyde önem verir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft places the highest priority on the privacy and security of your personal health data."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heft, kişisel sağlık verilerinin gizliliğine ve güvenliğine en üst düzeyde önem verir."
+          }
+        }
+      },
+      "comment": "Privacy header card subtitle"
+    },
+    "Henüz Tartım Kaydı Yok": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Weigh-ins Yet"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz Tartım Kaydı Yok"
+          }
+        }
+      },
+      "comment": "Empty history view title"
+    },
+    "Her Gün": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her Gün"
+          }
+        }
+      },
+      "comment": "Weigh-in daily frequency"
+    },
+    "Her sabah seçtiğin saatte hatırlatıcı alacaksın.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You'll receive a reminder every morning at your chosen time."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her sabah seçtiğin saatte hatırlatıcı alacaksın."
+          }
+        }
+      },
+      "comment": "Daily reminder explanation"
+    },
+    "Her sabah seçtiğin saatte nazik bir bildirim alacaksın.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You will receive a gentle reminder every morning at your chosen time."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her sabah seçtiğin saatte nazik bir bildirim alacaksın."
+          }
+        }
+      },
+      "comment": "Daily reminder subtitle"
+    },
+    "Her Şey Hazır!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All Set!"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her Şey Hazır!"
+          }
+        }
+      },
+      "comment": "All set step title variant"
+    },
+    "Hero Stat: 78.5 kg": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hero Stat: 78.5 kg"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hero Stat: 78.5 kg"
+          }
+        }
+      },
+      "comment": "Preview stat"
+    },
+    "Hoş Geldin": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoş Geldin"
+          }
+        }
+      },
+      "comment": "Welcome step title"
+    },
+    "Hızlı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fast"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hızlı"
+          }
+        }
+      },
+      "comment": "Pace status fast"
+    },
+    "Kadın": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Female"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kadın"
+          }
+        }
+      },
+      "comment": "Gender option female"
+    },
+    "Kapat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kapat"
+          }
+        }
+      },
+      "comment": "Close modal sheet button"
+    },
+    "Kaydedilmemiş Değişiklikler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsaved Changes"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydedilmemiş Değişiklikler"
+          }
+        }
+      },
+      "comment": "Unsaved changes alert title"
+    },
+    "Kaydet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydet"
+          }
+        }
+      },
+      "comment": "Save settings or entry button"
+    },
+    "Kaydet (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save (%@)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydet (%@)"
+          }
+        }
+      },
+      "comment": "Save button with weight"
+    },
+    "Kaydı Sil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Entry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydı Sil"
+          }
+        }
+      },
+      "comment": "Delete entry button in sheet"
+    },
+    "Kayıt Güncelle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update Entry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt Güncelle"
+          }
+        }
+      },
+      "comment": "Update entry button"
+    },
+    "Kayıt Güncelle (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update Entry (%@)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt Güncelle (%@)"
+          }
+        }
+      },
+      "comment": "Update entry button with weight"
+    },
+    "Kayıt Güncellensin mi?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update Entry?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt Güncellensin mi?"
+          }
+        }
+      },
+      "comment": "Overwrite alert title"
+    },
+    "Kayıt silinirken bir hata oluştu. Lütfen tekrar dene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An error occurred while deleting the entry. Please try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt silinirken bir hata oluştu. Lütfen tekrar dene."
+          }
+        }
+      },
+      "comment": "Delete error alert message"
+    },
+    "Kayıt sırasında bir hata oluştu. Lütfen tekrar dene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An error occurred while saving. Please try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kayıt sırasında bir hata oluştu. Lütfen tekrar dene."
+          }
+        }
+      },
+      "comment": "Save error alert message"
+    },
+    "Kilo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo"
+          }
+        }
+      },
+      "comment": "Weight stat label"
+    },
+    "Kilo Almak": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gain Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Almak"
+          }
+        }
+      },
+      "comment": "Goal type gain weight"
+    },
+    "Kilo Almak (Bulk/Kas)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gain Weight (Muscle Building)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Almak (Bulk/Kas)"
+          }
+        }
+      },
+      "comment": "Goal option gain weight description"
+    },
+    "Kilo Değişimi: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight Change: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Değişimi: %@"
+          }
+        }
+      },
+      "comment": "Weight change accessibility value"
+    },
+    "Kilo Ekle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Ekle"
+          }
+        }
+      },
+      "comment": "Add weight navigation title and button"
+    },
+    "Kilo Grafiği": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight Chart"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Grafiği"
+          }
+        }
+      },
+      "comment": "Weight chart title"
+    },
+    "Kilo Güncelle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Güncelle"
+          }
+        }
+      },
+      "comment": "Update weight button"
+    },
+    "Kilo Hedeflerin": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight Goals"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Hedeflerin"
+          }
+        }
+      },
+      "comment": "Weight goals card title"
+    },
+    "Kilo Koruma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintain Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Koruma"
+          }
+        }
+      },
+      "comment": "Goal maintain card title"
+    },
+    "Kilo Koruma Takibi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight Maintenance Tracking"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Koruma Takibi"
+          }
+        }
+      },
+      "comment": "Maintenance tracking subtitle"
+    },
+    "Kilo Korumak": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintain Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Korumak"
+          }
+        }
+      },
+      "comment": "Goal type maintain weight"
+    },
+    "Kilo Korumak (Mevcut Form)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintain Weight (Current Form)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Korumak (Mevcut Form)"
+          }
+        }
+      },
+      "comment": "Goal option maintain description"
+    },
+    "Kilo Vermek": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lose Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Vermek"
+          }
+        }
+      },
+      "comment": "Goal type lose weight"
+    },
+    "Kilo Vermek (Fit/Yağ Yakımı)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lose Weight (Fat Loss)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo Vermek (Fit/Yağ Yakımı)"
+          }
+        }
+      },
+      "comment": "Goal option lose weight description"
+    },
+    "Kilo alma hedefi için hedef kilon mevcut kilondan yüksek olmalıdır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For a weight gain goal, your target weight must be higher than your current weight."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo alma hedefi için hedef kilon mevcut kilondan yüksek olmalıdır."
+          }
+        }
+      },
+      "comment": "Goal gain validation error"
+    },
+    "Kilo alma hedefine ulaşmak için %@ mesafe var. Düzenli tartılarak ilerlemeni takip et.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are %@ away from your weight gain goal. Track your progress with regular weigh-ins."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo alma hedefine ulaşmak için %@ mesafe var. Düzenli tartılarak ilerlemeni takip et."
+          }
+        }
+      },
+      "comment": "Insight gain distance message"
+    },
+    "Kilo alma modunda artışlar pozitif olarak değerlendirilir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In weight gain mode, increases are celebrated as positive progress."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo alma modunda artışlar pozitif olarak değerlendirilir."
+          }
+        }
+      },
+      "comment": "Goal gain explanation"
+    },
+    "Kilo geçmişini ve değişim istatistiklerini görmek için ilk tartımını ekle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your first weigh-in to view your weight history and progress statistics."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo geçmişini ve değişim istatistiklerini görmek için ilk tartımını ekle."
+          }
+        }
+      },
+      "comment": "Empty history view description"
+    },
+    "Kilo grafiği, %@. %lld kayıt. En düşük %@, en yüksek %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight chart, %@. %lld entries. Lowest %@, highest %@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo grafiği, %@. %lld kayıt. En düşük %@, en yüksek %@."
+          }
+        }
+      },
+      "comment": "Weight chart summary accessibility label"
+    },
+    "Kilo koruma modunda mevcut kilonu dengede tutman hedeflenir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In maintenance mode, the focus is keeping your current weight steady."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo koruma modunda mevcut kilonu dengede tutman hedeflenir."
+          }
+        }
+      },
+      "comment": "Goal maintain explanation"
+    },
+    "Kilo trendini ve değişim grafiğini görebilmek için en az 2 ölçüm gerekiyor. Bir sonraki tartında ilerlemen burada canlanacak.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At least 2 entries are required to display your weight trend and progress chart. Your progress will appear here after your next weigh-in."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo trendini ve değişim grafiğini görebilmek için en az 2 ölçüm gerekiyor. Bir sonraki tartında ilerlemen burada canlanacak."
+          }
+        }
+      },
+      "comment": "Single entry chart explanation"
+    },
+    "Kilo verme hedefi için hedef kilon mevcut kilondan düşük olmalıdır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For a weight loss goal, your target weight must be lower than your current weight."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo verme hedefi için hedef kilon mevcut kilondan düşük olmalıdır."
+          }
+        }
+      },
+      "comment": "Goal lose validation error"
+    },
+    "Kilo verme modunda azalışlar başarı olarak değerlendirilir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In weight loss mode, decreases are celebrated as progress."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilo verme modunda azalışlar başarı olarak değerlendirilir."
+          }
+        }
+      },
+      "comment": "Goal lose explanation"
+    },
+    "Kilon %lld gündür %@ ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your weight has plateaued around %@ ± 0.4 kg for %lld days. This is a normal adaptation phase; your pace will pick back up as your metabolism adjusts."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilon %lld gündür %@ ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir."
+          }
+        }
+      },
+      "comment": "Plateau pace status message"
+    },
+    "Kişisel Bilgiler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal Information"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kişisel Bilgiler"
+          }
+        }
+      },
+      "comment": "Personal info section header"
+    },
+    "Kişisel kilo takip asistanın.\nHedefine adım adım, sağlıklı biçimde ulaş.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your personal weight tracking companion.\nReach your goals step by step, sustainably."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kişisel kilo takip asistanın.\nHedefine adım adım, sağlıklı biçimde ulaş."
+          }
+        }
+      },
+      "comment": "Welcome view brand slogan"
+    },
+    "Korumak": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintain"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Korumak"
+          }
+        }
+      },
+      "comment": "Goal type maintain short"
+    },
+    "KİLO DEĞİŞİMİ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEIGHT CHANGE"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KİLO DEĞİŞİMİ"
+          }
+        }
+      },
+      "comment": "Weight change header"
+    },
+    "KİLO KORUMA": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MAINTAIN WEIGHT"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KİLO KORUMA"
+          }
+        }
+      },
+      "comment": "Maintain weight projection title"
+    },
+    "MEVCUT": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CURRENT"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MEVCUT"
+          }
+        }
+      },
+      "comment": "Current weight header"
+    },
+    "MEVCUT KİLO": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CURRENT WEIGHT"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MEVCUT KİLO"
+          }
+        }
+      },
+      "comment": "Current weight section header"
+    },
+    "Merhaba, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hello, %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merhaba, %@"
+          }
+        }
+      },
+      "comment": "Greeting with user name"
+    },
+    "Meta Text": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meta Text"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meta Text"
+          }
+        }
+      },
+      "comment": "Preview meta text"
+    },
+    "Metni temizle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear text"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metni temizle"
+          }
+        }
+      },
+      "comment": "Clear text button a11y label"
+    },
+    "Mevcut": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut"
+          }
+        }
+      },
+      "comment": "Current weight label"
+    },
+    "Mevcut BMI: %@ (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current BMI: %@ (%@)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut BMI: %@ (%@)"
+          }
+        }
+      },
+      "comment": "Current BMI accessibility label"
+    },
+    "Mevcut Kilo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut Kilo"
+          }
+        }
+      },
+      "comment": "Current weight label and a11y title"
+    },
+    "Mevcut temponla (haftada ortalama %@ %@) bu aralıkta hedefine ulaşman öngörülüyor.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At your current pace (average %@ %@ per week), you are projected to reach your goal within this range."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut temponla (haftada ortalama %@ %@) bu aralıkta hedefine ulaşman öngörülüyor."
+          }
+        }
+      },
+      "comment": "Projection projected range message"
+    },
+    "Normal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      },
+      "comment": "BMI category Normal"
+    },
+    "Normal Sınır": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal Boundary"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal Sınır"
+          }
+        }
+      },
+      "comment": "Normal BMI limit chart annotation"
+    },
+    "Normal Sınırı (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal Boundary (%@)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal Sınırı (%@)"
+          }
+        }
+      },
+      "comment": "Normal limit chart accessibility label"
+    },
+    "Obez": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obese"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obez"
+          }
+        }
+      },
+      "comment": "BMI category Obese"
+    },
+    "Obez (Tip 1)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obese (Class 1)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obez (Tip 1)"
+          }
+        }
+      },
+      "comment": "BMI category Obese Class 1"
+    },
+    "Obez (Tip 2)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obese (Class 2)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obez (Tip 2)"
+          }
+        }
+      },
+      "comment": "BMI category Obese Class 2"
+    },
+    "Ondalık ayırıcı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decimal separator"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ondalık ayırıcı"
+          }
+        }
+      },
+      "comment": "Keypad decimal separator a11y label"
+    },
+    "PROFİL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PROFILE"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PROFİL"
+          }
+        }
+      },
+      "comment": "Profile settings section header"
+    },
+    "Paz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sun"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paz"
+          }
+        }
+      },
+      "comment": "Sunday short"
+    },
+    "Pazar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pazar"
+          }
+        }
+      },
+      "comment": "Sunday"
+    },
+    "Pazartesi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pazartesi"
+          }
+        }
+      },
+      "comment": "Monday"
+    },
+    "Per": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thu"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per"
+          }
+        }
+      },
+      "comment": "Thursday short"
+    },
+    "Perşembe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thursday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perşembe"
+          }
+        }
+      },
+      "comment": "Thursday"
+    },
+    "Planlanan": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planned"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planlanan"
+          }
+        }
+      },
+      "comment": "Planned target pace label"
+    },
+    "Plato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plateau"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plato"
+          }
+        }
+      },
+      "comment": "Plateau pace status"
+    },
+    "Profilini Oluştur": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create Your Profile"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profilini Oluştur"
+          }
+        }
+      },
+      "comment": "Body info step title"
+    },
+    "Pzt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pzt"
+          }
+        }
+      },
+      "comment": "Monday short"
+    },
+    "Sabah tartını kaydetmeyi unutma. Yeni kilonu Heft'e ekle.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't forget your morning weigh-in. Log your new weight in Heft."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabah tartını kaydetmeyi unutma. Yeni kilonu Heft'e ekle."
+          }
+        }
+      },
+      "comment": "Daily reminder body"
+    },
+    "Sabit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steady"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabit"
+          }
+        }
+      },
+      "comment": "Pace status stable"
+    },
+    "Sal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tue"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sal"
+          }
+        }
+      },
+      "comment": "Tuesday short"
+    },
+    "Salı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuesday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salı"
+          }
+        }
+      },
+      "comment": "Tuesday"
+    },
+    "Sample Card Content": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sample Card Content"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sample Card Content"
+          }
+        }
+      },
+      "comment": "Preview card content"
+    },
+    "Sağlık Verilerini İçe Aktar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Health Data"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sağlık Verilerini İçe Aktar"
+          }
+        }
+      },
+      "comment": "Import from HealthKit button"
+    },
+    "Sağlık ile Eşzamanla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync with Apple Health"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sağlık ile Eşzamanla"
+          }
+        }
+      },
+      "comment": "Sync with HealthKit toggle label"
+    },
+    "Sağlık izinlerini onayladığında, Heft yalnızca vücut ağırlığı (Body Mass) verilerini Apple Sağlık uygulaması ile iki yönlü eşzamanlar. Sağlık verilerin reklam, pazarlama veya veri madenciliği amacıyla asla kullanılmaz ve üçüncü taraflarla paylaşılmaz.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you grant Health permissions, Heft only syncs Body Mass data bidirectionally with Apple Health. Your health data is never used for advertising, marketing, or data mining, and is never shared with third parties."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sağlık izinlerini onayladığında, Heft yalnızca vücut ağırlığı (Body Mass) verilerini Apple Sağlık uygulaması ile iki yönlü eşzamanlar. Sağlık verilerin reklam, pazarlama veya veri madenciliği amacıyla asla kullanılmaz ve üçüncü taraflarla paylaşılmaz."
+          }
+        }
+      },
+      "comment": "Privacy card content 2"
+    },
+    "Sağlıklı Kilo Aralığı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Healthy Weight Range"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sağlıklı Kilo Aralığı"
+          }
+        }
+      },
+      "comment": "Healthy weight range title"
+    },
+    "Screen Title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Screen Title"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Screen Title"
+          }
+        }
+      },
+      "comment": "Preview screen title"
+    },
+    "Section Title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section Title"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section Title"
+          }
+        }
+      },
+      "comment": "Preview section title"
+    },
+    "Seni daha iyi tanımamız ve doğru analizler için temel bilgilerini gir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter your basic info so we can calculate accurate analytics."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seni daha iyi tanımamız ve doğru analizler için temel bilgilerini gir."
+          }
+        }
+      },
+      "comment": "Body info step subtitle"
+    },
+    "Seçilen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçilen"
+          }
+        }
+      },
+      "comment": "Selected chart item prefix"
+    },
+    "Seçilen Tarih": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected Date"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçilen Tarih"
+          }
+        }
+      },
+      "comment": "Selected date label"
+    },
+    "Seçili tarih: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected date: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçili tarih: %@"
+          }
+        }
+      },
+      "comment": "Selected date a11y label"
+    },
+    "Seçtiğin günde ve saatte nazik bir bildirim alacaksın.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You'll receive a gentle reminder on your chosen day and time."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçtiğin günde ve saatte nazik bir bildirim alacaksın."
+          }
+        }
+      },
+      "comment": "Weekly reminder subtitle"
+    },
+    "Seçtiğin günlerde ve saatte nazik bir bildirim alacaksın.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You'll receive a gentle reminder on your chosen days and time."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seçtiğin günlerde ve saatte nazik bir bildirim alacaksın."
+          }
+        }
+      },
+      "comment": "Custom days reminder subtitle"
+    },
+    "Sil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sil"
+          }
+        }
+      },
+      "comment": "Delete action or keypad delete button"
+    },
+    "Son %@ içinde ölçüm bulunamadı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No entries found in the last %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son %@ içinde ölçüm bulunamadı"
+          }
+        }
+      },
+      "comment": "Empty time range chart message"
+    },
+    "Son %lld günde +%@ artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ increase over the last %lld days — likely temporary water retention. With your overall pace, your goal is still on track."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son %lld günde +%@ artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında."
+          }
+        }
+      },
+      "comment": "Water retention message"
+    },
+    "Son 14 Gün": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 14 Days"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son 14 Gün"
+          }
+        }
+      },
+      "comment": "Projection scenario last 14 days"
+    },
+    "Son 30 Gün": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 30 Days"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son 30 Gün"
+          }
+        }
+      },
+      "comment": "Projection scenario last 30 days"
+    },
+    "Son tartıma göre %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ compared to last weigh-in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son tartıma göre %@"
+          }
+        }
+      },
+      "comment": "Comparison to last weigh-in"
+    },
+    "Son tartıma göre %@ kaydettin. Hedefe %@ kaldı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded %@ compared to last weigh-in. %@ remaining to goal."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son tartıma göre %@ kaydettin. Hedefe %@ kaldı."
+          }
+        }
+      },
+      "comment": "Insight lost progress msg"
+    },
+    "Son tartıma göre +%@ kaydettin. Hedefe %@ kaldı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gained +%@ compared to last weigh-in. %@ remaining to goal."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son tartıma göre +%@ kaydettin. Hedefe %@ kaldı."
+          }
+        }
+      },
+      "comment": "Insight gained progress msg"
+    },
+    "Son tartıma göre -%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "-%@ compared to last weigh-in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son tartıma göre -%@"
+          }
+        }
+      },
+      "comment": "Comparison to last weigh-in negative"
+    },
+    "Son tartımla aynı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as last weigh-in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son tartımla aynı"
+          }
+        }
+      },
+      "comment": "No change since last weigh-in"
+    },
+    "Sıklık": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frequency"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sıklık"
+          }
+        }
+      },
+      "comment": "Weigh-in frequency picker label"
+    },
+    "TAHMİNİ BİTİŞ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ESTIMATED COMPLETION"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TAHMİNİ BİTİŞ"
+          }
+        }
+      },
+      "comment": "Estimated completion header"
+    },
+    "TARTILACAĞIN GÜNLER": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEIGH-IN DAYS"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TARTILACAĞIN GÜNLER"
+          }
+        }
+      },
+      "comment": "Weigh-in days section header"
+    },
+    "TARTIM GÜNÜ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEIGH-IN DAY"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TARTIM GÜNÜ"
+          }
+        }
+      },
+      "comment": "Weigh-in day section header"
+    },
+    "TARTIM SAATİ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEIGH-IN TIME"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TARTIM SAATİ"
+          }
+        }
+      },
+      "comment": "Weigh-in time section header"
+    },
+    "TARTIM SIKLIĞI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEIGH-IN FREQUENCY"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TARTIM SIKLIĞI"
+          }
+        }
+      },
+      "comment": "Weigh-in frequency section header"
+    },
+    "TARTIM TAKVİMİ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEIGH-IN SCHEDULE"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TARTIM TAKVİMİ"
+          }
+        }
+      },
+      "comment": "Weigh-in schedule settings section header"
+    },
+    "Taban": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baseline"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taban"
+          }
+        }
+      },
+      "comment": "Baseline chart marker"
+    },
+    "Tamam": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamam"
+          }
+        }
+      },
+      "comment": "OK alert button"
+    },
+    "Tarih": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarih"
+          }
+        }
+      },
+      "comment": "Date label"
+    },
+    "Tarih Seç": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select Date"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarih Seç"
+          }
+        }
+      },
+      "comment": "Select date button"
+    },
+    "Tartıdaki kilonu gir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter your scale weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartıdaki kilonu gir"
+          }
+        }
+      },
+      "comment": "Current weight subtitle"
+    },
+    "Tartılacağın Günler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Days"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartılacağın Günler"
+          }
+        }
+      },
+      "comment": "Weigh-in days label"
+    },
+    "Tartım Günü": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Day"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım Günü"
+          }
+        }
+      },
+      "comment": "Weigh-in day picker label"
+    },
+    "Tartım Hatırlatıcısı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Reminder"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım Hatırlatıcısı"
+          }
+        }
+      },
+      "comment": "Weigh-in reminder toggle label"
+    },
+    "Tartım Rutini": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Routine"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım Rutini"
+          }
+        }
+      },
+      "comment": "Weigh-in routine title"
+    },
+    "Tartım Saati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Time"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım Saati"
+          }
+        }
+      },
+      "comment": "Weigh-in time label"
+    },
+    "Tartım Takvimi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Schedule"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım Takvimi"
+          }
+        }
+      },
+      "comment": "Schedule step title"
+    },
+    "Tartım Tarihi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Date"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım Tarihi"
+          }
+        }
+      },
+      "comment": "Weigh-in date label"
+    },
+    "Tartım Zamanı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weigh-in Time"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım Zamanı"
+          }
+        }
+      },
+      "comment": "Reminder notification title"
+    },
+    "Tartım sıklığı ve saati değiştirildiğinde hatırlatıcılar otomatik olarak güncellenir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders are updated automatically when weigh-in frequency and time change."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartım sıklığı ve saati değiştirildiğinde hatırlatıcılar otomatik olarak güncellenir."
+          }
+        }
+      },
+      "comment": "Schedule settings footer"
+    },
+    "Tartımı Düzenle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Weigh-in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartımı Düzenle"
+          }
+        }
+      },
+      "comment": "Edit weigh-in navigation title"
+    },
+    "Tartımı Sil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Weigh-in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartımı Sil"
+          }
+        }
+      },
+      "comment": "Delete weigh-in swipe action"
+    },
+    "Tebrikler": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Congratulations"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tebrikler"
+          }
+        }
+      },
+      "comment": "Congratulations badge"
+    },
+    "Tebrikler!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Congratulations!"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tebrikler!"
+          }
+        }
+      },
+      "comment": "Congratulations title"
+    },
+    "Tebrikler! Belirlediğin hedef kiloya başarıyla ulaştın.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Congratulations! You have successfully reached your target weight."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tebrikler! Belirlediğin hedef kiloya başarıyla ulaştın."
+          }
+        }
+      },
+      "comment": "Goal reached condition message"
+    },
+    "Tebrikler! Kilonu başarıyla dengede tutuyorsun. Düzenli tartılmaya devam et.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Congratulations! You are successfully keeping your weight steady. Keep weighing in consistently."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tebrikler! Kilonu başarıyla dengede tutuyorsun. Düzenli tartılmaya devam et."
+          }
+        }
+      },
+      "comment": "Maintain balanced message"
+    },
+    "Toplam Değişim": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total Change"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam Değişim"
+          }
+        }
+      },
+      "comment": "Total change stat"
+    },
+    "Tüm Verileri Sil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete All Data"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm Verileri Sil"
+          }
+        }
+      },
+      "comment": "Delete all data button and alert title"
+    },
+    "Tüm Zamanlar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All Time"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm Zamanlar"
+          }
+        }
+      },
+      "comment": "All Time chart range a11y title"
+    },
+    "Tüm kilo kayıtların, profil bilgilerin, ayarların ve Heft tarafından Apple Sağlık'a yazılan tartım kayıtları kalıcı olarak silinecek. Bu işlem geri alınamaz.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All your weight entries, profile info, settings, and entries written to Apple Health by Heft will be permanently deleted. This action cannot be undone."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm kilo kayıtların, profil bilgilerin, ayarların ve Heft tarafından Apple Sağlık'a yazılan tartım kayıtları kalıcı olarak silinecek. Bu işlem geri alınamaz."
+          }
+        }
+      },
+      "comment": "Delete all data confirmation alert message"
+    },
+    "Tüm kilo kayıtların, profil bilgilerin, bildirim ayarların ve Heft tarafından Apple Sağlık'a yazılan tartım kayıtları kalıcı olarak silinir. Bu işlem geri alınamaz.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All your weight entries, profile info, notification settings, and entries written to Apple Health by Heft are permanently deleted. This action cannot be undone."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm kilo kayıtların, profil bilgilerin, bildirim ayarların ve Heft tarafından Apple Sağlık'a yazılan tartım kayıtları kalıcı olarak silinir. Bu işlem geri alınamaz."
+          }
+        }
+      },
+      "comment": "Delete all data section footer"
+    },
+    "Tümü": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tümü"
+          }
+        }
+      },
+      "comment": "All Time chart range button"
+    },
+    "Tıbbi Sorumluluk Reddi:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medical Disclaimer:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tıbbi Sorumluluk Reddi:"
+          }
+        }
+      },
+      "comment": "Medical disclaimer heading"
+    },
+    "Uygulama içerisinde kullanıcı davranışlarını izleyen hiçbir üçüncü taraf analiz (analytics) aracı veya reklam ağı bulunmamaktadır. Verilerin takip edilmez (NSPrivacyTracking: false).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There are no third-party analytics tools or advertising networks tracking user behavior within the app. Your data is not tracked (NSPrivacyTracking: false)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulama içerisinde kullanıcı davranışlarını izleyen hiçbir üçüncü taraf analiz (analytics) aracı veya reklam ağı bulunmamaktadır. Verilerin takip edilmez (NSPrivacyTracking: false)."
+          }
+        }
+      },
+      "comment": "Privacy card content 3"
+    },
+    "VERİ YÖNETİMİ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DATA MANAGEMENT"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VERİ YÖNETİMİ"
+          }
+        }
+      },
+      "comment": "Data management settings section header"
+    },
+    "Vazgeç": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vazgeç"
+          }
+        }
+      },
+      "comment": "Cancel alert button"
+    },
+    "Veritabanı Başlatılamadı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Database Initialization Failed"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veritabanı Başlatılamadı"
+          }
+        }
+      },
+      "comment": "Database error screen title"
+    },
+    "VÜCUT KİTLE İNDEKSİ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BODY MASS INDEX"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VÜCUT KİTLE İNDEKSİ"
+          }
+        }
+      },
+      "comment": "Body mass index card header"
+    },
+    "Vücut Kitle İndeksi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body Mass Index"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vücut Kitle İndeksi"
+          }
+        }
+      },
+      "comment": "Body mass index full title"
+    },
+    "Vücut kitle indeksi grafiği, %@. %lld kayıt. Mevcut BMI: %@ (%@). En düşük %@, en yüksek %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body mass index chart, %@. %lld entries. Current BMI: %@ (%@). Lowest %@, highest %@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vücut kitle indeksi grafiği, %@. %lld kayıt. Mevcut BMI: %@ (%@). En düşük %@, en yüksek %@."
+          }
+        }
+      },
+      "comment": "BMI chart summary accessibility label"
+    },
+    "Vücut kitle indeksi trendin ve değişim grafiğin ikinci kilo ölçümünü kaydettiğinde burada şekillenecek.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your body mass index trend and change chart will take shape here after your second weigh-in."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vücut kitle indeksi trendin ve değişim grafiğin ikinci kilo ölçümünü kaydettiğinde burada şekillenecek."
+          }
+        }
+      },
+      "comment": "Empty BMI chart description"
+    },
+    "Web Sitemizdeki Gizlilik Politikasını İncele": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Review Privacy Policy on Our Website"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web Sitemizdeki Gizlilik Politikasını İncele"
+          }
+        }
+      },
+      "comment": "Privacy policy web link title"
+    },
+    "Web Sitesi Gizlilik Politikası": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Website Privacy Policy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web Sitesi Gizlilik Politikası"
+          }
+        }
+      },
+      "comment": "Website privacy policy link row"
+    },
+    "YAŞ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AGE"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YAŞ"
+          }
+        }
+      },
+      "comment": "Age section header"
+    },
+    "Yaptığın değişiklikler kaybolacak. Çıkmak istiyor musun?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your changes will be lost. Are you sure you want to leave?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yaptığın değişiklikler kaybolacak. Çıkmak istiyor musun?"
+          }
+        }
+      },
+      "comment": "Discard changes confirmation message"
+    },
+    "Yavaş": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slow"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yavaş"
+          }
+        }
+      },
+      "comment": "Pace status slow"
+    },
+    "Yaş": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Age"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yaş"
+          }
+        }
+      },
+      "comment": "Age label and a11y title"
+    },
+    "Yaş 1 ile 120 arasında olmalıdır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Age must be between 1 and 120."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yaş 1 ile 120 arasında olmalıdır."
+          }
+        }
+      },
+      "comment": "Age validation error"
+    },
+    "Yolculuk Başlıyor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journey Begins"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yolculuk Başlıyor"
+          }
+        }
+      },
+      "comment": "Insight journey begins title"
+    },
+    "başlangıç kaydı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "initial entry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "başlangıç kaydı"
+          }
+        }
+      },
+      "comment": "Initial record a11y"
+    },
+    "cm": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cm"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cm"
+          }
+        }
+      },
+      "comment": "Centimeter unit"
+    },
+    "değişim %@ kilogram": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "change of %@ kilograms"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "değişim %@ kilogram"
+          }
+        }
+      },
+      "comment": "Weight change delta a11y"
+    },
+    "değişim yok": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no change"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "değişim yok"
+          }
+        }
+      },
+      "comment": "No weight change delta a11y"
+    },
+    "eksik": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "below target"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "eksik"
+          }
+        }
+      },
+      "comment": "Below target suffix"
+    },
+    "fark": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "difference"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fark"
+          }
+        }
+      },
+      "comment": "Difference suffix"
+    },
+    "fazla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "above target"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fazla"
+          }
+        }
+      },
+      "comment": "Above target suffix"
+    },
+    "hafta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "weeks"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hafta"
+          }
+        }
+      },
+      "comment": "Weeks unit"
+    },
+    "hedef altı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "below target"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hedef altı"
+          }
+        }
+      },
+      "comment": "Below target suffix"
+    },
+    "hedef üstü": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "above target"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hedef üstü"
+          }
+        }
+      },
+      "comment": "Above target suffix"
+    },
+    "kaldı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to go"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kaldı"
+          }
+        }
+      },
+      "comment": "Remaining weight suffix"
+    },
+    "kg": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
+        }
+      },
+      "comment": "Kilogram unit"
+    },
+    "kilo alarak": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gaining weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kilo alarak"
+          }
+        }
+      },
+      "comment": "Gaining weight action"
+    },
+    "kilo vererek": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "losing weight"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kilo vererek"
+          }
+        }
+      },
+      "comment": "Losing weight action"
+    },
+    "yaş": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "age"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yaş"
+          }
+        }
+      },
+      "comment": "Age unit lowercase"
+    },
+    "yıl": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yrs"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yıl"
+          }
+        }
+      },
+      "comment": "Years unit"
+    },
+    "Çar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wed"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çar"
+          }
+        }
+      },
+      "comment": "Wednesday short"
+    },
+    "Çarşamba": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wednesday"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çarşamba"
+          }
+        }
+      },
+      "comment": "Wednesday"
+    },
+    "Çok Hızlı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too Fast"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çok Hızlı"
+          }
+        }
+      },
+      "comment": "Pace status too fast"
+    },
+    "ÖZET": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SUMMARY"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ÖZET"
+          }
+        }
+      },
+      "comment": "Summary section header"
+    },
+    "Öneri: Her sabah aç karnına tartılmak, vücudun günlük su dalgalanmalarını filtreler ve en gerçekçi kilo trendini sunar.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tip: Weighing in every morning on an empty stomach filters out daily water fluctuations and reveals your true weight trend."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öneri: Her sabah aç karnına tartılmak, vücudun günlük su dalgalanmalarını filtreler ve en gerçekçi kilo trendini sunar."
+          }
+        }
+      },
+      "comment": "Schedule tip text"
+    },
+    "Örn: Efe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. Alex"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Örn: Efe"
+          }
+        }
+      },
+      "comment": "Name input placeholder"
+    },
+    "Özet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summary"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Özet"
+          }
+        }
+      },
+      "comment": "Summary navigation title"
+    },
+    "Üzerine Yaz": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overwrite"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Üzerine Yaz"
+          }
+        }
+      },
+      "comment": "Overwrite entry destructive button"
+    },
+    "İSİM": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NAME"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İSİM"
+          }
+        }
+      },
+      "comment": "Name section header"
+    },
+    "İdeal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ideal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İdeal"
+          }
+        }
+      },
+      "comment": "Pace status ideal"
+    },
+    "İleri": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İleri"
+          }
+        }
+      },
+      "comment": "Next button"
+    },
+    "İlerleme Devam Ediyor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress Continues"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlerleme Devam Ediyor"
+          }
+        }
+      },
+      "comment": "Insight progress continues title"
+    },
+    "İlk Ölçümün Kaydedildi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First Entry Logged"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk Ölçümün Kaydedildi"
+          }
+        }
+      },
+      "comment": "First weigh-in insight title"
+    },
+    "İsim": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İsim"
+          }
+        }
+      },
+      "comment": "Name field label"
+    },
+    "İsteğe bağlı • Hitap ve bildirimler için": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional • For greetings and reminders"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İsteğe bağlı • Hitap ve bildirimler için"
+          }
+        }
+      },
+      "comment": "Name input subtitle"
+    },
+    "İstikrarını Koru": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stay Consistent"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İstikrarını Koru"
+          }
+        }
+      },
+      "comment": "Insight stay consistent title"
+    },
+    "İçe Aktarma Tamamlandı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Completed"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İçe Aktarma Tamamlandı"
+          }
+        }
+      },
+      "comment": "Import healthkit alert title"
+    },
+    "İşlem sırasında bir hata oluştu. Lütfen tekrar dene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An error occurred during the operation. Please try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İşlem sırasında bir hata oluştu. Lütfen tekrar dene."
+          }
+        }
+      },
+      "comment": "Generic operation error message"
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
-
