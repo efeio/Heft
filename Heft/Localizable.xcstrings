@@ -6154,6 +6154,390 @@
           }
         }
       }
+    },
+    "%@ boy için normal BMI (18,5 - 24,9) aralığı %@ arasındadır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal BMI (18.5 - 24.9) range for %@ height is between %@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ boy için normal BMI (18,5 - 24,9) aralığı %@ arasındadır."
+          }
+        }
+      }
+    },
+    "%@ hedefine ulaştığında BMI değerin %@ (%@) olacak. Boyun için sağlıklı kilo aralığı %@'dir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you reach your goal of %@, your BMI will be %@ (%@). Healthy weight range for your height is %@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ hedefine ulaştığında BMI değerin %@ (%@) olacak. Boyun için sağlıklı kilo aralığı %@'dir."
+          }
+        }
+      }
+    },
+    "%lld ft": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ft"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ft"
+          }
+        }
+      }
+    },
+    "%lld in": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld in"
+          }
+        }
+      }
+    },
+    "0,1 %@ artır": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Increase 0.1 %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0,1 %@ artır"
+          }
+        }
+      }
+    },
+    "0,1 %@ azalt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decrease 0.1 %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0,1 %@ azalt"
+          }
+        }
+      }
+    },
+    "Ağırlık Birimi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight Unit"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ağırlık Birimi"
+          }
+        }
+      }
+    },
+    "Başlangıç %@, güncel %@, hedef %@, yüzde %@ tamamlandı": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting %@, current %@, goal %@, %@ percent completed"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başlangıç %@, güncel %@, hedef %@, yüzde %@ tamamlandı"
+          }
+        }
+      }
+    },
+    "Boy Birimi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height Unit"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boy Birimi"
+          }
+        }
+      }
+    },
+    "BİRİMLER": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UNITS"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BİRİMLER"
+          }
+        }
+      }
+    },
+    "Fit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feet"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fit"
+          }
+        }
+      }
+    },
+    "Fit & İnç (ft / in)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feet & Inches (ft / in)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fit & İnç (ft / in)"
+          }
+        }
+      }
+    },
+    "Girilen kilo: %@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entered weight: %@ %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Girilen kilo: %@ %@"
+          }
+        }
+      }
+    },
+    "Hedef kilo %@ arasında olmalıdır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target weight must be between %@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef kilo %@ arasında olmalıdır."
+          }
+        }
+      }
+    },
+    "Hedef kilo 44 ile 1100 lbs arasında olmalıdır.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target weight must be between 44 and 1100 lbs."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hedef kilo 44 ile 1100 lbs arasında olmalıdır."
+          }
+        }
+      }
+    },
+    "Kilogram (kg)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilogram (kg)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilogram (kg)"
+          }
+        }
+      }
+    },
+    "Kilon %lld gündür %@ ± %@ %@ bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your weight has stabilized for %lld days within %@ ± %@ %@. This is a normal adaptation phase; your pace will pick up again once your body adjusts."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilon %lld gündür %@ ± %@ %@ bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir."
+          }
+        }
+      }
+    },
+    "Pound (lbs)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pound (lbs)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pound (lbs)"
+          }
+        }
+      }
+    },
+    "Santimetre (cm)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Centimeter (cm)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santimetre (cm)"
+          }
+        }
+      }
+    },
+    "Son tartıma göre -%@ kaydettin. Hedefe %@ kaldı.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recorded -%@ compared to last weigh-in. %@ left to goal."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son tartıma göre -%@ kaydettin. Hedefe %@ kaldı."
+          }
+        }
+      }
+    },
+    "değişim %@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "change %@ %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "değişim %@ %@"
+          }
+        }
+      }
+    },
+    "lbs": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lbs"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lbs"
+          }
+        }
+      }
+    },
+    "ft / in": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ft / in"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ft / in"
+          }
+        }
+      }
+    },
+    "İnç": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inches"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İnç"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

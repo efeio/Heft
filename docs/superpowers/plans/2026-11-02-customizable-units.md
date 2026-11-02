@@ -39,11 +39,11 @@
 - Modify: `Heft/Models/UserProfile.swift`
 - Modify: `Heft/Theme/HeftTheme.swift`
 
-- [ ] Create `Heft/Models/Units.swift` defining `WeightUnit` (`kg`, `lbs`) and `HeightUnit` (`cm`, `ftIn`), with conversion functions `kgToLbs`, `lbsToKg`, `cmToInches`, `inchesToCm`, `cmToFtIn`, `ftInToCm`.
-- [ ] Add `weightUnitRaw` and `heightUnitRaw` properties with default values to `UserProfile`, along with computed properties `weightUnit: WeightUnit` and `heightUnit: HeightUnit`.
-- [ ] Extend `HeftFormat` with unit-aware formatting helpers: `formatWeight`, `formatWeightWithUnit`, `formatSignedWeightWithUnit`, `formatHeight`, `formatHeightWithUnit`.
-- [ ] Verify build and test conversion math.
-- [ ] Commit as `feat(units): add WeightUnit, HeightUnit models, conversions, and unit-aware formatters`.
+- [x] Create `Heft/Models/Units.swift` defining `WeightUnit` (`kg`, `lbs`) and `HeightUnit` (`cm`, `ftIn`), with conversion functions `kgToLbs`, `lbsToKg`, `cmToInches`, `inchesToCm`, `cmToFtIn`, `ftInToCm`.
+- [x] Add `weightUnitRaw` and `heightUnitRaw` properties with default values to `UserProfile`, along with computed properties `weightUnit: WeightUnit` and `heightUnit: HeightUnit`.
+- [x] Extend `HeftFormat` with unit-aware formatting helpers: `formatWeight`, `formatWeightWithUnit`, `formatSignedWeightWithUnit`, `formatHeight`, `formatHeightWithUnit`.
+- [x] Verify build and test conversion math.
+- [x] Commit as `feat(units): add WeightUnit, HeightUnit models, conversions, and unit-aware formatters`.
 
 ---
 
@@ -55,12 +55,12 @@
 - Modify: `Heft/Onboarding/AllSetStep.swift`
 - Modify: `Heft/Onboarding/OnboardingContainerView.swift`
 
-- [ ] In `BodyInfoStep.swift`, add an inline segmented toggle `[ cm | ft ]` next to the Height section header. Adapt tick picker range and values to display either `cm` or `ft & in`.
-- [ ] In `WeightInfoStep.swift`, add an inline segmented toggle `[ kg | lbs ]` next to the Weight section header. Adapt tick picker range and values to display either `kg` or `lbs`.
-- [ ] In `AllSetStep.swift`, update summary rows to format height and weight according to selected `heightUnit` and `weightUnit`.
-- [ ] In `OnboardingContainerView.swift`, track `@State private var weightUnit: WeightUnit` and `@State private var heightUnit: HeightUnit`, passing them to steps and persisting to `UserProfile`.
-- [ ] Verify build and test onboarding transitions.
-- [ ] Commit as `feat(onboarding): add inline unit selectors to body info and weight info steps`.
+- [x] In `BodyInfoStep.swift`, add an inline segmented toggle `[ cm | ft ]` next to the Height section header. Adapt tick picker range and values to display either `cm` or `ft & in`.
+- [x] In `WeightInfoStep.swift`, add an inline segmented toggle `[ kg | lbs ]` next to the Weight section header. Adapt tick picker range and values to display either `kg` or `lbs`.
+- [x] In `AllSetStep.swift`, update summary rows to format height and weight according to selected `heightUnit` and `weightUnit`.
+- [x] In `OnboardingContainerView.swift`, track `@State private var weightUnit: WeightUnit` and `@State private var heightUnit: HeightUnit`, passing them to steps and persisting to `UserProfile`.
+- [x] Verify build and test onboarding transitions.
+- [x] Commit as `feat(onboarding): add inline unit selectors to body info and weight info steps`.
 
 ---
 
@@ -69,10 +69,10 @@
 **Files:**
 - Modify: `Heft/Settings/SettingsView.swift`
 
-- [ ] Add a new "BİRİMLER" / "UNITS" section in `SettingsView`.
-- [ ] Add segmented controls for `WeightUnit` (`kg` / `lbs`) and `HeightUnit` (`cm` / `ft / in`).
-- [ ] Ensure `targetWeightText` and validation dynamically display in the user's selected unit and convert to `kg` upon saving.
-- [ ] Commit as `feat(settings): add units configuration section for weight and height`.
+- [x] Add a new "BİRİMLER" / "UNITS" section in `SettingsView`.
+- [x] Add segmented controls for `WeightUnit` (`kg` / `lbs`) and `HeightUnit` (`cm` / `ft / in`).
+- [x] Ensure `targetWeightText` and validation dynamically display in the user's selected unit and convert to `kg` upon saving.
+- [x] Commit as `feat(settings): add units configuration section for weight and height`.
 
 ---
 
@@ -88,12 +88,12 @@
 - Modify: `Heft/History/HistoryRow.swift`
 - Modify: `Heft/History/HistoryView.swift`
 
-- [ ] In `AddWeightSheet.swift` & `EditWeightSheet.swift`, adapt keypad and stepper to input in user's `weightUnit`, converting to canonical `kg` before saving.
-- [ ] In `SummaryCardView.swift` & `TargetProjectionCard.swift`, display weights and deltas in user's `weightUnit`.
-- [ ] In `WeightChartView.swift`, render Y-axis labels, tooltips, and motivation banner in user's `weightUnit`.
-- [ ] In `BMIChartView.swift`, keep BMI metric formula intact while displaying reference weight ranges in user's `weightUnit`.
-- [ ] In `HistoryRow.swift` & `HistoryView.swift`, format logged weights and stat pills in user's `weightUnit`.
-- [ ] Commit as `feat(units): propagate unit preferences across dashboard, charts, history, and log sheets`.
+- [x] In `AddWeightSheet.swift` & `EditWeightSheet.swift`, adapt keypad and stepper to input in user's `weightUnit`, converting to canonical `kg` before saving.
+- [x] In `SummaryCardView.swift` & `TargetProjectionCard.swift`, display weights and deltas in user's `weightUnit`.
+- [x] In `WeightChartView.swift`, render Y-axis labels, tooltips, and motivation banner in user's `weightUnit`.
+- [x] In `BMIChartView.swift`, keep BMI metric formula intact while displaying reference weight ranges in user's `weightUnit`.
+- [x] In `HistoryRow.swift` & `HistoryView.swift`, format logged weights and stat pills in user's `weightUnit`.
+- [x] Commit as `feat(units): propagate unit preferences across dashboard, charts, history, and log sheets`.
 
 ---
 
@@ -104,7 +104,8 @@
 - Run: `scripts/verify_localization.py`
 - Run: `xcodebuild -scheme Heft -destination 'generic/platform=iOS Simulator' build`
 
-- [ ] Add all unit-related strings to `Localizable.xcstrings` with 100% `tr` and `en` translations.
-- [ ] Run `scripts/verify_localization.py` and confirm 100% completeness and zero hardcoded locales.
-- [ ] Run both Debug and Release builds to verify clean compilation.
-- [ ] Commit as `feat(i18n): localize unit selectors, labels, and settings options`.
+- [x] Add all unit-related strings to `Localizable.xcstrings` with 100% `tr` and `en` translations.
+- [x] Run `scripts/verify_localization.py` and confirm 100% completeness and zero hardcoded locales.
+- [x] Run both Debug and Release builds to verify clean compilation.
+- [x] Commit as `feat(i18n): localize unit selectors, labels, and settings options`.
+
