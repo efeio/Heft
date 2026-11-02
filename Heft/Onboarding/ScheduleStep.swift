@@ -9,21 +9,47 @@ import SwiftUI
 
 struct ScheduleDayItem: Identifiable, Hashable {
     let id: Int
-    let label: String
-    let shortLabel: String
     let weekday: Int // iOS Calendar weekday: 1 = Sunday, 2 = Monday, ...
+
+    var label: String {
+        switch weekday {
+        case 2: return String(localized: "Pazartesi", comment: "Monday")
+        case 3: return String(localized: "Salı", comment: "Tuesday")
+        case 4: return String(localized: "Çarşamba", comment: "Wednesday")
+        case 5: return String(localized: "Perşembe", comment: "Thursday")
+        case 6: return String(localized: "Cuma", comment: "Friday")
+        case 7: return String(localized: "Cumartesi", comment: "Saturday")
+        case 1: return String(localized: "Pazar", comment: "Sunday")
+        default: return ""
+        }
+    }
+
+    var shortLabel: String {
+        switch weekday {
+        case 2: return String(localized: "Pzt", comment: "Mon")
+        case 3: return String(localized: "Sal", comment: "Tue")
+        case 4: return String(localized: "Çar", comment: "Wed")
+        case 5: return String(localized: "Per", comment: "Thu")
+        case 6: return String(localized: "Cum", comment: "Fri")
+        case 7: return String(localized: "Cmt", comment: "Sat")
+        case 1: return String(localized: "Paz", comment: "Sun")
+        default: return ""
+        }
+    }
 }
 
 enum WeighInSchedule {
-    static let days: [ScheduleDayItem] = [
-        ScheduleDayItem(id: 2, label: "Pazartesi", shortLabel: "Pzt", weekday: 2),
-        ScheduleDayItem(id: 3, label: "Salı", shortLabel: "Sal", weekday: 3),
-        ScheduleDayItem(id: 4, label: "Çarşamba", shortLabel: "Çar", weekday: 4),
-        ScheduleDayItem(id: 5, label: "Perşembe", shortLabel: "Per", weekday: 5),
-        ScheduleDayItem(id: 6, label: "Cuma", shortLabel: "Cum", weekday: 6),
-        ScheduleDayItem(id: 7, label: "Cumartesi", shortLabel: "Cmt", weekday: 7),
-        ScheduleDayItem(id: 1, label: "Pazar", shortLabel: "Paz", weekday: 1)
-    ]
+    static var days: [ScheduleDayItem] {
+        [
+            ScheduleDayItem(id: 2, weekday: 2),
+            ScheduleDayItem(id: 3, weekday: 3),
+            ScheduleDayItem(id: 4, weekday: 4),
+            ScheduleDayItem(id: 5, weekday: 5),
+            ScheduleDayItem(id: 6, weekday: 6),
+            ScheduleDayItem(id: 7, weekday: 7),
+            ScheduleDayItem(id: 1, weekday: 1)
+        ]
+    }
 
     static func shortDayName(for weekday: Int) -> String {
         days.first(where: { $0.weekday == weekday })?.shortLabel ?? ""

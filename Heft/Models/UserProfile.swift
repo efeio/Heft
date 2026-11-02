@@ -17,9 +17,9 @@ enum WeighInFrequency: String, CaseIterable, Identifiable, Codable {
 
     var label: String {
         switch self {
-        case .daily: return "Her Gün"
-        case .weekly: return "Haftada 1 Gün"
-        case .custom: return "Belirli Günler"
+        case .daily: return String(localized: "Her Gün", comment: "Weigh-in daily frequency")
+        case .weekly: return String(localized: "Haftada 1 Gün", comment: "Weigh-in weekly frequency")
+        case .custom: return String(localized: "Belirli Günler", comment: "Weigh-in custom days frequency")
         }
     }
 }

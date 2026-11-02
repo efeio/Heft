@@ -23,17 +23,17 @@ enum BMICalculator {
         return String(format: "%.1f", bmi)
     }
 
-    /// Returns the localized category description in Turkish.
+    /// Returns the localized category description.
     static func category(for bmi: Double) -> String {
         switch bmi {
         case ..<18.5:
-            return "Düşük Kilolu"
+            return String(localized: "Düşük Kilolu", comment: "BMI category Underweight")
         case 18.5..<25.0:
-            return "Normal"
+            return String(localized: "Normal", comment: "BMI category Normal")
         case 25.0..<30.0:
-            return "Fazla Kilolu"
+            return String(localized: "Fazla Kilolu", comment: "BMI category Overweight")
         default:
-            return "Obez"
+            return String(localized: "Obez", comment: "BMI category Obese")
         }
     }
 

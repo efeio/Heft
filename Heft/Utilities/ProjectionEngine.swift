@@ -43,10 +43,10 @@ enum ProjectionScenario: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .adaptive: return "Adaptif"
-        case .shortTerm: return "Son 14 Gün"
-        case .longTerm: return "Genel"
-        case .planned: return "Hedef Plan"
+        case .adaptive: return String(localized: "Adaptif", comment: "Projection scenario adaptive")
+        case .shortTerm: return String(localized: "Son 14 Gün", comment: "Projection scenario last 14 days")
+        case .longTerm: return String(localized: "Genel", comment: "Projection scenario overall")
+        case .planned: return String(localized: "Hedef Plan", comment: "Projection scenario planned")
         }
     }
 
@@ -80,11 +80,11 @@ enum PaceStatus: Equatable {
 
     var label: String {
         switch self {
-        case .ideal: return "İdeal"
-        case .slow: return "Yavaş"
-        case .tooFast: return "Çok Hızlı"
-        case .moderate: return "Dengeli"
-        case .notApplicable: return "Sabit"
+        case .ideal: return String(localized: "İdeal", comment: "Pace status ideal")
+        case .slow: return String(localized: "Yavaş", comment: "Pace status slow")
+        case .tooFast: return String(localized: "Çok Hızlı", comment: "Pace status too fast")
+        case .moderate: return String(localized: "Dengeli", comment: "Pace status moderate")
+        case .notApplicable: return String(localized: "Sabit", comment: "Pace status stable")
         }
     }
 
@@ -155,26 +155,29 @@ struct ProjectionOutput: Equatable {
 
 enum ProjectionEngine {
 
-    private static let dayMonthFormatter: DateFormatter = {
+    private static var dayMonthFormatter: DateFormatter {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "d MMMM"
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "dMMMM", options: 0, locale: loc)
         return df
-    }()
+    }
 
-    private static let fullDateFormatter: DateFormatter = {
+    private static var fullDateFormatter: DateFormatter {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "d MMMM yyyy"
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "dMMMyyyy", options: 0, locale: loc)
         return df
-    }()
+    }
 
-    private static let monthYearFormatter: DateFormatter = {
+    private static var monthYearFormatter: DateFormatter {
         let df = DateFormatter()
-        df.locale = Locale(identifier: "tr_TR")
-        df.dateFormat = "MMMM yyyy"
+        let loc = Locale.autoupdatingCurrent
+        df.locale = loc
+        df.dateFormat = DateFormatter.dateFormat(fromTemplate: "MMMMyyyy", options: 0, locale: loc)
         return df
-    }()
+    }
 
     // MARK: - Main Calculation Function
     static func calculate(input: ProjectionInput) -> ProjectionOutput {
@@ -618,10 +621,11 @@ enum ProjectionEngine {
         refDate: Date,
         milestone: MilestoneData
     ) -> ProjectionOutput {
+        let reachedText = String(localized: "Hedefe Ulaşıldı", comment: "Goal reached title")
         let dummyScenario = ScenarioDetail(
             scenario: .adaptive,
             icon: "checkmark.seal.fill",
-            title: "Hedefe Ulaşıldı",
+            title: reachedText,
             weeklyRate: 0.0,
             projectedDate: refDate,
             dateRangeString: Self.fullDateFormatter.string(from: refDate),
@@ -634,7 +638,7 @@ enum ProjectionEngine {
             currentWeight: currentWeight,
             targetWeight: targetWeight,
             remainingKg: 0.0,
-            primaryDateRangeString: "Hedefe Ulaşıldı",
+            primaryDateRangeString: reachedText,
             primaryProjectedDate: refDate,
             primaryWeeksRemaining: 0.0,
             confidenceScore: confidenceScore,
@@ -646,10 +650,10 @@ enum ProjectionEngine {
             longTermScenario: dummyScenario,
             plannedScenario: dummyScenario,
             condition: .goalReached,
-            conditionMessage: "Tebrikler! Belirlediğiniz hedef kiloya başarıyla ulaştınız.",
+            conditionMessage: String(localized: "Tebrikler! Belirlediğin hedef kiloya başarıyla ulaştın.", comment: "Goal reached condition message"),
             catchUpInfo: nil,
             milestone: milestone,
-            generalMessage: "Harika bir disiplin gösterdiniz. Şimdi mevcut formunuzu koruma zamanı."
+            generalMessage: String(localized: "Harika bir disiplin gösterdin. Şimdi mevcut formunu koruma zamanı.", comment: "Goal reached general message")
         )
     }
 
@@ -663,19 +667,23 @@ enum ProjectionEngine {
         milestone: MilestoneData
     ) -> ProjectionOutput {
         let diff = abs(currentWeight - targetWeight)
-        let badge = isGoalReached ? "Formunuzu Koruyorsunuz" : String(format: "%@%.1f kg fark", currentWeight > targetWeight ? "+" : "−", diff)
+        let badge = isGoalReached
+            ? String(localized: "Formunu Koruyorsun", comment: "Maintain form badge")
+            : "\(currentWeight > targetWeight ? "+" : "−")\(HeftFormat.weightKg(diff)) " + String(localized: "fark", comment: "weight difference suffix")
 
         let dummyScenario = ScenarioDetail(
             scenario: .adaptive,
             icon: "equal.circle.fill",
-            title: "Kilo Koruma",
+            title: String(localized: "Kilo Koruma", comment: "Maintain weight title"),
             weeklyRate: 0.0,
             projectedDate: refDate,
             dateRangeString: badge,
             weeksRemaining: 0.0
         )
 
-        let msg = isGoalReached ? "Tebrikler! Kilonuzu başarıyla dengede tutuyorsunuz. Düzenli tartılmaya devam edin." : "Hedef kilonuzu dengede tutmak için beslenmenize dikkat edin ve tartımları aksatmayın."
+        let msg = isGoalReached
+            ? String(localized: "Tebrikler! Kilonu başarıyla dengede tutuyorsun. Düzenli tartılmaya devam et.", comment: "Maintain balanced msg")
+            : String(localized: "Hedef kilonu dengede tutmak için beslenmene dikkat et ve tartımları aksatma.", comment: "Maintain attention msg")
 
         return ProjectionOutput(
             isGoalReached: false,
