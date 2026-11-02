@@ -67,12 +67,11 @@ enum NotificationService {
         case .daily:
             let content = UNMutableNotificationContent()
             if !trimmedName.isEmpty {
-                content.title = "\(trimmedName), günaydın"
-                content.body = "Sabah tartını kaydetmeyi unutma. Yeni kilonu Heft'e ekle."
+                content.title = String(localized: "\(trimmedName), günaydın", comment: "Daily reminder title with user name")
             } else {
-                content.title = "Günaydın"
-                content.body = "Sabah tartını kaydetmeyi unutma. Yeni kilonu Heft'e ekle."
+                content.title = String(localized: "Günaydın", comment: "Daily reminder title")
             }
+            content.body = String(localized: "Sabah tartını kaydetmeyi unutma. Yeni kilonu Heft'e ekle.", comment: "Daily reminder body")
             content.sound = .default
 
             var dateComponents = DateComponents()
@@ -87,12 +86,11 @@ enum NotificationService {
             let day = days.first ?? 2
             let content = UNMutableNotificationContent()
             if !trimmedName.isEmpty {
-                content.title = "\(trimmedName), tartım zamanı"
-                content.body = "Bugün haftalık tartım günün. Yeni kilonu Heft'e kaydet."
+                content.title = String(localized: "\(trimmedName), tartım zamanı", comment: "Weekly reminder title with user name")
             } else {
-                content.title = "Tartım Zamanı"
-                content.body = "Bugün haftalık tartım günün. Yeni kilonu Heft'e kaydet."
+                content.title = String(localized: "Tartım Zamanı", comment: "Weekly reminder title")
             }
+            content.body = String(localized: "Bugün haftalık tartım günün. Yeni kilonu Heft'e kaydet.", comment: "Weekly reminder body")
             content.sound = .default
 
             var dateComponents = DateComponents()
@@ -109,12 +107,11 @@ enum NotificationService {
             for day in targetDays {
                 let content = UNMutableNotificationContent()
                 if !trimmedName.isEmpty {
-                    content.title = "\(trimmedName), tartım zamanı"
-                    content.body = "Bugün tartım günün. Yeni kilonu Heft'e kaydet."
+                    content.title = String(localized: "\(trimmedName), tartım zamanı", comment: "Custom days reminder title with user name")
                 } else {
-                    content.title = "Tartım Zamanı"
-                    content.body = "Bugün tartım günün. Yeni kilonu Heft'e kaydet."
+                    content.title = String(localized: "Tartım Zamanı", comment: "Custom days reminder title")
                 }
+                content.body = String(localized: "Bugün tartım günün. Yeni kilonu Heft'e kaydet.", comment: "Custom days reminder body")
                 content.sound = .default
 
                 var dateComponents = DateComponents()
