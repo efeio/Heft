@@ -93,16 +93,16 @@ struct BMIChartView: View {
             return BMIInsight(
                 icon: "heart.text.square.fill",
                 color: BMICalculator.color(for: targetBMI),
-                title: "Hedef BMI: \(HeftFormat.weight(targetBMI))",
-                message: "\(HeftFormat.integer(target)) kg hedefine ulaştığında BMI değerin \(HeftFormat.weight(targetBMI)) (\(targetCategory)) olacak. Boyun için sağlıklı kilo aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg'dır."
+                title: String(localized: "Hedef BMI: \(HeftFormat.weight(targetBMI))", comment: "Target BMI title"),
+                message: String(localized: "\(HeftFormat.integer(target)) kg hedefine ulaştığında BMI değerin \(HeftFormat.weight(targetBMI)) (\(targetCategory)) olacak. Boyun için sağlıklı kilo aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg'dır.", comment: "Target BMI explanation")
             )
         }
 
         return BMIInsight(
             icon: "figure.walk",
             color: accent,
-            title: "Sağlıklı Kilo Aralığı",
-            message: "\(HeftFormat.integer(height)) cm boy için normal BMI (18,5 - 24,9) aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg arasındadır."
+            title: String(localized: "Sağlıklı Kilo Aralığı", comment: "Healthy weight range title"),
+            message: String(localized: "\(HeftFormat.integer(height)) cm boy için normal BMI (18,5 - 24,9) aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg arasındadır.", comment: "Healthy weight range message")
         )
     }
 
@@ -142,7 +142,7 @@ struct BMIChartView: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Güncel ölçüme dön")
+                .accessibilityLabel(String(localized: "Güncel ölçüme dön", comment: "Reset to latest entry a11y label"))
                 .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
             }
         }
@@ -469,7 +469,7 @@ struct BMIChartView: View {
                     let maxBMI = activeBmis.max() ?? 0
                     let currentBMI = currentActivePoint?.bmi ?? 0
                     let currentCategory = BMICalculator.category(for: currentBMI)
-                    return "Vücut kitle indeksi grafiği, \(selectedRange.accessibilityTitle). \(currentActivePoints.count) kayıt. Mevcut BMI: \(HeftFormat.weight(currentBMI)) (\(currentCategory)). En düşük \(HeftFormat.weight(minBMI)), en yüksek \(HeftFormat.weight(maxBMI))."
+                    return String(localized: "Vücut kitle indeksi grafiği, \(selectedRange.accessibilityTitle). \(currentActivePoints.count) kayıt. Mevcut BMI: \(HeftFormat.weight(currentBMI)) (\(currentCategory)). En düşük \(HeftFormat.weight(minBMI)), en yüksek \(HeftFormat.weight(maxBMI)).", comment: "BMI chart summary accessibility label")
                 }())
 
                 if currentActivePoints.count == 1 {

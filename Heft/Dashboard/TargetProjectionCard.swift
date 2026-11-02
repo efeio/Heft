@@ -46,19 +46,20 @@ struct TargetProjectionCard: View {
     private func weeksBadgeText(for output: ProjectionOutput) -> String {
         let weeks = output.primaryWeeksRemaining
         if weeks <= 0 {
-            return "Tebrikler"
+            return String(localized: "Tebrikler", comment: "Congratulations badge")
         }
         let rounded = Int(ceil(weeks))
-        return "~\(rounded) Hafta"
+        return "~\(rounded) " + String(localized: "Hafta", comment: "Weeks unit")
     }
 
     private func informalPrimaryDateRangeString(for output: ProjectionOutput) -> String {
         if output.isMaintainGoal {
             let diff = abs(output.currentWeight - output.targetWeight)
             if diff <= 0.5 {
-                return "Formunu Koruyorsun"
+                return String(localized: "Formunu Koruyorsun", comment: "Maintain form text")
             }
-            return "\(output.currentWeight > output.targetWeight ? "+" : "−")\(HeftFormat.weightKg(diff)) fark"
+            let sign = output.currentWeight > output.targetWeight ? "+" : "−"
+            return "\(sign)\(HeftFormat.weightKg(diff)) " + String(localized: "fark", comment: "difference suffix")
         }
         return output.primaryDateRangeString
     }
@@ -66,27 +67,27 @@ struct TargetProjectionCard: View {
     private func informalGeneralMessage(for output: ProjectionOutput) -> String {
         switch output.condition {
         case .plateau(let days, let avgW):
-            return "Kilon \(days) gündür \(HeftFormat.weight(avgW)) ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir."
+            return String(localized: "Kilon \(days) gündür \(HeftFormat.weight(avgW)) ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir.", comment: "Plateau message")
         case .weightGainAnomaly(let days, let gainKg):
-            return "Son \(days) günde +\(HeftFormat.weightKg(gainKg)) artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında."
+            return String(localized: "Son \(days) günde +\(HeftFormat.weightKg(gainKg)) artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında.", comment: "Water retention message")
         case .goalReached:
-            return "Harika bir disiplin gösterdin. Şimdi mevcut formunu koruma zamanı."
+            return String(localized: "Harika bir disiplin gösterdin. Şimdi mevcut formunu koruma zamanı.", comment: "Goal reached discipline message")
         case .maintainActive:
             let isWithinBand = abs(output.currentWeight - output.targetWeight) <= 0.5
             return isWithinBand
-                ? "Tebrikler! Kilonu başarıyla dengede tutuyorsun. Düzenli tartılmaya devam et."
-                : "Hedef kilonu dengede tutmak için beslenmene dikkat et ve tartımları aksatma."
+                ? String(localized: "Tebrikler! Kilonu başarıyla dengede tutuyorsun. Düzenli tartılmaya devam et.", comment: "Maintain balanced message")
+                : String(localized: "Hedef kilonu dengede tutmak için beslenmene dikkat et ve tartımları aksatma.", comment: "Maintain attention message")
         case .normal:
             if let catchUp = output.catchUpInfo {
-                return "Hedef tarihine yetişmek için haftalık \(HeftFormat.weightKg(catchUp.requiredWeeklyPace)) tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor."
+                return String(localized: "Hedef tarihine yetişmek için haftalık \(HeftFormat.weightKg(catchUp.requiredWeeklyPace)) tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor.", comment: "Catch up pace message")
             }
             if output.generalMessage.contains("hafta daha erken") || output.generalMessage.contains("gün daha erken") {
                 return output.generalMessage
                     .replacingOccurrences(of: "temponuzla hedefinize", with: "temponla hedefine")
                     .replacingOccurrences(of: "ulaşacaksınız", with: "ulaşacaksın")
             }
-            let actionWord = goalType == .gain ? "kilo alarak" : "kilo vererek"
-            return "Mevcut temponla (haftada ortalama \(HeftFormat.weightKg(output.currentWeeklyPace)) \(actionWord)) bu aralıkta hedefine ulaşman öngörülüyor."
+            let actionWord = goalType == .gain ? String(localized: "kilo alarak", comment: "gaining weight action") : String(localized: "kilo vererek", comment: "losing weight action")
+            return String(localized: "Mevcut temponla (haftada ortalama \(HeftFormat.weightKg(output.currentWeeklyPace)) \(actionWord)) bu aralıkta hedefine ulaşman öngörülüyor.", comment: "Pace projection message")
         }
     }
 
@@ -384,9 +385,9 @@ struct TargetProjectionCard: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Hedef ilerlemesi")
+        .accessibilityLabel(String(localized: "Hedef ilerlemesi", comment: "Goal progress accessibility label"))
         .accessibilityValue(
-            "Başlangıç \(HeftFormat.weight(milestone.startWeight)) kilogram, güncel \(HeftFormat.weight(milestone.currentWeight)) kilogram, hedef \(HeftFormat.weight(milestone.targetWeight)) kilogram, yüzde \(HeftFormat.integer(milestone.progressFraction * 100)) tamamlandı"
+            String(localized: "Başlangıç \(HeftFormat.weight(milestone.startWeight)) kilogram, güncel \(HeftFormat.weight(milestone.currentWeight)) kilogram, hedef \(HeftFormat.weight(milestone.targetWeight)) kilogram, yüzde \(HeftFormat.integer(milestone.progressFraction * 100)) tamamlandı", comment: "Goal progress accessibility value")
         )
     }
 
@@ -470,7 +471,7 @@ struct TargetProjectionCard: View {
 
             // Delta < 0 means newDate is earlier than oldDate -> positive progress!
             if deltaDays <= -1 {
-                let text = "Hedef \(abs(deltaDays)) gün öne çekildi"
+                let text = String(localized: "Hedef \(abs(deltaDays)) gün öne çekildi", comment: "Target moved earlier badge")
                 feedbackBadgeText = text
                 feedbackBadgeIsPositive = true
                 if reduceMotion {
@@ -482,7 +483,7 @@ struct TargetProjectionCard: View {
                 }
                 AccessibilityNotification.Announcement(text).post()
             } else if deltaDays >= 1 {
-                let text = "Hedef \(deltaDays) gün ötelendi"
+                let text = String(localized: "Hedef \(deltaDays) gün ötelendi", comment: "Target delayed badge")
                 feedbackBadgeText = text
                 feedbackBadgeIsPositive = false
                 if reduceMotion {

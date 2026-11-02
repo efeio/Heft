@@ -43,26 +43,26 @@ struct SummaryCardView: View {
 
     private var remainingPillText: String {
         if isGoalReached {
-            return isMaintainGoal ? "Formunu koruyorsun" : "Hedefe ulaşıldı"
+            return isMaintainGoal ? String(localized: "Formunu koruyorsun", comment: "Pill maintain success") : String(localized: "Hedefe ulaşıldı", comment: "Pill goal reached")
         }
         if isMaintainGoal {
             let diff = latestWeight - targetWeight
             if diff > 0 {
-                return "+\(HeftFormat.weightKg(diff)) fark"
+                return "+\(HeftFormat.weightKg(diff)) " + String(localized: "fark", comment: "difference suffix")
             } else {
-                return "−\(HeftFormat.weightKg(abs(diff))) fark"
+                return "−\(HeftFormat.weightKg(abs(diff))) " + String(localized: "fark", comment: "difference suffix")
             }
         } else if isGainGoal {
             if diffToTarget > 0 {
-                return "+\(HeftFormat.weightKg(diffToTarget)) kaldı"
+                return "+\(HeftFormat.weightKg(diffToTarget)) " + String(localized: "kaldı", comment: "remaining to gain")
             } else {
-                return "+\(HeftFormat.weightKg(abs(diffToTarget))) hedef üstü"
+                return "+\(HeftFormat.weightKg(abs(diffToTarget))) " + String(localized: "hedef üstü", comment: "above target")
             }
         } else {
             if diffToTarget > 0 {
-                return "−\(HeftFormat.weightKg(diffToTarget)) kaldı"
+                return "−\(HeftFormat.weightKg(diffToTarget)) " + String(localized: "kaldı", comment: "remaining to lose")
             } else {
-                return "−\(HeftFormat.weightKg(abs(diffToTarget))) hedef altı"
+                return "−\(HeftFormat.weightKg(abs(diffToTarget))) " + String(localized: "hedef altı", comment: "below target")
             }
         }
     }
@@ -78,14 +78,14 @@ struct SummaryCardView: View {
 
     private var weeklyChangeText: String {
         guard let diff = weeklyDiff else {
-            return "Bu hafta: —"
+            return String(localized: "Bu hafta: —", comment: "Weekly change empty")
         }
         if abs(diff) < 0.05 {
-            return "Bu hafta: \(HeftFormat.weightKg(0))"
+            return String(localized: "Bu hafta: \(HeftFormat.weightKg(0))", comment: "Weekly change zero")
         } else if diff < 0 {
-            return "Bu hafta: −\(HeftFormat.weightKg(abs(diff)))"
+            return String(localized: "Bu hafta: −\(HeftFormat.weightKg(abs(diff)))", comment: "Weekly change loss")
         } else {
-            return "Bu hafta: +\(HeftFormat.weightKg(diff))"
+            return String(localized: "Bu hafta: +\(HeftFormat.weightKg(diff))", comment: "Weekly change gain")
         }
     }
 

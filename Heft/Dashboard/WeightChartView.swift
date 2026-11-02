@@ -71,7 +71,7 @@ struct WeightChartView: View {
 
         let delta = active.weight - first.weight
         if active.id == first.id {
-            return ("Başlangıç", false)
+            return (String(localized: "Başlangıç", comment: "Starting weight badge"), false)
         }
 
         let isSuccess: Bool
@@ -98,8 +98,8 @@ struct WeightChartView: View {
             return MotivationInsight(
                 icon: "chart.line.uptrend.xyaxis",
                 color: accent,
-                title: "Yolculuk Başlıyor",
-                message: "Düzenli kilo kaydı yaparak eğilimini keşfetmeye başla."
+                title: String(localized: "Yolculuk Başlıyor", comment: "Insight journey begins title"),
+                message: String(localized: "Düzenli kilo kaydı yaparak eğilimini keşfetmeye başla.", comment: "Insight journey begins message")
             )
         }
 
@@ -112,16 +112,16 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "checkmark.seal.fill",
                     color: .heftSuccess,
-                    title: "Formunu Koruyorsun",
-                    message: "Hedef kilon olan \(HeftFormat.weightKg(targetWeight)) seviyesini başarıyla koruyorsun. İstikrarını sürdür."
+                    title: String(localized: "Formunu Koruyorsun", comment: "Insight maintain title"),
+                    message: String(localized: "Hedef kilon olan \(HeftFormat.weightKg(targetWeight)) seviyesini başarıyla koruyorsun. İstikrarını sürdür.", comment: "Insight maintain success msg")
                 )
             } else {
-                let status = current > targetWeight ? "+\(HeftFormat.weightKg(diff)) fazla" : "−\(HeftFormat.weightKg(diff)) eksik"
+                let status = current > targetWeight ? "+\(HeftFormat.weightKg(diff)) " + String(localized: "fazla", comment: "above target") : "−\(HeftFormat.weightKg(diff)) " + String(localized: "eksik", comment: "below target")
                 return MotivationInsight(
                     icon: "equal.circle.fill",
                     color: accent,
-                    title: "Kilo Koruma Takibi",
-                    message: "Hedef kilondan (\(status)) bir fark var. Dengeli beslenme ve düzenli tartımla hedefini koru."
+                    title: String(localized: "Kilo Koruma Takibi", comment: "Insight maintain tracking title"),
+                    message: String(localized: "Hedef kilondan (\(status)) bir fark var. Dengeli beslenme ve düzenli tartımla hedefini koru.", comment: "Insight maintain tracking msg")
                 )
             }
         } else if isGainGoal {
@@ -132,8 +132,8 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "trophy.fill",
                     color: .heftSuccess,
-                    title: "Hedefine Ulaştın",
-                    message: "\(HeftFormat.weightKg(targetWeight)) hedefine başarıyla ulaştın. Formunu korumak için aynı kararlılıkla devam et."
+                    title: String(localized: "Hedefine Ulaştın", comment: "Insight goal reached title"),
+                    message: String(localized: "\(HeftFormat.weightKg(targetWeight)) hedefine başarıyla ulaştın. Formunu korumak için aynı kararlılıkla devam et.", comment: "Insight goal reached gain msg")
                 )
             }
 
@@ -141,8 +141,8 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "chart.line.uptrend.xyaxis",
                     color: .heftSuccess,
-                    title: "En Yüksek Kilo Kaydı",
-                    message: "Heft'teki en yüksek kilona ulaştın. Hedefe yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                    title: String(localized: "En Yüksek Kilo Kaydı", comment: "Insight highest weight title"),
+                    message: String(localized: "Heft'teki en yüksek kilona ulaştın. Hedefe yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight highest weight msg")
                 )
             }
 
@@ -153,15 +153,15 @@ struct WeightChartView: View {
                     return MotivationInsight(
                         icon: "arrow.up.right.circle.fill",
                         color: .heftSuccess,
-                        title: "İlerleme Devam Ediyor",
-                        message: "Son tartıma göre +\(HeftFormat.weightKg(gained)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                        title: String(localized: "İlerleme Devam Ediyor", comment: "Insight progress continues title"),
+                        message: String(localized: "Son tartıma göre +\(HeftFormat.weightKg(gained)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight gained progress msg")
                     )
                 } else if current < prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
-                        title: "İstikrarını Koru",
-                        message: "Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük kalori ve su dalgalanmaları doğaldır."
+                        title: String(localized: "İstikrarını Koru", comment: "Insight stay consistent title"),
+                        message: String(localized: "Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük kalori ve su dalgalanmaları doğaldır.", comment: "Insight fluctuations msg")
                     )
                 }
             }
@@ -169,8 +169,8 @@ struct WeightChartView: View {
             return MotivationInsight(
                 icon: "target",
                 color: accent,
-                title: "Hedefe Doğru",
-                message: "Kilo alma hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni takip et."
+                title: String(localized: "Hedefe Doğru", comment: "Insight towards goal title"),
+                message: String(localized: "Kilo alma hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni takip et.", comment: "Insight towards goal gain msg")
             )
         } else {
             let minWeight = allWeights.min() ?? current
@@ -180,8 +180,8 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "trophy.fill",
                     color: .heftSuccess,
-                    title: "Hedefine Ulaştın",
-                    message: "\(HeftFormat.weightKg(targetWeight)) hedefine ulaştın. Sağlıklı kilonu korumak için aynı kararlılıkla devam et."
+                    title: String(localized: "Hedefine Ulaştın", comment: "Insight goal reached title"),
+                    message: String(localized: "\(HeftFormat.weightKg(targetWeight)) hedefine ulaştın. Sağlıklı kilonu korumak için aynı kararlılıkla devam et.", comment: "Insight goal reached lose msg")
                 )
             }
 
@@ -189,8 +189,8 @@ struct WeightChartView: View {
                 return MotivationInsight(
                     icon: "chart.line.downtrend.xyaxis",
                     color: .heftSuccess,
-                    title: "En Düşük Kilo Kaydı",
-                    message: "Heft'teki en düşük kilonu kaydettin. Hedefine yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                    title: String(localized: "En Düşük Kilo Kaydı", comment: "Insight lowest weight title"),
+                    message: String(localized: "Heft'teki en düşük kilonu kaydettin. Hedefine yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight lowest weight msg")
                 )
             }
 
@@ -201,15 +201,15 @@ struct WeightChartView: View {
                     return MotivationInsight(
                         icon: "arrow.down.right.circle.fill",
                         color: .heftSuccess,
-                        title: "İlerleme Devam Ediyor",
-                        message: "Son tartıma göre \(HeftFormat.weightKg(lost)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı."
+                        title: String(localized: "İlerleme Devam Ediyor", comment: "Insight progress continues title"),
+                        message: String(localized: "Son tartıma göre \(HeftFormat.weightKg(lost)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight lost progress msg")
                     )
                 } else if current > prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
-                        title: "İstikrarını Koru",
-                        message: "Hedefine \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır."
+                        title: String(localized: "İstikrarını Koru", comment: "Insight stay consistent title"),
+                        message: String(localized: "Hedefine \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır.", comment: "Insight water retention msg")
                     )
                 }
             }
@@ -217,8 +217,8 @@ struct WeightChartView: View {
             return MotivationInsight(
                 icon: "target",
                 color: accent,
-                title: "Hedefe Doğru",
-                message: "Hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni izle."
+                title: String(localized: "Hedefe Doğru", comment: "Insight towards goal title"),
+                message: String(localized: "Hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni izle.", comment: "Insight towards goal lose msg")
             )
         }
     }
@@ -227,7 +227,7 @@ struct WeightChartView: View {
     private func headerBadges(active: WeightEntry?, activeEntries: [WeightEntry], allSortedEntries: [WeightEntry]) -> some View {
         HStack(spacing: 6) {
             if let delta = computeActiveDeltaText(active: active, activeEntries: activeEntries, allSortedEntries: allSortedEntries) {
-                let isStart = delta.text == "Başlangıç"
+                let isStart = delta.text == String(localized: "Başlangıç")
                 let badgeColor = isStart ? Color.secondary : (delta.isSuccess ? Color.heftSuccess : Color.heftError)
 
                 Text(delta.text)
@@ -262,7 +262,7 @@ struct WeightChartView: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Güncel ölçüme dön")
+                .accessibilityLabel(String(localized: "Güncel ölçüme dön", comment: "Reset to latest entry a11y label"))
                 .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
             }
         }
@@ -576,7 +576,7 @@ struct WeightChartView: View {
                 }
                 .animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: selectedRange)
                 .frame(minHeight: currentActiveEntries.count <= 1 ? singleChartHeight : fullChartHeight)
-                .accessibilityLabel("Kilo grafiği, \(selectedRange.accessibilityTitle). \(currentActiveEntries.count) kayıt. En düşük \(HeftFormat.weightKg(activeWeights.min() ?? 0)), en yüksek \(HeftFormat.weightKg(activeWeights.max() ?? 0)).")
+                .accessibilityLabel(String(localized: "Kilo grafiği, \(selectedRange.accessibilityTitle). \(currentActiveEntries.count) kayıt. En düşük \(HeftFormat.weightKg(activeWeights.min() ?? 0)), en yüksek \(HeftFormat.weightKg(activeWeights.max() ?? 0)).", comment: "Weight chart summary accessibility label"))
 
                 if currentActiveEntries.count == 1 {
                     Text("Bu aralıkta tek ölçüm var. Tüm zamanlar için 'Tümü' seçebilirsin.")

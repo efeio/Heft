@@ -62,9 +62,9 @@ struct DashboardView: View {
 
     private var greetingTitle: String {
         guard let name = profile?.name, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return "Ana Sayfa"
+            return String(localized: "Ana Sayfa", comment: "Home navigation title")
         }
-        return "Merhaba, \(name)"
+        return String(localized: "Merhaba, \(name)", comment: "Greeting with user name")
     }
 
     var body: some View {

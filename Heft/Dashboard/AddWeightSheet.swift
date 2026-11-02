@@ -145,7 +145,7 @@ struct AddWeightSheet: View {
                 }
             }
             .background(Color.heftCanvas)
-            .navigationTitle("Kilo Ekle")
+            .navigationTitle(String(localized: "Kilo Ekle", comment: "Add weight sheet title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -436,11 +436,11 @@ struct AddWeightSheet: View {
     private var saveButtonTitle: String {
         if let weight = parsedWeight, isWeightValid {
             if selectedDayEntry != nil {
-                return "Kayıt Güncelle (\(HeftFormat.weightKg(weight)))"
+                return String(localized: "Kayıt Güncelle (\(HeftFormat.weightKg(weight)))", comment: "Update weight button with weight")
             }
-            return "Kaydet (\(HeftFormat.weightKg(weight)))"
+            return String(localized: "Kaydet (\(HeftFormat.weightKg(weight)))", comment: "Save weight button with weight")
         }
-        return selectedDayEntry != nil ? "Kayıt Güncelle" : "Kaydet"
+        return selectedDayEntry != nil ? String(localized: "Kayıt Güncelle", comment: "Update weight button") : String(localized: "Kaydet", comment: "Save weight button")
     }
 
     // MARK: - Keypad Handlers
@@ -679,7 +679,7 @@ struct WeightKeypadView: View {
                 }
             }
 
-            keypadButton(title: HeftFormat.decimalSeparator, accessibilityLabel: "Ondalık virgül") {
+            keypadButton(title: HeftFormat.decimalSeparator, accessibilityLabel: String(localized: "Ondalık ayırıcı", comment: "Decimal separator keypad button")) {
                 onDecimal()
             }
 
@@ -703,7 +703,7 @@ struct WeightKeypadView: View {
                 }
             }
             .buttonStyle(KeypadPressStyle())
-            .accessibilityLabel("Sil")
+            .accessibilityLabel(String(localized: "Sil", comment: "Keypad delete button"))
         }
     }
 
