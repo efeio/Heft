@@ -38,6 +38,8 @@ final class UserProfile {
     var weighInMinute: Int
     var rawWeighInFrequency: String = "weekly"
     var rawWeighInDays: String = "2"
+    var rawWeightUnit: String = "kg"
+    var rawHeightUnit: String = "cm"
     var onboardingCompleted: Bool
 
     var isGainGoal: Bool {
@@ -92,6 +94,26 @@ final class UserProfile {
         }
     }
 
+    @Transient
+    var weightUnit: WeightUnit {
+        get {
+            WeightUnit(rawValue: rawWeightUnit) ?? .kg
+        }
+        set {
+            rawWeightUnit = newValue.rawValue
+        }
+    }
+
+    @Transient
+    var heightUnit: HeightUnit {
+        get {
+            HeightUnit(rawValue: rawHeightUnit) ?? .cm
+        }
+        set {
+            rawHeightUnit = newValue.rawValue
+        }
+    }
+
     init(
         name: String = "",
         height: Double,
@@ -105,6 +127,8 @@ final class UserProfile {
         weighInMinute: Int = 0,
         rawWeighInFrequency: String = "weekly",
         rawWeighInDays: String = "2",
+        rawWeightUnit: String = "kg",
+        rawHeightUnit: String = "cm",
         onboardingCompleted: Bool = false
     ) {
         self.name = name
@@ -119,6 +143,8 @@ final class UserProfile {
         self.weighInMinute = weighInMinute
         self.rawWeighInFrequency = rawWeighInFrequency
         self.rawWeighInDays = rawWeighInDays
+        self.rawWeightUnit = rawWeightUnit
+        self.rawHeightUnit = rawHeightUnit
         self.onboardingCompleted = onboardingCompleted
     }
 }

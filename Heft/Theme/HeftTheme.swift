@@ -154,6 +154,41 @@ enum HeftFormat {
         "\(signedWeight(delta, showZeroSign: showZeroSign)) kg"
     }
 
+    // MARK: - Unit-Aware Weight & Height Formatting
+    static func weightValue(_ kgValue: Double, unit: WeightUnit) -> Double {
+        unit == .lbs ? UnitConverter.kgToLbs(kgValue) : kgValue
+    }
+
+    static func weight(_ kgValue: Double, unit: WeightUnit) -> String {
+        weight(weightValue(kgValue, unit: unit))
+    }
+
+    static func weightWithUnit(_ kgValue: Double, unit: WeightUnit) -> String {
+        let displayVal = weightValue(kgValue, unit: unit)
+        return "\(weight(displayVal)) \(unit.label)"
+    }
+
+    static func signedWeightWithUnit(_ deltaKg: Double, unit: WeightUnit, showZeroSign: Bool = false) -> String {
+        let displayDelta = deltaKg * (unit == .lbs ? UnitConverter.lbsPerKg : 1.0)
+        let absFormatted = weight(abs(displayDelta))
+        if abs(displayDelta) < 0.05 {
+            let zeroText = showZeroSign ? "+\(weight(0))" : weight(0)
+            return "\(zeroText) \(unit.label)"
+        }
+        let sign = displayDelta > 0 ? "+" : "−"
+        return "\(sign)\(absFormatted) \(unit.label)"
+    }
+
+    static func heightWithUnit(_ cmValue: Double, unit: HeightUnit) -> String {
+        switch unit {
+        case .cm:
+            return "\(integer(cmValue)) cm"
+        case .ftIn:
+            let (feet, inches) = UnitConverter.cmToFtIn(cmValue)
+            return "\(feet)′ \(integer(inches))″"
+        }
+    }
+
     static func integer(_ value: Double) -> String {
         integerFormatter.string(from: NSNumber(value: value.rounded())) ?? String(format: "%.0f", value)
     }
