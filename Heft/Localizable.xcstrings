@@ -1,0 +1,41 @@
+{
+  "sourceLanguage" : "tr",
+  "strings" : {
+    "Ana Sayfa" : {
+      "comment" : "Bottom tab bar title for Home tab",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ana Sayfa"
+          }
+        }
+      }
+    },
+    "Geçmiş" : {
+      "comment" : "Bottom tab bar title for History tab",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçmiş"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
+

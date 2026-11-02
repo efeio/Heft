@@ -1,0 +1,41 @@
+{
+  "sourceLanguage" : "tr",
+  "strings" : {
+    "NSHealthShareUsageDescription" : {
+      "comment" : "Privacy - Health Share Usage Description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heft reads your body mass records from Apple Health to accurately display your weight trends and goal progress."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heft, kilo grafiklerini ve hedef ilerlemeni doğru gösterebilmek için Apple Sağlık'taki vücut ağırlığı kayıtlarını okur."
+          }
+        }
+      }
+    },
+    "NSHealthUpdateUsageDescription" : {
+      "comment" : "Privacy - Health Update Usage Description",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heft writes your logged weight entries to Apple Health to keep your health history up to date."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heft, uygulamaya girdiğin tartım kayıtlarını sağlık geçmişinin güncel kalması için Apple Sağlık'a kaydeder."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
+
