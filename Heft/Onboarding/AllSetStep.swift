@@ -72,15 +72,15 @@ struct AllSetStep: View {
     private var scheduleSummaryText: String {
         switch weighInFrequency {
         case .daily:
-            return "Her Gün • \(timeString)"
+            return "\(String(localized: "Her Gün")) • \(timeString)"
         case .weekly:
-            let dayName = WeighInSchedule.days.first(where: { $0.weekday == (weighInDays.first ?? weighInDay) })?.label ?? "Pazartesi"
+            let dayName = WeighInSchedule.days.first(where: { $0.weekday == (weighInDays.first ?? weighInDay) })?.label ?? String(localized: "Pazartesi")
             return "\(dayName) • \(timeString)"
         case .custom:
             let dayNames = weighInDays.compactMap { d in
                 WeighInSchedule.shortDayName(for: d)
             }.joined(separator: ", ")
-            return "\(dayNames.isEmpty ? "Pazartesi" : dayNames) • \(timeString)"
+            return "\(dayNames.isEmpty ? String(localized: "Pazartesi") : dayNames) • \(timeString)"
         }
     }
 
@@ -102,7 +102,7 @@ struct AllSetStep: View {
         OnboardingStepContainer(
             currentStep: 5,
             totalSteps: 5,
-            buttonTitle: "Hadi Başlayalım",
+            buttonTitle: String(localized: "Hadi Başlayalım", comment: "Let's start button"),
             isButtonEnabled: !isSaving,
             onBack: onBack,
             onButtonTap: completeOnboarding
@@ -135,21 +135,21 @@ struct AllSetStep: View {
 
                     // Summary Card
                     VStack(spacing: 16) {
-                        SummaryRow(label: "İSİM", value: name.isEmpty ? "—" : name)
+                        SummaryRow(label: String(localized: "İSİM"), value: name.isEmpty ? "—" : name)
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "HEDEF TÜRÜ", value: goalType == .gain ? "Kilo Almak (Bulk/Kas)" : (goalType == .maintain ? "Kilo Korumak (Mevcut Form)" : "Kilo Vermek (Fit/Yağ Yakımı)"))
+                        SummaryRow(label: String(localized: "HEDEF TÜRÜ"), value: goalType == .gain ? String(localized: "Kilo Almak (Bulk/Kas)") : (goalType == .maintain ? String(localized: "Kilo Korumak (Mevcut Form)") : String(localized: "Kilo Vermek (Fit/Yağ Yakımı)")))
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "BOY & YAŞ", value: "\(HeftFormat.integer(height)) cm • \(age) yaş")
+                        SummaryRow(label: String(localized: "BOY & YAŞ"), value: "\(HeftFormat.integer(height)) cm • \(age) \(String(localized: "yaş"))")
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "CİNSİYET", value: gender == .male ? "Erkek" : "Kadın")
+                        SummaryRow(label: String(localized: "CİNSİYET"), value: gender.label)
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "BAŞLANGIÇ KİLOSU", value: HeftFormat.weightKg(currentWeight))
+                        SummaryRow(label: String(localized: "BAŞLANGIÇ KİLOSU"), value: HeftFormat.weightKg(currentWeight))
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "HEDEF KİLO", value: HeftFormat.weightKg(targetWeight))
+                        SummaryRow(label: String(localized: "HEDEF KİLO"), value: HeftFormat.weightKg(targetWeight))
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "BAŞLANGIÇ BMI", value: "\(bmiValueText) \(bmiCategoryText)")
+                        SummaryRow(label: String(localized: "BAŞLANGIÇ BMI"), value: "\(bmiValueText) \(bmiCategoryText)")
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: "TARTIM TAKVİMİ", value: scheduleSummaryText)
+                        SummaryRow(label: String(localized: "TARTIM TAKVİMİ"), value: scheduleSummaryText)
                     }
                     .heftCard(padding: cardPadding)
 

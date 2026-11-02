@@ -42,15 +42,15 @@ struct WeightInfoStep: View {
 
     private var targetErrorMessage: String {
         if !isTargetRangeValid {
-            return "Hedef kilo 20 ile 500 kg arasında olmalıdır."
+            return String(localized: "Hedef kilo 20 ile 500 kg arasında olmalıdır.", comment: "Target weight out of bounds")
         }
         if goalType == .gain && targetWeight <= currentWeight {
-            return "Kilo alma hedefi için hedef kilon mevcut kilondan yüksek olmalıdır."
+            return String(localized: "Kilo alma hedefi için hedef kilon mevcut kilondan yüksek olmalıdır.", comment: "Target weight must be higher for gain")
         }
         if goalType == .lose && targetWeight >= currentWeight {
-            return "Kilo verme hedefi için hedef kilon mevcut kilondan düşük olmalıdır."
+            return String(localized: "Kilo verme hedefi için hedef kilon mevcut kilondan düşük olmalıdır.", comment: "Target weight must be lower for lose")
         }
-        return "Geçersiz hedef kilo."
+        return String(localized: "Geçersiz hedef kilo.", comment: "Invalid target weight")
     }
 
     private var isValid: Bool {
@@ -61,7 +61,7 @@ struct WeightInfoStep: View {
         OnboardingStepContainer(
             currentStep: 3,
             totalSteps: 5,
-            buttonTitle: "İleri",
+            buttonTitle: String(localized: "İleri", comment: "Next button"),
             isButtonEnabled: isValid,
             onBack: onBack,
             onButtonTap: onNext
@@ -99,7 +99,7 @@ struct WeightInfoStep: View {
                             step: 0.1,
                             unit: "kg",
                             formatStyle: .decimal,
-                            accessibilityTitle: "Mevcut Kilo"
+                            accessibilityTitle: String(localized: "Mevcut Kilo", comment: "Current weight accessibility title")
                         )
                     }
 
@@ -115,7 +115,7 @@ struct WeightInfoStep: View {
                             step: 0.1,
                             unit: "kg",
                             formatStyle: .decimal,
-                            accessibilityTitle: "Hedef Kilo"
+                            accessibilityTitle: String(localized: "Hedef Kilo", comment: "Target weight accessibility title")
                         )
 
                         if !isTargetDirectionValid {

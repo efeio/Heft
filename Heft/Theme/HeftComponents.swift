@@ -137,7 +137,7 @@ struct OnboardingStepContainer<Content: View>: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Geri")
+                    .accessibilityLabel(String(localized: "Geri", comment: "Back button accessibility label"))
                 }
 
                 // Progress Bar
@@ -154,7 +154,7 @@ struct OnboardingStepContainer<Content: View>: View {
                 }
                 .frame(height: barHeight)
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Adım \(currentStep) / \(totalSteps)")
+                .accessibilityLabel(String(localized: "Adım \(currentStep) / \(totalSteps)", comment: "Step progress accessibility label"))
 
                 if onBack != nil && currentStep > 1 {
                     Spacer()
@@ -314,13 +314,13 @@ struct HeftGenderSelector: View {
     var body: some View {
         ViewThatFits(in: .horizontal) {
             HStack(spacing: 10) {
-                genderButton(title: "Erkek", icon: "figure.stand", tag: .male, fixedHorizontal: true)
-                genderButton(title: "Kadın", icon: "figure.stand.dress", tag: .female, fixedHorizontal: true)
+                genderButton(title: Gender.male.label, icon: "figure.stand", tag: .male, fixedHorizontal: true)
+                genderButton(title: Gender.female.label, icon: "figure.stand.dress", tag: .female, fixedHorizontal: true)
             }
 
             VStack(spacing: 8) {
-                genderButton(title: "Erkek", icon: "figure.stand", tag: .male, fixedHorizontal: false)
-                genderButton(title: "Kadın", icon: "figure.stand.dress", tag: .female, fixedHorizontal: false)
+                genderButton(title: Gender.male.label, icon: "figure.stand", tag: .male, fixedHorizontal: false)
+                genderButton(title: Gender.female.label, icon: "figure.stand.dress", tag: .female, fixedHorizontal: false)
             }
         }
     }
@@ -391,15 +391,15 @@ struct HeftGoalSelector: View {
     var body: some View {
         ViewThatFits(in: .horizontal) {
             HStack(spacing: 8) {
-                goalButton(title: "Kilo Vermek", icon: "flame.fill", tag: .lose, fixedHorizontal: true)
-                goalButton(title: "Korumak", icon: "equal.circle.fill", tag: .maintain, fixedHorizontal: true)
-                goalButton(title: "Kilo Almak", icon: "figure.strengthtraining.traditional", tag: .gain, fixedHorizontal: true)
+                goalButton(title: GoalType.lose.label, icon: "flame.fill", tag: .lose, fixedHorizontal: true)
+                goalButton(title: GoalType.maintain.label, icon: "equal.circle.fill", tag: .maintain, fixedHorizontal: true)
+                goalButton(title: GoalType.gain.label, icon: "figure.strengthtraining.traditional", tag: .gain, fixedHorizontal: true)
             }
 
             VStack(spacing: 8) {
-                goalButton(title: "Kilo Vermek", icon: "flame.fill", tag: .lose, fixedHorizontal: false)
-                goalButton(title: "Korumak", icon: "equal.circle.fill", tag: .maintain, fixedHorizontal: false)
-                goalButton(title: "Kilo Almak", icon: "figure.strengthtraining.traditional", tag: .gain, fixedHorizontal: false)
+                goalButton(title: GoalType.lose.label, icon: "flame.fill", tag: .lose, fixedHorizontal: false)
+                goalButton(title: GoalType.maintain.label, icon: "equal.circle.fill", tag: .maintain, fixedHorizontal: false)
+                goalButton(title: GoalType.gain.label, icon: "figure.strengthtraining.traditional", tag: .gain, fixedHorizontal: false)
             }
         }
     }

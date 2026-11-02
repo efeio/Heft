@@ -17,7 +17,7 @@ struct WelcomeStep: View {
         OnboardingStepContainer(
             currentStep: 1,
             totalSteps: 5,
-            buttonTitle: "Başla",
+            buttonTitle: String(localized: "Başla", comment: "Onboarding start button"),
             isButtonEnabled: true,
             onButtonTap: onStart
         ) {

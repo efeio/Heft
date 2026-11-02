@@ -34,7 +34,7 @@ struct BodyInfoStep: View {
         OnboardingStepContainer(
             currentStep: 2,
             totalSteps: 5,
-            buttonTitle: "İleri",
+            buttonTitle: String(localized: "İleri", comment: "Next button"),
             isButtonEnabled: isValid,
             onBack: onBack,
             onButtonTap: onNext
@@ -59,9 +59,9 @@ struct BodyInfoStep: View {
 
                         HeftTextInputCard(
                             icon: "person.fill",
-                            title: "Adın",
-                            subtitle: "İsteğe bağlı • Hitap ve bildirimler için",
-                            placeholder: "Örn: Efe",
+                            title: String(localized: "Adın", comment: "Name input title"),
+                            subtitle: String(localized: "İsteğe bağlı • Hitap ve bildirimler için", comment: "Name input subtitle"),
+                            placeholder: String(localized: "Örn: Efe", comment: "Name input placeholder"),
                             text: $nameText
                         )
                     }
@@ -87,7 +87,7 @@ struct BodyInfoStep: View {
                             step: 1,
                             unit: "cm",
                             formatStyle: .integer,
-                            accessibilityTitle: "Boy"
+                            accessibilityTitle: String(localized: "Boy", comment: "Height accessibility title")
                         )
                     }
 
@@ -101,9 +101,9 @@ struct BodyInfoStep: View {
                             value: $age,
                             range: 13...100,
                             step: 1,
-                            unit: "yıl",
+                            unit: String(localized: "yıl", comment: "Years unit"),
                             formatStyle: .integer,
-                            accessibilityTitle: "Yaş"
+                            accessibilityTitle: String(localized: "Yaş", comment: "Age accessibility title")
                         )
                     }
                 }

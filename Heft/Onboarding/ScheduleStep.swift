@@ -108,15 +108,15 @@ struct ScheduleStep: View {
 
     private var reminderSubtitle: String {
         guard wantsNotifications else {
-            return "Bildirimler kapalı. Dilediğinde açabilirsin."
+            return String(localized: "Bildirimler kapalı. Dilediğinde açabilirsin.", comment: "Notifications off subtitle")
         }
         switch weighInFrequency {
         case .daily:
-            return "Her sabah seçtiğin saatte nazik bir bildirim alacaksın."
+            return String(localized: "Her sabah seçtiğin saatte nazik bir bildirim alacaksın.", comment: "Daily reminder subtitle")
         case .weekly:
-            return "Seçtiğin günde ve saatte nazik bir bildirim alacaksın."
+            return String(localized: "Seçtiğin günde ve saatte nazik bir bildirim alacaksın.", comment: "Weekly reminder subtitle")
         case .custom:
-            return "Seçtiğin günlerde ve saatte nazik bir bildirim alacaksın."
+            return String(localized: "Seçtiğin günlerde ve saatte nazik bir bildirim alacaksın.", comment: "Custom days reminder subtitle")
         }
     }
 
@@ -142,7 +142,7 @@ struct ScheduleStep: View {
         OnboardingStepContainer(
             currentStep: 4,
             totalSteps: 5,
-            buttonTitle: "İleri",
+            buttonTitle: String(localized: "İleri", comment: "Next button"),
             isButtonEnabled: true,
             onBack: onBack,
             onButtonTap: onNext
