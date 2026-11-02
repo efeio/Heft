@@ -23,6 +23,8 @@ def check_string_catalog(path):
     untranslated = []
 
     for key, val in strings.items():
+        if not key or val.get("shouldTranslate") is False:
+            continue
         locs = val.get("localizations", {})
         if "tr" not in locs:
             missing_tr.append(key)

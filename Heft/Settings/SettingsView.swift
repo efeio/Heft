@@ -47,9 +47,7 @@ struct SettingsView: View {
     @State private var exportCount = 0
     @State private var showPrivacyPolicy = false
     @State private var showSaveError = false
-    @State private var showDiscardAlert = false
     @State private var showDeleteAllDataAlert = false
-    @State private var hasUnsavedChanges = false
     @State private var isLoaded = false
     @State private var saveSuccessTrigger = false
     @State private var deleteAllTrigger = false
@@ -113,17 +111,7 @@ struct SettingsView: View {
                 get: { focusedField != nil },
                 set: { if !$0 { focusedField = nil } }
             ))
-            .navigationBarBackButtonHidden(hasUnsavedChanges)
             .toolbar {
-                if hasUnsavedChanges {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Vazgeç") {
-                            showDiscardAlert = true
-                        }
-                        .font(.heftBody)
-                        .foregroundStyle(Color.secondary)
-                    }
-                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Kaydet") {
                         saveSettings()
@@ -133,7 +121,6 @@ struct SettingsView: View {
                     .foregroundStyle(isValid ? accent : Color.secondary)
                 }
             }
-            .interactiveDismissDisabled(hasUnsavedChanges)
             .onAppear {
                 loadCurrentProfile()
                 refreshNotificationStatus()
@@ -158,15 +145,6 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showPrivacyPolicy) {
             PrivacyPolicyView()
-        }
-        .alert("Kaydedilmemiş Değişiklikler", isPresented: $showDiscardAlert) {
-            Button("Değişiklikleri Sil", role: .destructive) {
-                focusedField = nil
-                dismiss()
-            }
-            Button("Düzenlemeye Devam Et", role: .cancel) {}
-        } message: {
-            Text("Yaptığın değişiklikler kaybolacak. Çıkmak istiyor musun?")
         }
         .alert("Hata", isPresented: $showSaveError) {
             Button("Tamam", role: .cancel) {}
@@ -196,12 +174,6 @@ struct SettingsView: View {
             Button("Vazgeç", role: .cancel) {}
         } message: {
             Text("Tüm kilo kayıtların, profil bilgilerin, ayarların ve Heft tarafından Apple Sağlık'a yazılan tartım kayıtları kalıcı olarak silinecek. Bu işlem geri alınamaz.")
-        }
-    }
-
-    private func markDirty() {
-        if isLoaded {
-            hasUnsavedChanges = true
         }
     }
 
@@ -329,10 +301,6 @@ struct SettingsView: View {
             Text("PROFİL")
                 .heftEyebrowStyle()
         }
-        .onChange(of: nameText) { markDirty() }
-        .onChange(of: heightText) { markDirty() }
-        .onChange(of: ageText) { markDirty() }
-        .onChange(of: gender) { markDirty() }
     }
 
     @ViewBuilder
@@ -392,8 +360,6 @@ struct SettingsView: View {
                 .font(.heftMeta)
                 .foregroundStyle(Color.secondary)
         }
-        .onChange(of: goalType) { markDirty() }
-        .onChange(of: targetWeightText) { markDirty() }
     }
 
     @ViewBuilder
@@ -612,10 +578,6 @@ struct SettingsView: View {
                 .font(.heftMeta)
                 .foregroundStyle(Color.secondary)
         }
-        .onChange(of: weighInFrequency) { markDirty() }
-        .onChange(of: weighInDays) { markDirty() }
-        .onChange(of: weighInDay) { markDirty() }
-        .onChange(of: weighInTime) { markDirty() }
     }
 
     private func refreshNotificationStatus() {
@@ -657,7 +619,6 @@ struct SettingsView: View {
                         notificationAuthStatus = updated.authorizationStatus
                         if granted {
                             isRemindersOn = true
-                            markDirty()
                         } else {
                             isRemindersOn = false
                         }
@@ -666,7 +627,6 @@ struct SettingsView: View {
                 case .authorized, .provisional, .ephemeral:
                     await MainActor.run {
                         notificationAuthStatus = settings.authorizationStatus
-                        markDirty()
                     }
                 case .denied:
                     await MainActor.run {
@@ -679,8 +639,6 @@ struct SettingsView: View {
                     break
                 }
             }
-        } else {
-            markDirty()
         }
     }
 
@@ -721,7 +679,6 @@ struct SettingsView: View {
             }
         }
         weighInDay = weighInDays.first ?? 2
-        markDirty()
         UISelectionFeedbackGenerator().selectionChanged()
     }
 
@@ -770,7 +727,6 @@ struct SettingsView: View {
 
         DispatchQueue.main.async {
             isLoaded = true
-            hasUnsavedChanges = false
         }
     }
 
@@ -818,7 +774,6 @@ struct SettingsView: View {
 
         do {
             try modelContext.save()
-            hasUnsavedChanges = false
             saveSuccessTrigger.toggle()
             UIImpactFeedbackGenerator(style: .medium).impactOccurred()
 
@@ -909,7 +864,6 @@ struct SettingsView: View {
     }
 
     private func deleteAllData() {
-        hasUnsavedChanges = false
         let allEntries = (try? modelContext.fetch(FetchDescriptor<WeightEntry>())) ?? []
         let samplesToDelete: [(uuid: UUID?, date: Date)] = allEntries.map { (uuid: $0.healthKitUUID, date: $0.date) }
 
