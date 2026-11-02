@@ -30,6 +30,8 @@ struct OnboardingContainerView: View {
         return Calendar.current.date(from: comps) ?? Date()
     }()
     @State private var wantsNotifications = false
+    @State private var weightUnit: WeightUnit = .kg
+    @State private var heightUnit: HeightUnit = .cm
 
     var body: some View {
         ZStack {
@@ -46,6 +48,7 @@ struct OnboardingContainerView: View {
                     height: $height,
                     age: $age,
                     gender: $gender,
+                    heightUnit: $heightUnit,
                     onBack: goBack,
                     onNext: { goToStep(3) }
                 )
@@ -56,6 +59,7 @@ struct OnboardingContainerView: View {
                     currentWeight: $currentWeight,
                     targetWeight: $targetWeight,
                     goalType: $goalType,
+                    weightUnit: $weightUnit,
                     onBack: goBack,
                     onNext: { goToStep(4) }
                 )
@@ -86,6 +90,8 @@ struct OnboardingContainerView: View {
                     weighInDay: weighInDays.first ?? weighInDay,
                     weighInTime: weighInTime,
                     wantsNotifications: wantsNotifications,
+                    weightUnit: weightUnit,
+                    heightUnit: heightUnit,
                     onBack: goBack,
                     onFinish: onCompleted
                 )

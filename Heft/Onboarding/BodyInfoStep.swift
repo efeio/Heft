@@ -12,6 +12,7 @@ struct BodyInfoStep: View {
     @Binding var height: Double
     @Binding var age: Double
     @Binding var gender: Gender
+    @Binding var heightUnit: HeightUnit
 
     var onBack: (() -> Void)? = nil
     let onNext: () -> Void
@@ -77,16 +78,28 @@ struct BodyInfoStep: View {
 
                     // Height Input
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("BOY")
-                            .heftEyebrowStyle()
-                            .foregroundStyle(Color.secondary)
+                        HStack {
+                            Text("BOY")
+                                .heftEyebrowStyle()
+                                .foregroundStyle(Color.secondary)
+
+                            Spacer()
+
+                            Picker("", selection: $heightUnit) {
+                                ForEach(HeightUnit.allCases) { u in
+                                    Text(u.label).tag(u)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .frame(width: 120)
+                        }
 
                         HeftTickPicker(
                             value: $height,
                             range: 120...250,
                             step: 1,
-                            unit: "cm",
-                            formatStyle: .integer,
+                            unit: heightUnit == .cm ? "cm" : "",
+                            formatStyle: heightUnit == .cm ? .integer : .ftIn,
                             accessibilityTitle: String(localized: "Boy", comment: "Height accessibility title")
                         )
                     }
@@ -121,6 +134,7 @@ struct BodyInfoStep: View {
         height: .constant(178),
         age: .constant(26),
         gender: .constant(.male),
+        heightUnit: .constant(.cm),
         onNext: {}
     )
 }
@@ -131,6 +145,7 @@ struct BodyInfoStep: View {
         height: .constant(178),
         age: .constant(26),
         gender: .constant(.male),
+        heightUnit: .constant(.cm),
         onNext: {}
     )
 }

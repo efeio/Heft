@@ -11,6 +11,7 @@ struct WeightInfoStep: View {
     @Binding var currentWeight: Double
     @Binding var targetWeight: Double
     @Binding var goalType: GoalType
+    @Binding var weightUnit: WeightUnit
 
     var onBack: (() -> Void)? = nil
     let onNext: () -> Void
@@ -40,8 +41,25 @@ struct WeightInfoStep: View {
         isTargetRangeValid && isTargetDirectionValid
     }
 
+    private var displayCurrentWeightBinding: Binding<Double> {
+        Binding(
+            get: { weightUnit == .lbs ? UnitConverter.kgToLbs(currentWeight) : currentWeight },
+            set: { currentWeight = (weightUnit == .lbs ? UnitConverter.lbsToKg($0) : $0) }
+        )
+    }
+
+    private var displayTargetWeightBinding: Binding<Double> {
+        Binding(
+            get: { weightUnit == .lbs ? UnitConverter.kgToLbs(targetWeight) : targetWeight },
+            set: { targetWeight = (weightUnit == .lbs ? UnitConverter.lbsToKg($0) : $0) }
+        )
+    }
+
     private var targetErrorMessage: String {
         if !isTargetRangeValid {
+            if weightUnit == .lbs {
+                return String(localized: "Hedef kilo 44 ile 1100 lbs arasında olmalıdır.", comment: "Target weight out of bounds lbs")
+            }
             return String(localized: "Hedef kilo 20 ile 500 kg arasında olmalıdır.", comment: "Target weight out of bounds")
         }
         if goalType == .gain && targetWeight <= currentWeight {
@@ -89,15 +107,27 @@ struct WeightInfoStep: View {
 
                     // Current Weight
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("MEVCUT KİLO")
-                            .heftEyebrowStyle()
-                            .foregroundStyle(Color.secondary)
+                        HStack {
+                            Text("MEVCUT KİLO")
+                                .heftEyebrowStyle()
+                                .foregroundStyle(Color.secondary)
+
+                            Spacer()
+
+                            Picker("", selection: $weightUnit) {
+                                ForEach(WeightUnit.allCases) { u in
+                                    Text(u.label).tag(u)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .frame(width: 120)
+                        }
 
                         HeftTickPicker(
-                            value: $currentWeight,
-                            range: 40...300,
-                            step: 0.1,
-                            unit: "kg",
+                            value: displayCurrentWeightBinding,
+                            range: weightUnit == .kg ? 40...300 : 88...660,
+                            step: weightUnit == .kg ? 0.1 : 0.2,
+                            unit: weightUnit.label,
                             formatStyle: .decimal,
                             accessibilityTitle: String(localized: "Mevcut Kilo", comment: "Current weight accessibility title")
                         )
@@ -110,10 +140,10 @@ struct WeightInfoStep: View {
                             .foregroundStyle(Color.secondary)
 
                         HeftTickPicker(
-                            value: $targetWeight,
-                            range: 40...300,
-                            step: 0.1,
-                            unit: "kg",
+                            value: displayTargetWeightBinding,
+                            range: weightUnit == .kg ? 40...300 : 88...660,
+                            step: weightUnit == .kg ? 0.1 : 0.2,
+                            unit: weightUnit.label,
                             formatStyle: .decimal,
                             accessibilityTitle: String(localized: "Hedef Kilo", comment: "Target weight accessibility title")
                         )
@@ -139,6 +169,7 @@ struct WeightInfoStep: View {
         currentWeight: .constant(78.5),
         targetWeight: .constant(70.0),
         goalType: .constant(.lose),
+        weightUnit: .constant(.kg),
         onNext: {}
     )
 }
@@ -148,6 +179,7 @@ struct WeightInfoStep: View {
         currentWeight: .constant(78.5),
         targetWeight: .constant(70.0),
         goalType: .constant(.lose),
+        weightUnit: .constant(.kg),
         onNext: {}
     )
 }

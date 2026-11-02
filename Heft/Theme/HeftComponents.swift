@@ -482,6 +482,7 @@ struct HeftTickPicker: View {
     enum TickPickerFormatStyle {
         case integer    // "28" for age, "178" for height
         case decimal    // "78.5" for weight
+        case ftIn       // "5′ 10″" for height in feet/inches
     }
 
     @Environment(\.heftAccent) private var accent
@@ -501,10 +502,14 @@ struct HeftTickPicker: View {
     }
 
     private var formattedValue: String {
-        if formatStyle == .integer {
+        switch formatStyle {
+        case .integer:
             return HeftFormat.integer(value)
-        } else {
+        case .decimal:
             return HeftFormat.weight(value)
+        case .ftIn:
+            let (feet, inches) = UnitConverter.cmToFtIn(value)
+            return "\(feet)′ \(HeftFormat.integer(inches))″"
         }
     }
 
@@ -525,6 +530,13 @@ struct HeftTickPicker: View {
 
     private func labelText(for index: Int) -> String {
         let val = value(for: index)
+        if formatStyle == .ftIn {
+            let (feet, inches) = UnitConverter.cmToFtIn(val)
+            if Int(inches) == 0 {
+                return "\(feet)′"
+            }
+            return ""
+        }
         return HeftFormat.integer(val)
     }
 
@@ -559,9 +571,11 @@ struct HeftTickPicker: View {
                     .contentTransition(reduceMotion ? .identity : .numericText())
                     .animation(reduceMotion ? nil : .snappy, value: formattedValue)
 
-                Text(unit)
-                    .font(.callout.weight(.semibold))
-                    .foregroundStyle(Color.secondary)
+                if !unit.isEmpty {
+                    Text(unit)
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(Color.secondary)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .center)
 

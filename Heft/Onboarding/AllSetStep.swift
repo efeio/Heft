@@ -21,6 +21,8 @@ struct AllSetStep: View {
     let weighInDay: Int
     let weighInTime: Date
     let wantsNotifications: Bool
+    var weightUnit: WeightUnit = .kg
+    var heightUnit: HeightUnit = .cm
     var onBack: (() -> Void)? = nil
     let onFinish: () -> Void
 
@@ -37,6 +39,8 @@ struct AllSetStep: View {
         weighInDay: Int = 2,
         weighInTime: Date,
         wantsNotifications: Bool = false,
+        weightUnit: WeightUnit = .kg,
+        heightUnit: HeightUnit = .cm,
         onBack: (() -> Void)? = nil,
         onFinish: @escaping () -> Void
     ) {
@@ -52,6 +56,8 @@ struct AllSetStep: View {
         self.weighInDay = weighInDay
         self.weighInTime = weighInTime
         self.wantsNotifications = wantsNotifications
+        self.weightUnit = weightUnit
+        self.heightUnit = heightUnit
         self.onBack = onBack
         self.onFinish = onFinish
     }
@@ -139,13 +145,13 @@ struct AllSetStep: View {
                         Divider().overlay(Color.heftDivider)
                         SummaryRow(label: String(localized: "HEDEF TÜRÜ"), value: goalType == .gain ? String(localized: "Kilo Almak (Bulk/Kas)") : (goalType == .maintain ? String(localized: "Kilo Korumak (Mevcut Form)") : String(localized: "Kilo Vermek (Fit/Yağ Yakımı)")))
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: String(localized: "BOY & YAŞ"), value: "\(HeftFormat.integer(height)) cm • \(age) \(String(localized: "yaş"))")
+                        SummaryRow(label: String(localized: "BOY & YAŞ"), value: "\(HeftFormat.heightWithUnit(height, unit: heightUnit)) • \(age) \(String(localized: "yaş"))")
                         Divider().overlay(Color.heftDivider)
                         SummaryRow(label: String(localized: "CİNSİYET"), value: gender.label)
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: String(localized: "BAŞLANGIÇ KİLOSU"), value: HeftFormat.weightKg(currentWeight))
+                        SummaryRow(label: String(localized: "BAŞLANGIÇ KİLOSU"), value: HeftFormat.weightWithUnit(currentWeight, unit: weightUnit))
                         Divider().overlay(Color.heftDivider)
-                        SummaryRow(label: String(localized: "HEDEF KİLO"), value: HeftFormat.weightKg(targetWeight))
+                        SummaryRow(label: String(localized: "HEDEF KİLO"), value: HeftFormat.weightWithUnit(targetWeight, unit: weightUnit))
                         Divider().overlay(Color.heftDivider)
                         SummaryRow(label: String(localized: "BAŞLANGIÇ BMI"), value: "\(bmiValueText) \(bmiCategoryText)")
                         Divider().overlay(Color.heftDivider)
@@ -190,6 +196,8 @@ struct AllSetStep: View {
             weighInMinute: minute,
             rawWeighInFrequency: weighInFrequency.rawValue,
             rawWeighInDays: weighInDays.map(String.init).joined(separator: ","),
+            rawWeightUnit: weightUnit.rawValue,
+            rawHeightUnit: heightUnit.rawValue,
             onboardingCompleted: true
         )
         modelContext.insert(profile)
