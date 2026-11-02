@@ -1,6 +1,24 @@
 {
   "sourceLanguage" : "tr",
   "strings" : {
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heft"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heft"
+          }
+        }
+      }
+    },
     "NSHealthShareUsageDescription" : {
       "comment" : "Privacy - Health Share Usage Description",
       "localizations" : {
@@ -38,4 +56,3 @@
   },
   "version" : "1.0"
 }
-

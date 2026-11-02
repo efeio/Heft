@@ -747,7 +747,7 @@ TRANSLATIONS = {
         "comment": "Goal lose explanation"
     },
     "Kilon %lld gündür %@ ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir.": {
-        "en": "Your weight has plateaued around %@ ± 0.4 kg for %lld days. This is a normal adaptation phase; your pace will pick back up as your metabolism adjusts.",
+        "en": "For %lld days, your weight has plateaued around %@ ± 0.4 kg. This is a normal adaptation phase; your pace will pick back up as your metabolism adjusts.",
         "comment": "Plateau pace status message"
     },
     "Kişisel Bilgiler": {
@@ -955,7 +955,7 @@ TRANSLATIONS = {
         "comment": "Empty time range chart message"
     },
     "Son %lld günde +%@ artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında.": {
-        "en": "+%@ increase over the last %lld days — likely temporary water retention. With your overall pace, your goal is still on track.",
+        "en": "Over the last %lld days, there is a +%@ increase — likely temporary water retention. With your overall pace, your goal is still on track.",
         "comment": "Water retention message"
     },
     "Son 14 Gün": {
@@ -1462,7 +1462,7 @@ def main():
     for k, info in TRANSLATIONS.items():
         src_spec = extract_format_specifiers(k)
         dst_spec = extract_format_specifiers(info["en"])
-        if sorted(src_spec) != sorted(dst_spec):
+        if src_spec != dst_spec:
             mismatches.append((k, info["en"], src_spec, dst_spec))
 
     if mismatches:

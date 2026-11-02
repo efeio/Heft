@@ -3610,7 +3610,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your weight has plateaued around %@ ± 0.4 kg for %lld days. This is a normal adaptation phase; your pace will pick back up as your metabolism adjusts."
+            "value": "For %lld days, your weight has plateaued around %@ ± 0.4 kg. This is a normal adaptation phase; your pace will pick back up as your metabolism adjusts."
           }
         },
         "tr": {
@@ -4477,7 +4477,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "+%@ increase over the last %lld days — likely temporary water retention. With your overall pace, your goal is still on track."
+            "value": "Over the last %lld days, there is a +%@ increase — likely temporary water retention. With your overall pace, your goal is still on track."
           }
         },
         "tr": {
