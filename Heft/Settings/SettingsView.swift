@@ -27,10 +27,14 @@ struct SettingsView: View {
 
     @State private var nameText = ""
     @State private var heightText = ""
+    @State private var heightFeet: Int = 5
+    @State private var heightInches: Int = 10
     @State private var ageText = ""
     @State private var gender: Gender = .male
     @State private var goalType: GoalType = .lose
     @State private var targetWeightText = ""
+    @State private var weightUnit: WeightUnit = .kg
+    @State private var heightUnit: HeightUnit = .cm
     @State private var weighInFrequency: WeighInFrequency = .weekly
     @State private var weighInDays: [Int] = [2]
     @State private var weighInDay = 2
@@ -66,6 +70,9 @@ struct SettingsView: View {
     }
 
     private var isHeightValid: Bool {
+        if heightUnit == .ftIn {
+            return heightFeet >= 3 && heightFeet <= 8
+        }
         guard let h = heightValue else { return false }
         return h >= 50 && h <= 300
     }
@@ -85,7 +92,8 @@ struct SettingsView: View {
 
     private var isTargetWeightValid: Bool {
         guard let w = targetWeightValue else { return false }
-        return w >= 20 && w <= 500
+        let kg = (weightUnit == .lbs) ? UnitConverter.lbsToKg(w) : w
+        return kg >= 20 && kg <= 500
     }
 
     private var isValid: Bool {
@@ -96,6 +104,7 @@ struct SettingsView: View {
         ScrollViewReader { proxy in
             Form {
                 profileSection
+                unitsSection
                 goalSection
                 healthKitSection
                 scheduleSection
@@ -224,35 +233,75 @@ struct SettingsView: View {
                     rowLabel("Boy", systemImage: "ruler")
                         .fixedSize(horizontal: true, vertical: false)
                     Spacer()
-                    TextField("175", text: $heightText)
-                        .textFieldStyle(.plain)
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.trailing)
-                        .font(.heftListItem)
-                        .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
-                        .padding(.vertical, 4)
-                        .focused($focusedField, equals: .height)
-                    Text("cm")
-                        .font(.heftMeta)
-                        .foregroundStyle(Color.secondary)
-                }
-
-                VStack(alignment: .leading, spacing: 6) {
-                    rowLabel("Boy", systemImage: "ruler")
-                    HStack {
+                    if heightUnit == .cm {
                         TextField("175", text: $heightText)
                             .textFieldStyle(.plain)
                             .keyboardType(.numberPad)
+                            .multilineTextAlignment(.trailing)
                             .font(.heftListItem)
+                            .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
+                            .padding(.vertical, 4)
                             .focused($focusedField, equals: .height)
                         Text("cm")
                             .font(.heftMeta)
                             .foregroundStyle(Color.secondary)
+                    } else {
+                        HStack(spacing: 8) {
+                            Picker("", selection: $heightFeet) {
+                                ForEach(3...8, id: \.self) { ft in
+                                    Text("\(ft) ft").tag(ft)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(accent)
+
+                            Picker("", selection: $heightInches) {
+                                ForEach(0...11, id: \.self) { inch in
+                                    Text("\(inch) in").tag(inch)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(accent)
+                        }
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    rowLabel("Boy", systemImage: "ruler")
+                    if heightUnit == .cm {
+                        HStack {
+                            TextField("175", text: $heightText)
+                                .textFieldStyle(.plain)
+                                .keyboardType(.numberPad)
+                                .font(.heftListItem)
+                                .focused($focusedField, equals: .height)
+                            Text("cm")
+                                .font(.heftMeta)
+                                .foregroundStyle(Color.secondary)
+                        }
+                    } else {
+                        HStack(spacing: 8) {
+                            Picker("", selection: $heightFeet) {
+                                ForEach(3...8, id: \.self) { ft in
+                                    Text("\(ft) ft").tag(ft)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(accent)
+
+                            Picker("", selection: $heightInches) {
+                                ForEach(0...11, id: \.self) { inch in
+                                    Text("\(inch) in").tag(inch)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(accent)
+                        }
                     }
                 }
             }
 
-            if !heightText.isEmpty && !isHeightValid {
+            if heightUnit == .cm && !heightText.isEmpty && !isHeightValid {
                 Label("Boy 50 ile 300 cm arasında olmalıdır.", systemImage: "exclamationmark.circle.fill")
                     .font(.caption)
                     .foregroundStyle(Color.heftError)
@@ -304,6 +353,59 @@ struct SettingsView: View {
     }
 
     @ViewBuilder
+    private var unitsSection: some View {
+        Section {
+            // Weight Unit
+            HStack {
+                rowLabel("Ağırlık Birimi", systemImage: "scalemass")
+                Spacer()
+                Picker("", selection: $weightUnit) {
+                    ForEach(WeightUnit.allCases) { unit in
+                        Text(unit.localizedName).tag(unit)
+                    }
+                }
+                .pickerStyle(.menu)
+                .tint(accent)
+            }
+            .onChange(of: weightUnit) { oldUnit, newUnit in
+                if oldUnit != newUnit, let currentVal = targetWeightValue {
+                    let kg = (oldUnit == .lbs) ? UnitConverter.lbsToKg(currentVal) : currentVal
+                    let converted = (newUnit == .lbs) ? UnitConverter.kgToLbs(kg) : kg
+                    targetWeightText = HeftFormat.weight(converted)
+                }
+            }
+
+            // Height Unit
+            HStack {
+                rowLabel("Boy Birimi", systemImage: "ruler")
+                Spacer()
+                Picker("", selection: $heightUnit) {
+                    ForEach(HeightUnit.allCases) { unit in
+                        Text(unit.localizedName).tag(unit)
+                    }
+                }
+                .pickerStyle(.menu)
+                .tint(accent)
+            }
+            .onChange(of: heightUnit) { oldUnit, newUnit in
+                if oldUnit != newUnit {
+                    if newUnit == .ftIn, let cm = heightValue {
+                        let (ft, inch) = UnitConverter.cmToFtIn(cm)
+                        heightFeet = ft
+                        heightInches = Int(inch.rounded())
+                    } else if newUnit == .cm {
+                        let cm = UnitConverter.ftInToCm(feet: heightFeet, inches: Double(heightInches))
+                        heightText = HeftFormat.integer(cm)
+                    }
+                }
+            }
+        } header: {
+            Text("BİRİMLER")
+                .heftEyebrowStyle()
+        }
+    }
+
+    @ViewBuilder
     private var goalSection: some View {
         Section {
             Picker(selection: $goalType) {
@@ -327,7 +429,7 @@ struct SettingsView: View {
                         .frame(minWidth: inputFieldMinWidth, maxWidth: inputFieldMaxWidth)
                         .padding(.vertical, 4)
                         .focused($focusedField, equals: .targetWeight)
-                    Text("kg")
+                    Text(weightUnit.label)
                         .font(.heftMeta)
                         .foregroundStyle(Color.secondary)
                 }
@@ -340,7 +442,7 @@ struct SettingsView: View {
                             .keyboardType(.decimalPad)
                             .font(.heftListItem)
                             .focused($focusedField, equals: .targetWeight)
-                        Text("kg")
+                        Text(weightUnit.label)
                             .font(.heftMeta)
                             .foregroundStyle(Color.secondary)
                     }
@@ -348,7 +450,8 @@ struct SettingsView: View {
             }
 
             if !targetWeightText.isEmpty && !isTargetWeightValid {
-                Label("Hedef kilo 20 ile 500 kg arasında olmalıdır.", systemImage: "exclamationmark.circle.fill")
+                let rangeStr = weightUnit == .lbs ? "44 - 1100 lbs" : "20 - 500 kg"
+                Label(String(localized: "Hedef kilo \(rangeStr) arasında olmalıdır.", comment: "Target weight bounds error"), systemImage: "exclamationmark.circle.fill")
                     .font(.caption)
                     .foregroundStyle(Color.heftError)
             }
@@ -711,11 +814,17 @@ struct SettingsView: View {
             return
         }
         nameText = p.name
+        weightUnit = p.weightUnit
+        heightUnit = p.heightUnit
         heightText = "\(Int(p.height))"
+        let (ft, inch) = UnitConverter.cmToFtIn(p.height)
+        heightFeet = ft
+        heightInches = Int(inch.rounded())
         ageText = "\(p.age)"
         gender = p.gender
         goalType = p.goalType
-        targetWeightText = HeftFormat.weight(p.targetWeight)
+        let displayTarget = (p.weightUnit == .lbs) ? UnitConverter.kgToLbs(p.targetWeight) : p.targetWeight
+        targetWeightText = HeftFormat.weight(displayTarget)
         weighInFrequency = p.weighInFrequency
         weighInDays = p.weighInDaysList
         weighInDay = p.weighInDay
@@ -731,7 +840,17 @@ struct SettingsView: View {
     }
 
     private func saveSettings() {
-        guard let h = heightValue, let a = ageValue, let tw = targetWeightValue else { return }
+        let effectiveHeight: Double = {
+            if heightUnit == .ftIn {
+                return UnitConverter.ftInToCm(feet: heightFeet, inches: Double(heightInches))
+            }
+            return heightValue ?? 175.0
+        }()
+
+        guard let tw = targetWeightValue else { return }
+        let effectiveTargetWeight: Double = (weightUnit == .lbs) ? UnitConverter.lbsToKg(tw) : tw
+
+        guard let a = ageValue, isHeightValid && isTargetWeightValid else { return }
 
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: weighInTime)
@@ -740,11 +859,13 @@ struct SettingsView: View {
 
         if let p = profile {
             p.name = trimmedName
-            p.height = h
+            p.height = effectiveHeight
             p.age = a
             p.gender = gender
             p.goalType = goalType
-            p.targetWeight = tw
+            p.targetWeight = effectiveTargetWeight
+            p.weightUnit = weightUnit
+            p.heightUnit = heightUnit
             p.weighInFrequency = weighInFrequency
             p.weighInDaysList = weighInDays
             p.weighInDay = weighInDays.first ?? weighInDay
@@ -756,17 +877,19 @@ struct SettingsView: View {
             }
             let newProfile = UserProfile(
                 name: trimmedName,
-                height: h,
+                height: effectiveHeight,
                 age: a,
                 gender: gender,
-                initialWeight: tw,
-                targetWeight: tw,
+                initialWeight: effectiveTargetWeight,
+                targetWeight: effectiveTargetWeight,
                 goalType: goalType,
                 weighInDay: weighInDays.first ?? weighInDay,
                 weighInHour: hour,
                 weighInMinute: minute,
                 rawWeighInFrequency: weighInFrequency.rawValue,
                 rawWeighInDays: weighInDays.map(String.init).joined(separator: ","),
+                rawWeightUnit: weightUnit.rawValue,
+                rawHeightUnit: heightUnit.rawValue,
                 onboardingCompleted: true
             )
             modelContext.insert(newProfile)
