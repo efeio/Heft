@@ -13,9 +13,18 @@ struct HistoryRow: View {
     let height: Double
     var delta: Double? = nil
     var isGainGoal: Bool = false
+    var weightUnit: WeightUnit = .kg
 
     @ScaledMetric(relativeTo: .body) private var minRowHeight: CGFloat = 52
     @ScaledMetric(relativeTo: .body) private var rowSpacing: CGFloat = 2
+
+    private var displayWeight: Double {
+        weightUnit == .lbs ? UnitConverter.kgToLbs(weight) : weight
+    }
+
+    private var displayDelta: Double? {
+        delta.map { weightUnit == .lbs ? UnitConverter.kgToLbs($0) : $0 }
+    }
 
     private static var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -38,33 +47,33 @@ struct HistoryRow: View {
 
     private var accessibilityLabel: String {
         let deltaPart: String
-        if let delta = delta {
-            if abs(delta) < 0.05 {
+        if let d = displayDelta {
+            if abs(d) < 0.05 {
                 deltaPart = String(localized: "değişim yok", comment: "No weight change delta a11y")
             } else {
-                let formattedDelta = HeftFormat.signedWeight(delta)
-                deltaPart = String(localized: "değişim \(formattedDelta) kilogram", comment: "Weight change delta a11y")
+                let formattedDelta = HeftFormat.signedWeight(d)
+                deltaPart = String(localized: "değişim \(formattedDelta) \(weightUnit.symbol)", comment: "Weight change delta a11y")
             }
         } else {
             deltaPart = String(localized: "başlangıç kaydı", comment: "Initial record a11y")
         }
-        let formattedWeight = HeftFormat.weight(weight)
-        return "\(formattedDate), \(formattedWeight) kg, \(bmiText), \(deltaPart)"
+        let formattedWeight = HeftFormat.weight(displayWeight)
+        return "\(formattedDate), \(formattedWeight) \(weightUnit.symbol), \(bmiText), \(deltaPart)"
     }
 
     @ViewBuilder
     private var deltaBadge: some View {
-        if let delta = delta {
-            let isPositive = delta > 0.001
-            let isNegative = delta < -0.001
+        if let d = displayDelta {
+            let isPositive = d > 0.001
+            let isNegative = d < -0.001
             let isGood = isGainGoal ? isPositive : isNegative
             let badgeColor = (isPositive || isNegative) ? (isGood ? Color.heftSuccess : Color.heftError) : Color.secondary
 
             let text: String = {
-                if abs(delta) < 0.05 {
-                    return HeftFormat.weightKg(0)
+                if abs(d) < 0.05 {
+                    return HeftFormat.weightWithUnit(0, unit: weightUnit)
                 }
-                return HeftFormat.signedWeightKg(delta)
+                return HeftFormat.signedWeightWithUnit(d, unit: weightUnit)
             }()
 
             Text(text)
@@ -103,11 +112,11 @@ struct HistoryRow: View {
 
                 VStack(alignment: .trailing, spacing: rowSpacing) {
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
-                        Text(HeftFormat.weight(weight))
+                        Text(HeftFormat.weight(displayWeight))
                             .font(.heftCardTitle)
                             .foregroundStyle(Color.primary)
 
-                        Text("kg")
+                        Text(weightUnit.symbol)
                             .font(.heftMeta)
                             .foregroundStyle(Color.secondary)
                     }
@@ -125,7 +134,7 @@ struct HistoryRow: View {
                     .foregroundStyle(Color.primary)
 
                 HStack {
-                    Text(HeftFormat.weightKg(weight))
+                    Text(HeftFormat.weightWithUnit(displayWeight, unit: weightUnit))
                         .font(.heftCardTitle)
                         .foregroundStyle(Color.primary)
                     Spacer()

@@ -44,12 +44,19 @@ struct AddWeightSheet: View {
         profiles.first
     }
 
+    private var weightUnit: WeightUnit {
+        profile?.weightUnit ?? .kg
+    }
+
     private var parsedWeight: Double? {
         HeftFormat.parseDouble(weightText)
     }
 
     private var isWeightValid: Bool {
         guard let w = parsedWeight else { return false }
+        if weightUnit == .lbs {
+            return w >= 44.0 && w <= 1100.0
+        }
         return w >= 20.0 && w <= 500.0
     }
 
@@ -85,10 +92,11 @@ struct AddWeightSheet: View {
         }
     }
 
-    /// Live delta between current input weight and previous record
+    /// Live delta between current input weight and previous record in display units
     private var liveDeltaFromPrevious: Double? {
         guard let current = parsedWeight, let prev = comparisonEntry else { return nil }
-        return current - prev.weight
+        let prevDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(prev.weight) : prev.weight
+        return current - prevDisplay
     }
 
     private func effectiveHealthKitDate(for date: Date) -> Date {
@@ -167,7 +175,8 @@ struct AddWeightSheet: View {
                 }
             } message: {
                 if let conflict = conflictingEntry, let weight = parsedWeight {
-                    Text("\(Self.dayMonthFormatter.string(from: selectedDate)) tarihine ait mevcut kayıt (\(HeftFormat.weightKg(conflict.weight))), yeni değer olan \(HeftFormat.weightKg(weight)) ile güncellenecektir.")
+                    let conflictDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(conflict.weight) : conflict.weight
+                    Text("\(Self.dayMonthFormatter.string(from: selectedDate)) tarihine ait mevcut kayıt (\(HeftFormat.weightWithUnit(conflictDisplay, unit: weightUnit))), yeni değer olan \(HeftFormat.weightWithUnit(weight, unit: weightUnit)) ile güncellenecektir.")
                 } else {
                     Text("Bu tarihteki mevcut kayıt güncellenecektir.")
                 }
@@ -312,7 +321,13 @@ struct AddWeightSheet: View {
     // MARK: - Hero Weight Section
     private var heroWeightSection: some View {
         VStack(spacing: 6) {
-            HeftScaleMotifView(weight: parsedWeight ?? existingEntries.first?.weight ?? 70.0)
+            let motifWeight: Double = {
+                if let p = parsedWeight {
+                    return (weightUnit == .lbs) ? UnitConverter.lbsToKg(p) : p
+                }
+                return existingEntries.first?.weight ?? 70.0
+            }()
+            HeftScaleMotifView(weight: motifWeight)
                 .padding(.bottom, 2)
 
             HStack(alignment: .firstTextBaseline, spacing: 6) {
@@ -323,14 +338,14 @@ struct AddWeightSheet: View {
                     .lineLimit(1)
                     .contentTransition(reduceMotion ? .identity : .numericText())
 
-                Text("kg")
+                Text(weightUnit.symbol)
                     .font(.title2.weight(.bold))
                     .foregroundStyle(Color.secondary)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 2)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("Girilen kilo: \(weightText.isEmpty ? "0,0" : weightText) kilogram")
+            .accessibilityLabel("Girilen kilo: \(weightText.isEmpty ? "0,0" : weightText) \(weightUnit.symbol)")
 
             // Micro Steppers (-0,1 / +0,1)
             HStack(spacing: 16) {
@@ -355,7 +370,7 @@ struct AddWeightSheet: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(KeypadPressStyle())
-                .accessibilityLabel("0,1 kilogram azalt")
+                .accessibilityLabel("0,1 \(weightUnit.symbol) azalt")
 
                 Button {
                     stepWeight(by: 0.1)
@@ -378,7 +393,7 @@ struct AddWeightSheet: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(KeypadPressStyle())
-                .accessibilityLabel("0,1 kilogram artır")
+                .accessibilityLabel("0,1 \(weightUnit.symbol) artır")
             }
         }
     }
@@ -398,10 +413,10 @@ struct AddWeightSheet: View {
                         .font(.caption2.weight(.bold))
 
                     if isGain {
-                        Text("Son tartıma göre \(HeftFormat.signedWeightKg(delta))")
+                        Text("Son tartıma göre \(HeftFormat.signedWeightWithUnit(delta, unit: weightUnit))")
                             .font(.caption.weight(.semibold))
                     } else if isLoss {
-                        Text("Son tartıma göre -\(HeftFormat.weightKg(abs(delta)))")
+                        Text("Son tartıma göre -\(HeftFormat.weightWithUnit(abs(delta), unit: weightUnit))")
                             .font(.caption.weight(.semibold))
                     } else {
                         Text("Son tartımla aynı")
@@ -416,11 +431,12 @@ struct AddWeightSheet: View {
                         .fill(isPositiveDirection ? Color.heftSuccess.opacity(0.12) : (isGain || isLoss ? Color.heftWarning.opacity(0.12) : Color.heftSurfaceSub))
                 }
             } else if let target = profile?.targetWeight {
-                let diff = current - target
+                let targetDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(target) : target
+                let diff = current - targetDisplay
                 HStack(spacing: 6) {
                     Image(systemName: "target")
                         .font(.caption2.weight(.bold))
-                    Text(String(localized: "Hedefe \(HeftFormat.weightKg(abs(diff))) kaldı", comment: "Remaining to goal badge"))
+                    Text(String(localized: "Hedefe \(HeftFormat.weightWithUnit(abs(diff), unit: weightUnit)) kaldı", comment: "Remaining to goal badge"))
                         .font(.caption.weight(.semibold))
                 }
                 .foregroundStyle(accent)
@@ -444,9 +460,9 @@ struct AddWeightSheet: View {
     private var saveButtonTitle: String {
         if let weight = parsedWeight, isWeightValid {
             if selectedDayEntry != nil {
-                return String(localized: "Kayıt Güncelle (\(HeftFormat.weightKg(weight)))", comment: "Update weight button with weight")
+                return String(localized: "Kayıt Güncelle (\(HeftFormat.weightWithUnit(weight, unit: weightUnit)))", comment: "Update weight button with weight")
             }
-            return String(localized: "Kaydet (\(HeftFormat.weightKg(weight)))", comment: "Save weight button with weight")
+            return String(localized: "Kaydet (\(HeftFormat.weightWithUnit(weight, unit: weightUnit)))", comment: "Save weight button with weight")
         }
         return selectedDayEntry != nil ? String(localized: "Kayıt Güncelle", comment: "Update weight button") : String(localized: "Kaydet", comment: "Save weight button")
     }
@@ -508,8 +524,15 @@ struct AddWeightSheet: View {
     }
 
     private func stepWeight(by delta: Double) {
-        let current = parsedWeight ?? existingEntries.first?.weight ?? 70.0
-        let newWeight = max(20.0, min(350.0, current + delta))
+        let current = parsedWeight ?? {
+            if let first = existingEntries.first {
+                return (weightUnit == .lbs) ? UnitConverter.kgToLbs(first.weight) : first.weight
+            }
+            return (weightUnit == .lbs) ? 150.0 : 70.0
+        }()
+        let minW = (weightUnit == .lbs) ? 44.0 : 20.0
+        let maxW = (weightUnit == .lbs) ? 770.0 : 350.0
+        let newWeight = max(minW, min(maxW, current + delta))
         weightText = HeftFormat.weight(newWeight)
         hasUserTyped = true
         if !reduceMotion {
@@ -524,11 +547,13 @@ struct AddWeightSheet: View {
         selectedDate = today
 
         if let existing = existingEntries.first(where: { calendar.isDate($0.date, inSameDayAs: today) }) {
-            weightText = HeftFormat.weight(existing.weight)
+            let displayVal = (weightUnit == .lbs) ? UnitConverter.kgToLbs(existing.weight) : existing.weight
+            weightText = HeftFormat.weight(displayVal)
             hasUserTyped = true
         } else if let latest = existingEntries.first {
             // Smart suggestion: prefill with latest weight so user can easily adjust with stepper
-            weightText = HeftFormat.weight(latest.weight)
+            let displayVal = (weightUnit == .lbs) ? UnitConverter.kgToLbs(latest.weight) : latest.weight
+            weightText = HeftFormat.weight(displayVal)
             hasUserTyped = false // next keypad digit will replace it
         }
     }
@@ -545,7 +570,8 @@ struct AddWeightSheet: View {
 
     private func onDateChanged(_ date: Date) {
         if let existing = existingEntries.first(where: { calendar.isDate($0.date, inSameDayAs: date) }) {
-            weightText = HeftFormat.weight(existing.weight)
+            let displayVal = (weightUnit == .lbs) ? UnitConverter.kgToLbs(existing.weight) : existing.weight
+            weightText = HeftFormat.weight(displayVal)
             hasUserTyped = true
         }
     }
@@ -564,6 +590,7 @@ struct AddWeightSheet: View {
 
     private func commitSave(overwrite: Bool) {
         guard let weight = parsedWeight else { return }
+        let weightInKg = (weightUnit == .lbs) ? UnitConverter.lbsToKg(weight) : weight
         let targetDate = effectiveHealthKitDate(for: selectedDate)
 
         let targetEntry: WeightEntry
@@ -571,11 +598,11 @@ struct AddWeightSheet: View {
         if overwrite, let existing = conflictingEntry {
             oldUUID = existing.healthKitUUID
             existing.date = targetDate
-            existing.weight = weight
+            existing.weight = weightInKg
             targetEntry = existing
         } else {
             oldUUID = nil
-            let newEntry = WeightEntry(date: targetDate, weight: weight)
+            let newEntry = WeightEntry(date: targetDate, weight: weightInKg)
             modelContext.insert(newEntry)
             targetEntry = newEntry
         }
@@ -587,7 +614,7 @@ struct AddWeightSheet: View {
                 if overwrite {
                     await HealthKitService.shared.deleteWeight(uuid: oldUUID, on: targetDate)
                 }
-                let newUUID = await HealthKitService.shared.saveWeight(weightKg: weight, date: targetDate)
+                let newUUID = await HealthKitService.shared.saveWeight(weightKg: weightInKg, date: targetDate)
                 if let uuid = newUUID {
                     await MainActor.run {
                         targetEntry.healthKitUUID = uuid

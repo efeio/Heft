@@ -13,6 +13,8 @@ struct BMIChartView: View {
     let entries: [WeightEntry]
     let height: Double
     var targetWeight: Double? = nil
+    var weightUnit: WeightUnit = .kg
+    var heightUnit: HeightUnit = .cm
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.heftAccent) private var accent
@@ -88,13 +90,20 @@ struct BMIChartView: View {
         let normalMinWeight = 18.5 * (heightM * heightM)
         let normalMaxWeight = 24.9 * (heightM * heightM)
 
+        let minWeightDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(normalMinWeight) : normalMinWeight
+        let maxWeightDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(normalMaxWeight) : normalMaxWeight
+        let rangeStr = "\(HeftFormat.integer(minWeightDisplay)) - \(HeftFormat.integer(maxWeightDisplay)) \(weightUnit.symbol)"
+        let heightStr = HeftFormat.heightWithUnit(height, unit: heightUnit)
+
         if let target = targetWeight, let targetBMI = BMICalculator.calculate(weightKg: target, heightCm: height) {
             let targetCategory = BMICalculator.category(for: targetBMI)
+            let targetDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(target) : target
+            let targetStr = "\(HeftFormat.integer(targetDisplay)) \(weightUnit.symbol)"
             return BMIInsight(
                 icon: "heart.text.square.fill",
                 color: BMICalculator.color(for: targetBMI),
                 title: String(localized: "Hedef BMI: \(HeftFormat.weight(targetBMI))", comment: "Target BMI title"),
-                message: String(localized: "\(HeftFormat.integer(target)) kg hedefine ulaştığında BMI değerin \(HeftFormat.weight(targetBMI)) (\(targetCategory)) olacak. Boyun için sağlıklı kilo aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg'dır.", comment: "Target BMI explanation")
+                message: String(localized: "\(targetStr) hedefine ulaştığında BMI değerin \(HeftFormat.weight(targetBMI)) (\(targetCategory)) olacak. Boyun için sağlıklı kilo aralığı \(rangeStr)'dir.", comment: "Target BMI explanation")
             )
         }
 
@@ -102,7 +111,7 @@ struct BMIChartView: View {
             icon: "figure.walk",
             color: accent,
             title: String(localized: "Sağlıklı Kilo Aralığı", comment: "Healthy weight range title"),
-            message: String(localized: "\(HeftFormat.integer(height)) cm boy için normal BMI (18,5 - 24,9) aralığı \(HeftFormat.integer(normalMinWeight)) - \(HeftFormat.integer(normalMaxWeight)) kg arasındadır.", comment: "Healthy weight range message")
+            message: String(localized: "\(heightStr) boy için normal BMI (18,5 - 24,9) aralığı \(rangeStr) arasındadır.", comment: "Healthy weight range message")
         )
     }
 

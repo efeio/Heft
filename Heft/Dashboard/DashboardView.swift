@@ -60,6 +60,14 @@ struct DashboardView: View {
         profile?.goalType ?? .lose
     }
 
+    private var userWeightUnit: WeightUnit {
+        profile?.weightUnit ?? .kg
+    }
+
+    private var userHeightUnit: HeightUnit {
+        profile?.heightUnit ?? .cm
+    }
+
     private var greetingTitle: String {
         guard let name = profile?.name, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return String(localized: "Ana Sayfa", comment: "Home navigation title")
@@ -78,7 +86,8 @@ struct DashboardView: View {
                                     latestWeight: latestWeight,
                                     targetWeight: targetWeight,
                                     weekAgoWeight: weekAgoWeight,
-                                    goalType: userGoalType
+                                    goalType: userGoalType,
+                                    weightUnit: userWeightUnit
                                 )
                                 .frame(maxWidth: .infinity, alignment: .top)
 
@@ -86,7 +95,8 @@ struct DashboardView: View {
                                     entries: entries,
                                     targetWeight: targetWeight,
                                     initialWeight: profile?.initialWeight ?? entries.last?.weight ?? latestWeight,
-                                    goalType: userGoalType
+                                    goalType: userGoalType,
+                                    weightUnit: userWeightUnit
                                 )
                                 .frame(maxWidth: .infinity, alignment: .top)
                             }
@@ -96,7 +106,8 @@ struct DashboardView: View {
                                 latestWeight: latestWeight,
                                 targetWeight: targetWeight,
                                 weekAgoWeight: weekAgoWeight,
-                                goalType: userGoalType
+                                goalType: userGoalType,
+                                weightUnit: userWeightUnit
                             )
 
                             // Target Projection Card
@@ -104,7 +115,8 @@ struct DashboardView: View {
                                 entries: entries,
                                 targetWeight: targetWeight,
                                 initialWeight: profile?.initialWeight ?? entries.last?.weight ?? latestWeight,
-                                goalType: userGoalType
+                                goalType: userGoalType,
+                                weightUnit: userWeightUnit
                             )
                         }
 
@@ -123,7 +135,8 @@ struct DashboardView: View {
                                 WeightChartView(
                                     entries: entries,
                                     targetWeight: targetWeight,
-                                    goalType: userGoalType
+                                    goalType: userGoalType,
+                                    weightUnit: userWeightUnit
                                 )
                                 .frame(maxWidth: .infinity, alignment: .top)
                                 .id("weightChart")
@@ -131,7 +144,9 @@ struct DashboardView: View {
                                 BMIChartView(
                                     entries: entries,
                                     height: userHeight,
-                                    targetWeight: targetWeight
+                                    targetWeight: targetWeight,
+                                    weightUnit: userWeightUnit,
+                                    heightUnit: userHeightUnit
                                 )
                                 .frame(maxWidth: .infinity, alignment: .top)
                                 .id("bmiChart")
@@ -140,14 +155,17 @@ struct DashboardView: View {
                             WeightChartView(
                                 entries: entries,
                                 targetWeight: targetWeight,
-                                goalType: userGoalType
+                                goalType: userGoalType,
+                                weightUnit: userWeightUnit
                             )
                             .id("weightChart")
 
                             BMIChartView(
                                 entries: entries,
                                 height: userHeight,
-                                targetWeight: targetWeight
+                                targetWeight: targetWeight,
+                                weightUnit: userWeightUnit,
+                                heightUnit: userHeightUnit
                             )
                             .id("bmiChart")
                         }

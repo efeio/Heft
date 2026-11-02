@@ -15,6 +15,7 @@ struct TargetProjectionCard: View {
     var initialWeight: Double? = nil
     var goalType: GoalType = .lose
     var targetWeeklyPace: Double = 0.5
+    var weightUnit: WeightUnit = .kg
 
     @Environment(\.heftAccent) private var accent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -25,6 +26,10 @@ struct TargetProjectionCard: View {
     @State private var lastEvaluatedCount: Int = -1
 
     @AppStorage("heft_last_projected_timestamp") private var lastProjectedTimestamp: Double = 0.0
+
+    private func displayWeight(_ kg: Double) -> Double {
+        weightUnit == .lbs ? UnitConverter.kgToLbs(kg) : kg
+    }
 
     private var effectiveInitialWeight: Double {
         initialWeight ?? entries.min(by: { $0.date < $1.date })?.weight ?? targetWeight
@@ -55,11 +60,12 @@ struct TargetProjectionCard: View {
     private func informalPrimaryDateRangeString(for output: ProjectionOutput) -> String {
         if output.isMaintainGoal {
             let diff = abs(output.currentWeight - output.targetWeight)
+            let diffDisplay = displayWeight(diff)
             if diff <= 0.5 {
                 return String(localized: "Formunu Koruyorsun", comment: "Maintain form text")
             }
             let sign = output.currentWeight > output.targetWeight ? "+" : "−"
-            return "\(sign)\(HeftFormat.weightKg(diff)) " + String(localized: "fark", comment: "difference suffix")
+            return "\(sign)\(HeftFormat.weightWithUnit(diffDisplay, unit: weightUnit)) " + String(localized: "fark", comment: "difference suffix")
         }
         return output.primaryDateRangeString
     }
@@ -67,9 +73,12 @@ struct TargetProjectionCard: View {
     private func informalGeneralMessage(for output: ProjectionOutput) -> String {
         switch output.condition {
         case .plateau(let days, let avgW):
-            return String(localized: "Kilon \(days) gündür \(HeftFormat.weight(avgW)) ± 0,4 kg bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir.", comment: "Plateau message")
+            let avgDisplay = displayWeight(avgW)
+            let bandDisplay = displayWeight(0.4)
+            return String(localized: "Kilon \(days) gündür \(HeftFormat.weight(avgDisplay)) ± \(HeftFormat.weight(bandDisplay)) \(weightUnit.symbol) bandında dengeleniyor. Bu normal bir adaptasyon evresidir; metabolizman alıştığında tempon yeniden hareketlenecektir.", comment: "Plateau message")
         case .weightGainAnomaly(let days, let gainKg):
-            return String(localized: "Son \(days) günde +\(HeftFormat.weightKg(gainKg)) artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında.", comment: "Water retention message")
+            let gainDisplay = displayWeight(gainKg)
+            return String(localized: "Son \(days) günde +\(HeftFormat.weightWithUnit(gainDisplay, unit: weightUnit)) artış var — muhtemelen geçici su tutulumu. Genel temponla hedefin hâlâ koruma altında.", comment: "Water retention message")
         case .goalReached:
             return String(localized: "Harika bir disiplin gösterdin. Şimdi mevcut formunu koruma zamanı.", comment: "Goal reached discipline message")
         case .maintainActive:
@@ -79,7 +88,8 @@ struct TargetProjectionCard: View {
                 : String(localized: "Hedef kilonu dengede tutmak için beslenmene dikkat et ve tartımları aksatma.", comment: "Maintain attention message")
         case .normal:
             if let catchUp = output.catchUpInfo {
-                return String(localized: "Hedef tarihine yetişmek için haftalık \(HeftFormat.weightKg(catchUp.requiredWeeklyPace)) tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor.", comment: "Catch up pace message")
+                let paceDisplay = displayWeight(catchUp.requiredWeeklyPace)
+                return String(localized: "Hedef tarihine yetişmek için haftalık \(HeftFormat.weightWithUnit(paceDisplay, unit: weightUnit)) tempoya ihtiyacın var. Mevcut temponla bitiş ileri bir tarihe sarkıyor.", comment: "Catch up pace message")
             }
             return output.generalMessage
         }
@@ -303,7 +313,7 @@ struct TargetProjectionCard: View {
                             Text("Başlangıç:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(HeftFormat.weight(milestone.startWeight))
+                            Text(HeftFormat.weightWithUnit(displayWeight(milestone.startWeight), unit: weightUnit))
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
                         }
@@ -315,7 +325,7 @@ struct TargetProjectionCard: View {
                             Text("Bugün:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(HeftFormat.weight(milestone.currentWeight))
+                            Text(HeftFormat.weightWithUnit(displayWeight(milestone.currentWeight), unit: weightUnit))
                                 .font(.caption2.weight(.bold))
                                 .foregroundStyle(Color.primary)
                         }
@@ -327,7 +337,7 @@ struct TargetProjectionCard: View {
                             Text("Bugün:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(HeftFormat.weight(milestone.currentWeight))
+                            Text(HeftFormat.weightWithUnit(displayWeight(milestone.currentWeight), unit: weightUnit))
                                 .font(.caption2.weight(.bold))
                                 .foregroundStyle(Color.primary)
                         }
@@ -340,7 +350,7 @@ struct TargetProjectionCard: View {
                         Text("Hedef:")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.secondary)
-                        Text(HeftFormat.weight(milestone.targetWeight))
+                        Text(HeftFormat.weightWithUnit(displayWeight(milestone.targetWeight), unit: weightUnit))
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(accent)
                     }
@@ -353,7 +363,7 @@ struct TargetProjectionCard: View {
                             Text("Başlangıç:")
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
-                            Text(HeftFormat.weight(milestone.startWeight))
+                            Text(HeftFormat.weightWithUnit(displayWeight(milestone.startWeight), unit: weightUnit))
                                 .font(.caption2.weight(.medium))
                                 .foregroundStyle(Color.secondary)
                         }
@@ -363,7 +373,7 @@ struct TargetProjectionCard: View {
                         Text("Bugün:")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.secondary)
-                        Text(HeftFormat.weight(milestone.currentWeight))
+                        Text(HeftFormat.weightWithUnit(displayWeight(milestone.currentWeight), unit: weightUnit))
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(Color.primary)
                     }
@@ -372,7 +382,7 @@ struct TargetProjectionCard: View {
                         Text("Hedef:")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.secondary)
-                        Text(HeftFormat.weight(milestone.targetWeight))
+                        Text(HeftFormat.weightWithUnit(displayWeight(milestone.targetWeight), unit: weightUnit))
                             .font(.caption2.weight(.bold))
                             .foregroundStyle(accent)
                     }
@@ -382,7 +392,7 @@ struct TargetProjectionCard: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(String(localized: "Hedef ilerlemesi", comment: "Goal progress accessibility label"))
         .accessibilityValue(
-            String(localized: "Başlangıç \(HeftFormat.weight(milestone.startWeight)) kilogram, güncel \(HeftFormat.weight(milestone.currentWeight)) kilogram, hedef \(HeftFormat.weight(milestone.targetWeight)) kilogram, yüzde \(HeftFormat.integer(milestone.progressFraction * 100)) tamamlandı", comment: "Goal progress accessibility value")
+            String(localized: "Başlangıç \(HeftFormat.weightWithUnit(displayWeight(milestone.startWeight), unit: weightUnit)), güncel \(HeftFormat.weightWithUnit(displayWeight(milestone.currentWeight), unit: weightUnit)), hedef \(HeftFormat.weightWithUnit(displayWeight(milestone.targetWeight), unit: weightUnit)), yüzde \(HeftFormat.integer(milestone.progressFraction * 100)) tamamlandı", comment: "Goal progress accessibility value")
         )
     }
 

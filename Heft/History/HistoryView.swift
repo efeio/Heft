@@ -32,6 +32,10 @@ struct HistoryView: View {
         profiles.first?.height ?? 175.0
     }
 
+    private var userWeightUnit: WeightUnit {
+        profiles.first?.weightUnit ?? .kg
+    }
+
     private struct MonthGroup: Identifiable {
         var id: String { title }
         let title: String
@@ -163,31 +167,36 @@ struct HistoryView: View {
                         // Summary Stats Header Card
                         if let stats = summaryStats {
                             let deltaColor: Color? = stats.delta == 0 ? nil : (isGainGoal ? (stats.delta > 0 ? .heftSuccess : .heftError) : (stats.delta < 0 ? .heftSuccess : .heftError))
+                            let displayInitial = (userWeightUnit == .lbs) ? UnitConverter.kgToLbs(stats.initial) : stats.initial
+                            let displayExtreme = (userWeightUnit == .lbs) ? UnitConverter.kgToLbs(stats.extreme) : stats.extreme
+                            let displayDelta = (userWeightUnit == .lbs) ? UnitConverter.kgToLbs(stats.delta) : stats.delta
+                            let unitSymbol = userWeightUnit.symbol
+
                             Section {
                                 ViewThatFits(in: .horizontal) {
                                     HStack(spacing: 0) {
-                                        statColumn(title: String(localized: "Başlangıç", comment: "Initial weight stat"), value: HeftFormat.weight(stats.initial), unit: "kg", fixedHorizontal: true)
+                                        statColumn(title: String(localized: "Başlangıç", comment: "Initial weight stat"), value: HeftFormat.weight(displayInitial), unit: unitSymbol, fixedHorizontal: true)
                                         Divider().frame(height: 28)
-                                        statColumn(title: stats.extremeLabel, value: HeftFormat.weight(stats.extreme), unit: "kg", fixedHorizontal: true)
+                                        statColumn(title: stats.extremeLabel, value: HeftFormat.weight(displayExtreme), unit: unitSymbol, fixedHorizontal: true)
                                         Divider().frame(height: 28)
                                         statColumn(
                                             title: String(localized: "Toplam Değişim", comment: "Total change stat"),
-                                            value: HeftFormat.signedWeight(stats.delta),
-                                            unit: "kg",
+                                            value: HeftFormat.signedWeight(displayDelta),
+                                            unit: unitSymbol,
                                             highlightColor: deltaColor,
                                             fixedHorizontal: true
                                         )
                                     }
 
                                     VStack(alignment: .leading, spacing: 8) {
-                                        statRow(title: String(localized: "Başlangıç", comment: "Initial weight stat"), value: HeftFormat.weight(stats.initial), unit: "kg")
+                                        statRow(title: String(localized: "Başlangıç", comment: "Initial weight stat"), value: HeftFormat.weight(displayInitial), unit: unitSymbol)
                                         Divider()
-                                        statRow(title: stats.extremeLabel, value: HeftFormat.weight(stats.extreme), unit: "kg")
+                                        statRow(title: stats.extremeLabel, value: HeftFormat.weight(displayExtreme), unit: unitSymbol)
                                         Divider()
                                         statRow(
                                             title: String(localized: "Toplam Değişim", comment: "Total change stat"),
-                                            value: HeftFormat.signedWeight(stats.delta),
-                                            unit: "kg",
+                                            value: HeftFormat.signedWeight(displayDelta),
+                                            unit: unitSymbol,
                                             highlightColor: deltaColor
                                         )
                                     }
@@ -208,7 +217,8 @@ struct HistoryView: View {
                                             weight: entry.weight,
                                             height: userHeight,
                                             delta: delta(for: entry),
-                                            isGainGoal: isGainGoal
+                                            isGainGoal: isGainGoal,
+                                            weightUnit: userWeightUnit
                                         )
                                     }
                                     .buttonStyle(.plain)

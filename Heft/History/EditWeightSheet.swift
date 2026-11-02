@@ -16,6 +16,7 @@ struct EditWeightSheet: View {
     let entry: WeightEntry
 
     @Query(sort: \WeightEntry.date, order: .reverse) private var existingEntries: [WeightEntry]
+    @Query private var profiles: [UserProfile]
 
     @ScaledMetric(relativeTo: .body) private var horizontalPadding: CGFloat = 20
     @ScaledMetric(relativeTo: .body) private var heroMinHeight: CGFloat = 58
@@ -29,12 +30,23 @@ struct EditWeightSheet: View {
     @State private var saveSuccessTrigger = false
     @FocusState private var isWeightFocused: Bool
 
+    private var profile: UserProfile? {
+        profiles.first
+    }
+
+    private var weightUnit: WeightUnit {
+        profile?.weightUnit ?? .kg
+    }
+
     private var parsedWeight: Double? {
         HeftFormat.parseDouble(weightText)
     }
 
     private var isWeightValid: Bool {
         guard let w = parsedWeight else { return false }
+        if weightUnit == .lbs {
+            return w >= 44.0 && w <= 1100.0
+        }
         return w >= 20.0 && w <= 500.0
     }
 
@@ -87,7 +99,7 @@ struct EditWeightSheet: View {
                             isWeightFocused = true
                         }
 
-                        Text("kg")
+                        Text(weightUnit.symbol)
                             .font(.heftMeta)
                             .foregroundStyle(Color.secondary)
                     }
@@ -175,7 +187,8 @@ struct EditWeightSheet: View {
                 }
             }
             .onAppear {
-                weightText = HeftFormat.weight(entry.weight)
+                let displayWeight = (weightUnit == .lbs) ? UnitConverter.kgToLbs(entry.weight) : entry.weight
+                weightText = HeftFormat.weight(displayWeight)
                 selectedDate = entry.date
             }
             .confirmationDialog(
@@ -210,7 +223,8 @@ struct EditWeightSheet: View {
                 }
             } message: {
                 if let conflict = conflictingEntry, let weight = parsedWeight {
-                    Text("Bu tarihe ait mevcut kayıt (\(HeftFormat.weightKg(conflict.weight))), yeni değer olan \(HeftFormat.weightKg(weight)) ile güncellenecek.")
+                    let conflictDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(conflict.weight) : conflict.weight
+                    Text("Bu tarihe ait mevcut kayıt (\(HeftFormat.weightWithUnit(conflictDisplay, unit: weightUnit))), yeni değer olan \(HeftFormat.weightWithUnit(weight, unit: weightUnit)) ile güncellenecek.")
                 } else {
                     Text("Bu tarihteki mevcut kayıt güncellenecek.")
                 }
@@ -245,11 +259,12 @@ struct EditWeightSheet: View {
     }
 
     private func applyUpdate(weight: Double) {
+        let weightInKg = (weightUnit == .lbs) ? UnitConverter.lbsToKg(weight) : weight
         let oldDate = entry.date
         let oldUUID = entry.healthKitUUID
         let targetDate = effectiveHealthKitDate(for: selectedDate)
 
-        entry.weight = weight
+        entry.weight = weightInKg
         entry.date = targetDate
 
         var conflictUUID: UUID? = nil
@@ -270,7 +285,7 @@ struct EditWeightSheet: View {
                 if let cUUID = conflictUUID, let cDate = conflictDate {
                     await HealthKitService.shared.deleteWeight(uuid: cUUID, on: cDate)
                 }
-                let newUUID = await HealthKitService.shared.saveWeight(weightKg: weight, date: targetDate)
+                let newUUID = await HealthKitService.shared.saveWeight(weightKg: weightInKg, date: targetDate)
                 if let uuid = newUUID {
                     await MainActor.run {
                         entry.healthKitUUID = uuid

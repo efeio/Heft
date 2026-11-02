@@ -12,8 +12,17 @@ struct SummaryCardView: View {
     let targetWeight: Double
     let weekAgoWeight: Double?
     var goalType: GoalType = .lose
+    var weightUnit: WeightUnit = .kg
 
     @Environment(\.heftAccent) private var accent
+
+    private var displayLatest: Double {
+        weightUnit == .lbs ? UnitConverter.kgToLbs(latestWeight) : latestWeight
+    }
+
+    private var displayTarget: Double {
+        weightUnit == .lbs ? UnitConverter.kgToLbs(targetWeight) : targetWeight
+    }
 
     private var isGainGoal: Bool {
         goalType == .gain
@@ -25,9 +34,9 @@ struct SummaryCardView: View {
 
     private var diffToTarget: Double {
         if isGainGoal {
-            return targetWeight - latestWeight
+            return displayTarget - displayLatest
         } else {
-            return latestWeight - targetWeight
+            return displayLatest - displayTarget
         }
     }
 
@@ -46,23 +55,23 @@ struct SummaryCardView: View {
             return isMaintainGoal ? String(localized: "Formunu koruyorsun", comment: "Pill maintain success") : String(localized: "Hedefe ulaşıldı", comment: "Pill goal reached")
         }
         if isMaintainGoal {
-            let diff = latestWeight - targetWeight
+            let diff = displayLatest - displayTarget
             if diff > 0 {
-                return "+\(HeftFormat.weightKg(diff)) " + String(localized: "fark", comment: "difference suffix")
+                return "+\(HeftFormat.weightWithUnit(diff, unit: weightUnit)) " + String(localized: "fark", comment: "difference suffix")
             } else {
-                return "−\(HeftFormat.weightKg(abs(diff))) " + String(localized: "fark", comment: "difference suffix")
+                return "−\(HeftFormat.weightWithUnit(abs(diff), unit: weightUnit)) " + String(localized: "fark", comment: "difference suffix")
             }
         } else if isGainGoal {
             if diffToTarget > 0 {
-                return "+\(HeftFormat.weightKg(diffToTarget)) " + String(localized: "kaldı", comment: "remaining to gain")
+                return "+\(HeftFormat.weightWithUnit(diffToTarget, unit: weightUnit)) " + String(localized: "kaldı", comment: "remaining to gain")
             } else {
-                return "+\(HeftFormat.weightKg(abs(diffToTarget))) " + String(localized: "hedef üstü", comment: "above target")
+                return "+\(HeftFormat.weightWithUnit(abs(diffToTarget), unit: weightUnit)) " + String(localized: "hedef üstü", comment: "above target")
             }
         } else {
             if diffToTarget > 0 {
-                return "−\(HeftFormat.weightKg(diffToTarget)) " + String(localized: "kaldı", comment: "remaining to lose")
+                return "−\(HeftFormat.weightWithUnit(diffToTarget, unit: weightUnit)) " + String(localized: "kaldı", comment: "remaining to lose")
             } else {
-                return "−\(HeftFormat.weightKg(abs(diffToTarget))) " + String(localized: "hedef altı", comment: "below target")
+                return "−\(HeftFormat.weightWithUnit(abs(diffToTarget), unit: weightUnit)) " + String(localized: "hedef altı", comment: "below target")
             }
         }
     }
@@ -73,7 +82,8 @@ struct SummaryCardView: View {
 
     private var weeklyDiff: Double? {
         guard let prev = weekAgoWeight else { return nil }
-        return latestWeight - prev
+        let prevDisplay = (weightUnit == .lbs) ? UnitConverter.kgToLbs(prev) : prev
+        return displayLatest - prevDisplay
     }
 
     private var weeklyChangeText: String {
@@ -81,11 +91,11 @@ struct SummaryCardView: View {
             return String(localized: "Bu hafta: —", comment: "Weekly change empty")
         }
         if abs(diff) < 0.05 {
-            return String(localized: "Bu hafta: \(HeftFormat.weightKg(0))", comment: "Weekly change zero")
+            return String(localized: "Bu hafta: \(HeftFormat.weightWithUnit(0, unit: weightUnit))", comment: "Weekly change zero")
         } else if diff < 0 {
-            return String(localized: "Bu hafta: −\(HeftFormat.weightKg(abs(diff)))", comment: "Weekly change loss")
+            return String(localized: "Bu hafta: −\(HeftFormat.weightWithUnit(abs(diff), unit: weightUnit))", comment: "Weekly change loss")
         } else {
-            return String(localized: "Bu hafta: +\(HeftFormat.weightKg(diff))", comment: "Weekly change gain")
+            return String(localized: "Bu hafta: +\(HeftFormat.weightWithUnit(diff, unit: weightUnit))", comment: "Weekly change gain")
         }
     }
 
@@ -118,11 +128,11 @@ struct SummaryCardView: View {
     private var accessibilityAnnouncement: String {
         let weeklyStr: String
         if let diff = weeklyDiff {
-            weeklyStr = "\(diff >= 0 ? "+" : "−")\(HeftFormat.weightKg(abs(diff)))"
+            weeklyStr = "\(diff >= 0 ? "+" : "−")\(HeftFormat.weightWithUnit(abs(diff), unit: weightUnit))"
         } else {
             weeklyStr = String(localized: "değişim yok", comment: "No change")
         }
-        return String(localized: "Mevcut kilo \(HeftFormat.weightKg(latestWeight)), hedef \(HeftFormat.weightKg(targetWeight)), \(remainingPillText), bu hafta \(weeklyStr).", comment: "Summary card a11y announcement")
+        return String(localized: "Mevcut kilo \(HeftFormat.weightWithUnit(displayLatest, unit: weightUnit)), hedef \(HeftFormat.weightWithUnit(displayTarget, unit: weightUnit)), \(remainingPillText), bu hafta \(weeklyStr).", comment: "Summary card a11y announcement")
     }
 
     // MARK: - Pill Views
@@ -171,11 +181,11 @@ struct SummaryCardView: View {
                             .fixedSize(horizontal: true, vertical: false)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(HeftFormat.weight(latestWeight))
+                            Text(HeftFormat.weight(displayLatest))
                                 .font(.heftHeroStat)
                                 .foregroundStyle(Color.primary)
 
-                            Text("kg")
+                            Text(weightUnit.symbol)
                                 .font(.heftMetaSemibold)
                                 .foregroundStyle(Color.secondary)
                         }
@@ -192,11 +202,11 @@ struct SummaryCardView: View {
                             .fixedSize(horizontal: true, vertical: false)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(HeftFormat.weight(targetWeight))
+                            Text(HeftFormat.weight(displayTarget))
                                 .font(.heftCardTitle)
                                 .foregroundStyle(Color.primary)
 
-                            Text("kg")
+                            Text(weightUnit.symbol)
                                 .font(.heftMetaSemibold)
                                 .foregroundStyle(Color.secondary)
                         }
@@ -211,12 +221,12 @@ struct SummaryCardView: View {
                             .foregroundStyle(Color.secondary)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(HeftFormat.weight(latestWeight))
+                            Text(HeftFormat.weight(displayLatest))
                                 .font(.heftHeroStat)
                                 .foregroundStyle(Color.primary)
                                 .minimumScaleFactor(0.8)
 
-                            Text("kg")
+                            Text(weightUnit.symbol)
                                 .font(.heftMetaSemibold)
                                 .foregroundStyle(Color.secondary)
                         }
@@ -228,11 +238,11 @@ struct SummaryCardView: View {
                             .foregroundStyle(Color.secondary)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(HeftFormat.weight(targetWeight))
+                            Text(HeftFormat.weight(displayTarget))
                                 .font(.heftCardTitle)
                                 .foregroundStyle(Color.primary)
 
-                            Text("kg")
+                            Text(weightUnit.symbol)
                                 .font(.heftMetaSemibold)
                                 .foregroundStyle(Color.secondary)
                         }

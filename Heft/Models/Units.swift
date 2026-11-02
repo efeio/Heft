@@ -32,6 +32,10 @@ public enum WeightUnit: String, Codable, CaseIterable, Identifiable {
             return String(localized: "lbs", comment: "Short weight unit lbs")
         }
     }
+
+    public var symbol: String {
+        shortName
+    }
 }
 
 public enum HeightUnit: String, Codable, CaseIterable, Identifiable {
@@ -45,6 +49,10 @@ public enum HeightUnit: String, Codable, CaseIterable, Identifiable {
         case .cm: return "cm"
         case .ftIn: return "ft / in"
         }
+    }
+
+    public var symbol: String {
+        label
     }
 
     public var localizedName: String {

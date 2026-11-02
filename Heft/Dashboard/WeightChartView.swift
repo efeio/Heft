@@ -12,6 +12,7 @@ struct WeightChartView: View {
     let entries: [WeightEntry]
     let targetWeight: Double
     var goalType: GoalType = .lose
+    var weightUnit: WeightUnit = .kg
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.heftAccent) private var accent
@@ -19,6 +20,10 @@ struct WeightChartView: View {
     @ScaledMetric(relativeTo: .body) private var insightIconSize: CGFloat = 28
     @ScaledMetric(relativeTo: .body) private var singleChartHeight: CGFloat = 160
     @ScaledMetric(relativeTo: .body) private var fullChartHeight: CGFloat = 200
+
+    private func displayWeight(_ kg: Double) -> Double {
+        weightUnit == .lbs ? UnitConverter.kgToLbs(kg) : kg
+    }
 
     @State private var selectedRange: ChartTimeRange = {
         #if DEBUG
@@ -69,20 +74,20 @@ struct WeightChartView: View {
         guard let active = active, let first = activeEntries.first ?? allSortedEntries.first else { return nil }
         guard (activeEntries.count >= 2 || allSortedEntries.count >= 2) else { return nil }
 
-        let delta = active.weight - first.weight
+        let delta = displayWeight(active.weight) - displayWeight(first.weight)
         if active.id == first.id {
             return (String(localized: "Başlangıç", comment: "Starting weight badge"), false)
         }
 
         let isSuccess: Bool
         if isMaintainGoal {
-            isSuccess = abs(delta) <= 0.5
+            isSuccess = abs(delta) <= (weightUnit == .lbs ? 1.1 : 0.5)
         } else if isGainGoal {
             isSuccess = delta > 0
         } else {
             isSuccess = delta < 0
         }
-        return (HeftFormat.signedWeightKg(delta), isSuccess)
+        return (HeftFormat.signedWeightWithUnit(delta, unit: weightUnit), isSuccess)
     }
 
     // MARK: - Motivational Insight
@@ -94,7 +99,7 @@ struct WeightChartView: View {
     }
 
     private func currentInsight(for allSortedEntries: [WeightEntry]) -> MotivationInsight {
-        guard let current = allSortedEntries.last?.weight else {
+        guard let currentKg = allSortedEntries.last?.weight else {
             return MotivationInsight(
                 icon: "chart.line.uptrend.xyaxis",
                 color: accent,
@@ -103,20 +108,23 @@ struct WeightChartView: View {
             )
         }
 
-        let allWeights = allSortedEntries.map(\.weight)
-        let initialWeight = allSortedEntries.first?.weight ?? current
+        let current = displayWeight(currentKg)
+        let displayTarget = displayWeight(targetWeight)
+        let allWeights = allSortedEntries.map { displayWeight($0.weight) }
+        let initialWeight = allWeights.first ?? current
 
         if isMaintainGoal {
-            let diff = abs(current - targetWeight)
-            if diff <= 0.5 {
+            let diff = abs(current - displayTarget)
+            let threshold = (weightUnit == .lbs ? 1.1 : 0.5)
+            if diff <= threshold {
                 return MotivationInsight(
                     icon: "checkmark.seal.fill",
                     color: .heftSuccess,
                     title: String(localized: "Formunu Koruyorsun", comment: "Insight maintain title"),
-                    message: String(localized: "Hedef kilon olan \(HeftFormat.weightKg(targetWeight)) seviyesini başarıyla koruyorsun. İstikrarını sürdür.", comment: "Insight maintain success msg")
+                    message: String(localized: "Hedef kilon olan \(HeftFormat.weightWithUnit(displayTarget, unit: weightUnit)) seviyesini başarıyla koruyorsun. İstikrarını sürdür.", comment: "Insight maintain success msg")
                 )
             } else {
-                let status = current > targetWeight ? "+\(HeftFormat.weightKg(diff)) " + String(localized: "fazla", comment: "above target") : "−\(HeftFormat.weightKg(diff)) " + String(localized: "eksik", comment: "below target")
+                let status = current > displayTarget ? "+\(HeftFormat.weightWithUnit(diff, unit: weightUnit)) " + String(localized: "fazla", comment: "above target") : "−\(HeftFormat.weightWithUnit(diff, unit: weightUnit)) " + String(localized: "eksik", comment: "below target")
                 return MotivationInsight(
                     icon: "equal.circle.fill",
                     color: accent,
@@ -126,14 +134,14 @@ struct WeightChartView: View {
             }
         } else if isGainGoal {
             let maxWeight = allWeights.max() ?? current
-            let distanceToTarget = targetWeight - current
+            let distanceToTarget = displayTarget - current
 
-            if current >= targetWeight {
+            if current >= displayTarget {
                 return MotivationInsight(
                     icon: "trophy.fill",
                     color: .heftSuccess,
                     title: String(localized: "Hedefine Ulaştın", comment: "Insight goal reached title"),
-                    message: String(localized: "\(HeftFormat.weightKg(targetWeight)) hedefine başarıyla ulaştın. Formunu korumak için aynı kararlılıkla devam et.", comment: "Insight goal reached gain msg")
+                    message: String(localized: "\(HeftFormat.weightWithUnit(displayTarget, unit: weightUnit)) hedefine başarıyla ulaştın. Formunu korumak için aynı kararlılıkla devam et.", comment: "Insight goal reached gain msg")
                 )
             }
 
@@ -142,26 +150,26 @@ struct WeightChartView: View {
                     icon: "chart.line.uptrend.xyaxis",
                     color: .heftSuccess,
                     title: String(localized: "En Yüksek Kilo Kaydı", comment: "Insight highest weight title"),
-                    message: String(localized: "Heft'teki en yüksek kilona ulaştın. Hedefe yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight highest weight msg")
+                    message: String(localized: "Heft'teki en yüksek kilona ulaştın. Hedefe yalnızca \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) kaldı.", comment: "Insight highest weight msg")
                 )
             }
 
-            if allSortedEntries.count >= 2 {
-                let prev = allSortedEntries[allSortedEntries.count - 2].weight
+            if allWeights.count >= 2 {
+                let prev = allWeights[allWeights.count - 2]
                 if current > prev {
                     let gained = current - prev
                     return MotivationInsight(
                         icon: "arrow.up.right.circle.fill",
                         color: .heftSuccess,
                         title: String(localized: "İlerleme Devam Ediyor", comment: "Insight progress continues title"),
-                        message: String(localized: "Son tartıma göre +\(HeftFormat.weightKg(gained)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight gained progress msg")
+                        message: String(localized: "Son tartıma göre +\(HeftFormat.weightWithUnit(gained, unit: weightUnit)) kaydettin. Hedefe \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) kaldı.", comment: "Insight gained progress msg")
                     )
                 } else if current < prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
                         title: String(localized: "İstikrarını Koru", comment: "Insight stay consistent title"),
-                        message: String(localized: "Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük kalori ve su dalgalanmaları doğaldır.", comment: "Insight fluctuations msg")
+                        message: String(localized: "Hedefe \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) kaldı. Günlük kalori ve su dalgalanmaları doğaldır.", comment: "Insight fluctuations msg")
                     )
                 }
             }
@@ -170,18 +178,18 @@ struct WeightChartView: View {
                 icon: "target",
                 color: accent,
                 title: String(localized: "Hedefe Doğru", comment: "Insight towards goal title"),
-                message: String(localized: "Kilo alma hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni takip et.", comment: "Insight towards goal gain msg")
+                message: String(localized: "Kilo alma hedefine ulaşmak için \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) mesafe var. Düzenli tartılarak ilerlemeni takip et.", comment: "Insight towards goal gain msg")
             )
         } else {
             let minWeight = allWeights.min() ?? current
-            let distanceToTarget = current - targetWeight
+            let distanceToTarget = current - displayTarget
 
-            if current <= targetWeight {
+            if current <= displayTarget {
                 return MotivationInsight(
                     icon: "trophy.fill",
                     color: .heftSuccess,
                     title: String(localized: "Hedefine Ulaştın", comment: "Insight goal reached title"),
-                    message: String(localized: "\(HeftFormat.weightKg(targetWeight)) hedefine ulaştın. Sağlıklı kilonu korumak için aynı kararlılıkla devam et.", comment: "Insight goal reached lose msg")
+                    message: String(localized: "\(HeftFormat.weightWithUnit(displayTarget, unit: weightUnit)) hedefine ulaştın. Sağlıklı kilonu korumak için aynı kararlılıkla devam et.", comment: "Insight goal reached lose msg")
                 )
             }
 
@@ -190,26 +198,26 @@ struct WeightChartView: View {
                     icon: "chart.line.downtrend.xyaxis",
                     color: .heftSuccess,
                     title: String(localized: "En Düşük Kilo Kaydı", comment: "Insight lowest weight title"),
-                    message: String(localized: "Heft'teki en düşük kilonu kaydettin. Hedefine yalnızca \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight lowest weight msg")
+                    message: String(localized: "Heft'teki en düşük kilonu kaydettin. Hedefine yalnızca \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) kaldı.", comment: "Insight lowest weight msg")
                 )
             }
 
-            if allSortedEntries.count >= 2 {
-                let prev = allSortedEntries[allSortedEntries.count - 2].weight
+            if allWeights.count >= 2 {
+                let prev = allWeights[allWeights.count - 2]
                 if current < prev {
                     let lost = prev - current
                     return MotivationInsight(
                         icon: "arrow.down.right.circle.fill",
                         color: .heftSuccess,
                         title: String(localized: "İlerleme Devam Ediyor", comment: "Insight progress continues title"),
-                        message: String(localized: "Son tartıma göre \(HeftFormat.weightKg(lost)) kaydettin. Hedefe \(HeftFormat.weightKg(distanceToTarget)) kaldı.", comment: "Insight lost progress msg")
+                        message: String(localized: "Son tartıma göre -\(HeftFormat.weightWithUnit(lost, unit: weightUnit)) kaydettin. Hedefe \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) kaldı.", comment: "Insight lost progress msg")
                     )
                 } else if current > prev {
                     return MotivationInsight(
                         icon: "flame.fill",
                         color: .heftWarning,
                         title: String(localized: "İstikrarını Koru", comment: "Insight stay consistent title"),
-                        message: String(localized: "Hedefine \(HeftFormat.weightKg(distanceToTarget)) kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır.", comment: "Insight water retention msg")
+                        message: String(localized: "Hedefine \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) kaldı. Günlük su ve tuz dalgalanmaları oldukça doğaldır.", comment: "Insight water retention msg")
                     )
                 }
             }
@@ -218,7 +226,7 @@ struct WeightChartView: View {
                 icon: "target",
                 color: accent,
                 title: String(localized: "Hedefe Doğru", comment: "Insight towards goal title"),
-                message: String(localized: "Hedefine ulaşmak için \(HeftFormat.weightKg(distanceToTarget)) mesafe var. Düzenli tartılarak ilerlemeni izle.", comment: "Insight towards goal lose msg")
+                message: String(localized: "Hedefine ulaşmak için \(HeftFormat.weightWithUnit(distanceToTarget, unit: weightUnit)) mesafe var. Düzenli tartılarak ilerlemeni izle.", comment: "Insight towards goal lose msg")
             )
         }
     }
@@ -315,10 +323,11 @@ struct WeightChartView: View {
             return currentActiveEntries.last ?? allSorted.last
         }()
         let activeId = currentActiveEntry?.id
-        let activeWeights = currentActiveEntries.map(\.weight)
-        let allWeights = allSorted.map(\.weight)
-        let currentYMin = (activeWeights.min() ?? allWeights.min() ?? 50.0) - 1.5
-        let currentYMax = max(currentYMin + 2.0, (activeWeights.max() ?? allWeights.max() ?? 100.0) + 1.5)
+        let displayTarget = displayWeight(targetWeight)
+        let activeWeights = currentActiveEntries.map { displayWeight($0.weight) }
+        let allWeights = allSorted.map { displayWeight($0.weight) }
+        let currentYMin = (activeWeights.min() ?? allWeights.min() ?? displayWeight(50.0)) - 1.5
+        let currentYMax = max(currentYMin + 2.0, (activeWeights.max() ?? allWeights.max() ?? displayWeight(100.0)) + 1.5)
         let currentXDomain = selectedRange.dateRange(relativeTo: refDate, allDates: allDates)
         let currentXAxisDates = selectedRange.xAxisDates(referenceDate: refDate, allDates: allDates)
 
@@ -352,11 +361,11 @@ struct WeightChartView: View {
                 if let active = currentActiveEntry {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
-                            Text(HeftFormat.weight(active.weight))
+                            Text(HeftFormat.weight(displayWeight(active.weight)))
                                 .font(.title.weight(.bold))
                                 .foregroundStyle(Color.primary)
 
-                            Text("kg")
+                            Text(weightUnit.symbol)
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(Color.secondary)
                         }
@@ -455,8 +464,8 @@ struct WeightChartView: View {
             } else {
                 Chart {
                     // Target Weight RuleMark (Item 11)
-                    if targetWeight >= currentYMin && targetWeight <= currentYMax {
-                        RuleMark(y: .value("Hedef", targetWeight))
+                    if displayTarget >= currentYMin && displayTarget <= currentYMax {
+                        RuleMark(y: .value("Hedef", displayTarget))
                             .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
                             .foregroundStyle(Color.heftTeal)
                             .annotation(position: .trailing, alignment: .trailing) {
@@ -480,7 +489,7 @@ struct WeightChartView: View {
                             AreaMark(
                                 x: .value("Tarih", entry.date),
                                 yStart: .value("Taban", currentYMin),
-                                yEnd: .value("Kilo", entry.weight)
+                                yEnd: .value("Kilo", displayWeight(entry.weight))
                             )
                             .interpolationMethod(.catmullRom)
                             .foregroundStyle(
@@ -498,7 +507,7 @@ struct WeightChartView: View {
                         ForEach(currentActiveEntries) { entry in
                             LineMark(
                                 x: .value("Tarih", entry.date),
-                                y: .value("Kilo", entry.weight)
+                                y: .value("Kilo", displayWeight(entry.weight))
                             )
                             .interpolationMethod(.catmullRom)
                             .foregroundStyle(accent)
@@ -512,10 +521,10 @@ struct WeightChartView: View {
 
                         PointMark(
                             x: .value("Tarih", entry.date),
-                            y: .value("Kilo", entry.weight)
+                            y: .value("Kilo", displayWeight(entry.weight))
                         )
                         .accessibilityLabel(Self.fullDateFormatter.string(from: entry.date))
-                        .accessibilityValue("\(HeftFormat.weight(entry.weight)) kilogram")
+                        .accessibilityValue("\(HeftFormat.weight(displayWeight(entry.weight))) \(weightUnit.symbol)")
                         .symbol {
                             ZStack {
                                 if isSelected {
