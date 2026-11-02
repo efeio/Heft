@@ -6120,6 +6120,23 @@
         }
       },
       "comment": "Generic operation error message"
+    },
+    "Güncellemeyi Kaydet": {
+      "comment": "Update entry save button title in edit weight sheet",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save Changes"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Güncellemeyi Kaydet"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
