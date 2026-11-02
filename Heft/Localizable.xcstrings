@@ -5786,7 +5786,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "age"
+            "value": "yrs old"
           }
         },
         "tr": {
@@ -6134,6 +6134,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Güncellemeyi Kaydet"
+          }
+        }
+      }
+    },
+    "Profil oluşturulurken bir hata meydana geldi. Lütfen tekrar dene.": {
+      "comment": "Error message when initial profile creation fails in onboarding",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An error occurred while creating your profile. Please try again."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil oluşturulurken bir hata meydana geldi. Lütfen tekrar dene."
           }
         }
       }
