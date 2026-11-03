@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heft - Gizlilik Politikası / Privacy Policy</title>
+    <style>
+        :root {
+            --bg-color: #0c0e12;
+            --card-bg: #161a22;
+            --text-primary: #f0f3f6;
+            --text-secondary: #8b949e;
+            --accent: #2f81f7;
+            --border: #30363d;
+        }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-color: #f6f8fa;
+                --card-bg: #ffffff;
+                --text-primary: #1f2328;
+                --text-secondary: #656d76;
+                --accent: #0969da;
+                --border: #d0d7de;
+            }
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+            margin-bottom: 28px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2f81f7, #1f6feb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 22px;
+        }
+        h1 {
+            font-size: 26px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .date {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .lang-switch {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        h2 {
+            font-size: 18px;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 6px;
+        }
+        p, li {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+        strong {
+            color: var(--text-primary);
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(47, 129, 247, 0.12);
+            color: var(--accent);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-area">
+                <div class="logo-icon">H</div>
+                <div>
+                    <h1>Heft</h1>
+                    <div class="date" id="date-label">Son Güncelleme: 3 Kasım 2026</div>
+                </div>
+            </div>
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="setLang('tr')">TR</button>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </div>
+
+        <!-- TURKISH CONTENT -->
+        <div id="content-tr">
+            <span class="badge">Gizlilik Öncelikli Mimari</span>
+            <p><strong>Heft</strong> olarak gizliliğinize en üst düzeyde önem veriyoruz. Heft, sağlık ve kilo verilerinizin yalnızca size ait olması gerektiği prensibiyle geliştirilmiştir.</p>
+
+            <h2>1. Toplamadığımız Bilgiler</h2>
+            <ul>
+                <li>Heft'i kullanmak için bir hesap açmanız gerekmez.</li>
+                <li>Kişisel verileriniz, kilo kayıtlarınız, vücut ölçüleriniz veya hedefleriniz <strong>hiçbir uzak sunucuya aktarılmaz ve depolanmaz</strong>.</li>
+                <li>Uygulamada üçüncü taraf takip (tracking) araçları, reklam kütüphaneleri veya veri madenciliği servisleri bulunmaz.</li>
+            </ul>
+
+            <h2>2. Cihaz İçi Veri Saklama (SwiftData)</h2>
+            <p>Heft içerisine girdiğiniz tüm kayıtlar (kilo, hedef, boy, yaş, birim tercihleri) yalnızca kendi cihazınızda, Apple'ın <strong>SwiftData</strong> çerçevesi ve cihaz seviyesinde şifreleme ile güvenle saklanır.</p>
+
+            <h2>3. Apple Sağlık (HealthKit) Entegrasyonu</h2>
+            <p>Heft, Apple Sağlık ile isteğe bağlı senkronizasyon sağlar:</p>
+            <ul>
+                <li><strong>Okuma İzni:</strong> Apple Sağlık'taki vücut ağırlığı geçmişinizi okuyarak grafiklerinizi ve hedef analizinizi doğru oluşturmak için kullanılır.</li>
+                <li><strong>Yazma İzni:</strong> Uygulamaya girdiğiniz yeni tartımları Apple Sağlık'a kaydederek sağlık geçmişinizi güncel tutar.</li>
+                <li><strong>Üçüncü Taraflarla Paylaşılmaz:</strong> Apple HealthKit kuralları gereğince sağlık verileriniz reklam, pazarlama veya veri komisyoncularıyla asla paylaşılmaz ve satılmaz.</li>
+                <li><strong>Kullanıcı Kontrolü:</strong> Bu izinleri dilediğiniz an iOS <em>Ayarlar > Sağlık > Veri Erişimi ve Cihazlar > Heft</em> menüsünden yönetebilirsiniz.</li>
+            </ul>
+
+            <h2>4. Tıbbi Sorumluluk Reddi</h2>
+            <p>Heft yalnızca kilo takibi ve görselleştirme amaçlı bir araçtır; tıbbi teşhis, tedavi veya klinik tavsiye niteliği taşımaz. Sağlık programlarınız ve diyet değişiklikleriniz için daima uzman bir hekime danışınız.</p>
+
+            <h2>5. İletişim</h2>
+            <p>Gizlilik politikamızla ilgili her türlü soru ve geri bildiriminiz için bize ulaşabilirsiniz:</p>
+            <p><strong>Geliştirici:</strong> Efe Koç<br>
+            <strong>E-posta:</strong> efe.koc@icloud.com</p>
+        </div>
+
+        <!-- ENGLISH CONTENT -->
+        <div id="content-en" style="display: none;">
+            <span class="badge">Privacy-First Architecture</span>
+            <p>At <strong>Heft</strong>, your privacy is fundamentally important to us. Heft is designed with a strict privacy-first architecture: your health and weight data belongs solely to you.</p>
+
+            <h2>1. Information We Do Not Collect</h2>
+            <ul>
+                <li>No account creation or registration is required.</li>
+                <li>We <strong>do not collect, store, or transmit</strong> your weight entries, body measurements, or health records to any external server.</li>
+                <li>Heft contains no third-party tracking frameworks, advertising SDKs, or data brokers.</li>
+            </ul>
+
+            <h2>2. On-Device Storage (SwiftData)</h2>
+            <p>All data you enter into Heft is stored strictly on your local device using Apple's <strong>SwiftData</strong> framework and protected by iOS device-level hardware encryption.</p>
+
+            <h2>3. Apple Health (HealthKit) Integration</h2>
+            <p>Heft offers seamless, optional synchronization with Apple Health:</p>
+            <ul>
+                <li><strong>Read Access:</strong> Reads body weight records from Apple Health to build your historical trend charts and milestone progress.</li>
+                <li><strong>Write Access:</strong> Writes your logged weigh-ins to Apple Health to keep your central health profile unified.</li>
+                <li><strong>No Third-Party Sharing:</strong> In strict compliance with Apple's HealthKit guidelines, your health data is never sold, shared with advertisers, or used for data mining.</li>
+                <li><strong>Full User Control:</strong> You can enable or revoke HealthKit access anytime in iOS <em>Settings > Health > Data Access & Devices > Heft</em>.</li>
+            </ul>
+
+            <h2>4. Medical Disclaimer</h2>
+            <p>Heft is an informational tracking and visualization tool. It does not provide clinical diagnosis, medical advice, or treatment. Always consult a healthcare professional regarding medical questions or significant dietary adjustments.</p>
+
+            <h2>5. Contact Us</h2>
+            <p>If you have any questions regarding this Privacy Policy, please contact us:</p>
+            <p><strong>Developer:</strong> Efe Koç<br>
+            <strong>Email:</strong> efe.koc@icloud.com</p>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 Heft. Developed by Efe Koç. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        function setLang(lang) {
+            const trContent = document.getElementById('content-tr');
+            const enContent = document.getElementById('content-en');
+            const dateLabel = document.getElementById('date-label');
+            const buttons = document.querySelectorAll('.lang-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            if (lang === 'tr') {
+                trContent.style.display = 'block';
+                enContent.style.display = 'none';
+                dateLabel.innerText = 'Son Güncelleme: 3 Kasım 2026';
+                buttons[0].classList.add('active');
+            } else {
+                trContent.style.display = 'none';
+                enContent.style.display = 'block';
+                dateLabel.innerText = 'Last Updated: November 3, 2026';
+                buttons[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

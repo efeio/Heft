@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heft - Destek / Support</title>
+    <style>
+        :root {
+            --bg-color: #0c0e12;
+            --card-bg: #161a22;
+            --text-primary: #f0f3f6;
+            --text-secondary: #8b949e;
+            --accent: #2f81f7;
+            --border: #30363d;
+        }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-color: #f6f8fa;
+                --card-bg: #ffffff;
+                --text-primary: #1f2328;
+                --text-secondary: #656d76;
+                --accent: #0969da;
+                --border: #d0d7de;
+            }
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+            margin-bottom: 28px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2f81f7, #1f6feb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 22px;
+        }
+        h1 {
+            font-size: 26px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .lang-switch {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .faq-item {
+            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+        }
+        .faq-question {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .faq-answer {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0;
+        }
+        .contact-box {
+            margin-top: 32px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(47, 129, 247, 0.08), rgba(31, 111, 235, 0.03));
+            border: 1px solid rgba(47, 129, 247, 0.25);
+            border-radius: 16px;
+            text-align: center;
+        }
+        .contact-btn {
+            display: inline-block;
+            margin-top: 14px;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-area">
+                <div class="logo-icon">H</div>
+                <div>
+                    <h1>Heft Destek</h1>
+                    <div class="subtitle" id="sub-label">Sıkça Sorulan Sorular ve İletişim</div>
+                </div>
+            </div>
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="setLang('tr')">TR</button>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </div>
+
+        <!-- TURKISH CONTENT -->
+        <div id="content-tr">
+            <div class="faq-item">
+                <div class="faq-question">1. Heft verilerimi kimseyle paylaşıyor mu?</div>
+                <p class="faq-answer">Hayır. Heft sıfır sunucu mimarisine sahiptir. Tüm tartımlarınız ve profil bilgileriniz yalnızca kendi iPhone'unuzda ve Apple Sağlık kasanızda saklanır.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">2. Apple Sağlık senkronizasyonu nasıl çalışır?</div>
+                <p class="faq-answer">Ayarlar menüsünden Apple Sağlık bağlantısını açtığınızda, girdiğiniz her yeni tartım otomatik olarak Apple Sağlık ile eşitlenir. Dilerseniz geçmiş tartımlarınızı da tek dokunuşla içe veya dışa aktarabilirsiniz.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">3. kg ve lbs birimleri arasında geçiş yapabilir miyim?</div>
+                <p class="faq-answer">Evet. Ayarlar &gt; BİRİMLER bölümünden dilediğiniz zaman Kilo (kg / lbs) ve Boy (cm / ft & in) birimlerinizi değiştirebilirsiniz. Geçmiş kayıtlarınız hiçbir veri kaybı olmadan yeni birime uyarlanır.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">4. Yanlış girdiğim bir tartımı nasıl düzenler veya silerim?</div>
+                <p class="faq-answer">Geçmiş (History) sekmesinde düzenlemek istediğiniz tartımın üzerine dokunarak kilosunu ve tarihini değiştirebilir ya da satırı sola kaydırıp "Sil" butonuna basarak kaydı kaldırabilirsiniz.</p>
+            </div>
+
+            <div class="contact-box">
+                <h3 style="margin-top: 0; color: var(--text-primary);">Daha fazla yardıma mı ihtiyacınız var?</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 0;">Geri bildirimlerinizi dinlemekten mutluluk duyarız. Bize doğrudan e-posta ile ulaşabilirsiniz.</p>
+                <a href="mailto:efe.koc@icloud.com" class="contact-btn">E-posta Gönder: efe.koc@icloud.com</a>
+            </div>
+        </div>
+
+        <!-- ENGLISH CONTENT -->
+        <div id="content-en" style="display: none;">
+            <div class="faq-item">
+                <div class="faq-question">1. Does Heft share my health or weight data?</div>
+                <p class="faq-answer">No. Heft operates on a zero-cloud, privacy-first model. All your entries and body metrics remain strictly on your iPhone and inside your personal Apple Health repository.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">2. How does Apple Health integration work?</div>
+                <p class="faq-answer">When enabled in Settings, newly logged weigh-ins sync directly with Apple Health. You can also import previous weight records or export your data at any time.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">3. Can I toggle between kg and lbs?</div>
+                <p class="faq-answer">Yes. Navigate to Settings &gt; UNITS to switch between kg/lbs and cm/ft-in. Your recorded data will adapt seamlessly without any precision loss.</p>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">4. How do I edit or delete an incorrect entry?</div>
+                <p class="faq-answer">In the History tab, tap any row to edit the weight and date, or swipe left on the row and tap "Delete" to permanently remove it.</p>
+            </div>
+
+            <div class="contact-box">
+                <h3 style="margin-top: 0; color: var(--text-primary);">Need further assistance?</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 0;">We are always happy to help. Feel free to contact us directly via email.</p>
+                <a href="mailto:efe.koc@icloud.com" class="contact-btn">Email: efe.koc@icloud.com</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 Heft. Developed by Efe Koç. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        function setLang(lang) {
+            const trContent = document.getElementById('content-tr');
+            const enContent = document.getElementById('content-en');
+            const subLabel = document.getElementById('sub-label');
+            const buttons = document.querySelectorAll('.lang-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            if (lang === 'tr') {
+                trContent.style.display = 'block';
+                enContent.style.display = 'none';
+                subLabel.innerText = 'Sıkça Sorulan Sorular ve İletişim';
+                buttons[0].classList.add('active');
+            } else {
+                trContent.style.display = 'none';
+                enContent.style.display = 'block';
+                subLabel.innerText = 'Frequently Asked Questions & Contact';
+                buttons[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
