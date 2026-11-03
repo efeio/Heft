@@ -253,6 +253,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDevelopmentRegion = tr;
+				INFOPLIST_KEY_CFBundleDisplayName = Heft;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Heft, kilo grafiklerini ve hedef ilerlemeni doğru gösterebilmek için Apple Sağlık'taki vücut ağırlığı kayıtlarını okur.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Heft, uygulamaya girdiğin tartım kayıtlarını sağlık geçmişinin güncel kalması için Apple Sağlık'a kaydeder.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -289,6 +291,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDevelopmentRegion = tr;
+				INFOPLIST_KEY_CFBundleDisplayName = Heft;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Heft, kilo grafiklerini ve hedef ilerlemeni doğru gösterebilmek için Apple Sağlık'taki vücut ağırlığı kayıtlarını okur.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Heft, uygulamaya girdiğin tartım kayıtlarını sağlık geçmişinin güncel kalması için Apple Sağlık'a kaydeder.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
