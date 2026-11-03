@@ -1,0 +1,28 @@
+# Xcode
+#
+# gitignore template for Xcode programs
+#
+# Full list: https://github.com/github/gitignore/blob/main/Swift.gitignore
+
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+
+## Other
+*.moved-aside
+*.xccheckout
+*.installedRunHooks
+
+## DerivedData
+DerivedData/
+
+## Accurate diffs
+*.xcuserstate
+project.xcworkspace/xcuserdata/
