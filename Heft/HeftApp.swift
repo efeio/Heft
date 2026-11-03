@@ -69,6 +69,44 @@ struct HeftApp: App {
             descriptor.fetchLimit = 1
             _ = try context.fetch(descriptor)
 
+            #if DEBUG
+            if CommandLine.arguments.contains("--seed-demo") {
+                let existingProfiles = (try? context.fetch(FetchDescriptor<UserProfile>())) ?? []
+                for p in existingProfiles { context.delete(p) }
+                let existingEntries = (try? context.fetch(FetchDescriptor<WeightEntry>())) ?? []
+                for e in existingEntries { context.delete(e) }
+
+                let profile = UserProfile(
+                    name: "Alex",
+                    height: 180,
+                    age: 28,
+                    gender: .male,
+                    initialWeight: 84.5,
+                    targetWeight: 75.0,
+                    goalType: .lose,
+                    rawWeightUnit: "kg",
+                    rawHeightUnit: "cm",
+                    onboardingCompleted: true
+                )
+                context.insert(profile)
+
+                let calendar = Calendar.current
+                let now = Date()
+                let weights: [Double] = [
+                    84.5, 84.1, 83.8, 83.5, 83.1, 82.7, 82.9, 82.3,
+                    81.9, 81.5, 81.1, 80.8, 80.2, 79.9, 79.4, 78.8, 78.2
+                ]
+                for (index, w) in weights.enumerated() {
+                    let dayOffset = -(weights.count - 1 - index) * 2
+                    if let entryDate = calendar.date(byAdding: .day, value: dayOffset, to: now) {
+                        let entry = WeightEntry(date: entryDate, weight: w)
+                        context.insert(entry)
+                    }
+                }
+                try? context.save()
+            }
+            #endif
+
             return (container, nil)
         } catch {
             print("Failed to create persistent ModelContainer: \(error)")
