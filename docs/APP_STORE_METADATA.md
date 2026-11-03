@@ -171,6 +171,7 @@ Contact phone / email are provided above if you need any clarification. Thank yo
 
 ## 🌐 Zorunlu URL Bağlantıları
 
-GitHub Pages veya kendi alan adınızda yayınlayabileceğiniz hazır dosyalar:
-- **Gizlilik Politikası URL (Privacy Policy):** `docs/privacy.html` (veya `docs/PRIVACY_POLICY.md`)
-- **Destek URL (Support URL):** `docs/support.html` (veya `docs/SUPPORT.md`)
+App Store Connect'e doğrudan yapıştıracağınız canlı bağlantılarınız:
+- **Gizlilik Politikası URL (Privacy Policy URL):** `https://efeio.github.io/Heft/privacy.html`
+- **Destek URL (Support URL):** `https://efeio.github.io/Heft/support.html`
+- **Pazarlama URL (Marketing URL - İsteğe bağlı):** `https://efeio.github.io/Heft/`

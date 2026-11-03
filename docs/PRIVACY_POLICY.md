@@ -68,4 +68,4 @@ If you have any questions or feedback regarding this Privacy Policy, please cont
 
 - **Developer:** Efe Koç
 - **Email:** efe.koc@icloud.com
-- **Website:** https://github.com/efekoc/Heft
+- **Website:** https://github.com/efeio/Heft
