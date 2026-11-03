@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heft - Minimal Kilo & Hedef Takibi</title>
+    <style>
+        :root {
+            --bg-color: #0c0e12;
+            --card-bg: #161a22;
+            --text-primary: #f0f3f6;
+            --text-secondary: #8b949e;
+            --accent: #2f81f7;
+            --border: #30363d;
+        }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-color: #f6f8fa;
+                --card-bg: #ffffff;
+                --text-primary: #1f2328;
+                --text-secondary: #656d76;
+                --accent: #0969da;
+                --border: #d0d7de;
+            }
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 44px 36px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+            text-align: center;
+        }
+        .logo-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2f81f7, #1f6feb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 34px;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 8px 20px rgba(47, 129, 247, 0.35);
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0 0 8px 0;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+        }
+        p.subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin: 0 0 28px 0;
+        }
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .nav-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+        .nav-card:hover {
+            border-color: var(--accent);
+            background: rgba(47, 129, 247, 0.08);
+            transform: translateY(-1px);
+        }
+        .arrow {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .footer {
+            margin-top: 36px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-icon">H</div>
+        <h1>Heft</h1>
+        <p class="subtitle">Minimal Kilo, Hedef & Apple Health Takibi</p>
+
+        <div class="nav-links">
+            <a href="privacy.html" class="nav-card">
+                <span>🔒 Gizlilik Politikası / Privacy Policy</span>
+                <span class="arrow">&rarr;</span>
+            </a>
+            <a href="support.html" class="nav-card">
+                <span>💬 Destek ve İletişim / Support & Contact</span>
+                <span class="arrow">&rarr;</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 Heft. Geliştirici: Efe Koç.
+        </div>
+    </div>
+</body>
+</html>
