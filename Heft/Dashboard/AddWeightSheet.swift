@@ -8,6 +8,9 @@
 
 import SwiftUI
 import SwiftData
+#if DEBUG
+import Combine
+#endif
 
 struct AddWeightSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -186,6 +189,13 @@ struct AddWeightSheet: View {
             } message: {
                 Text("Kayıt sırasında bir hata oluştu. Lütfen tekrar dene.")
             }
+            #if DEBUG
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("heft_demo_step_plus"))) { _ in
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    stepWeight(by: 0.1)
+                }
+            }
+            #endif
         }
     }
 

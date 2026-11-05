@@ -7,6 +7,9 @@
 
 import SwiftUI
 import SwiftData
+#if DEBUG
+import Combine
+#endif
 
 struct DashboardView: View {
     @Query(sort: \WeightEntry.date, order: .reverse) private var entries: [WeightEntry]
@@ -180,6 +183,7 @@ struct DashboardView: View {
                     }
                     .scenePadding(.horizontal)
                     .padding(.vertical, 16)
+                    .id("dashboardTop")
                 }
                 .onAppear {
                     #if DEBUG
@@ -199,6 +203,18 @@ struct DashboardView: View {
                     }
                     #endif
                 }
+                #if DEBUG
+                .onReceive(NotificationCenter.default.publisher(for: Notification.Name("heft_demo_scroll_charts"))) { _ in
+                    withAnimation(.easeInOut(duration: 0.8)) {
+                        proxy.scrollTo("weightChart", anchor: .top)
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: Notification.Name("heft_demo_scroll_top"))) { _ in
+                    withAnimation(.easeInOut(duration: 0.8)) {
+                        proxy.scrollTo("dashboardTop", anchor: .top)
+                    }
+                }
+                #endif
             }
             .background(Color.heftAdaptiveCanvas(colorScheme).ignoresSafeArea())
             .navigationTitle(greetingTitle)
@@ -254,6 +270,28 @@ struct DashboardView: View {
                 }
                 #endif
             }
+            #if DEBUG
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("heft_demo_open_add_weight"))) { _ in
+                withAnimation(.easeInOut) {
+                    showingAddWeight = true
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("heft_demo_close_add_weight"))) { _ in
+                withAnimation(.easeInOut) {
+                    showingAddWeight = false
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("heft_demo_open_settings"))) { _ in
+                withAnimation(.easeInOut) {
+                    showingSettings = true
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("heft_demo_close_settings"))) { _ in
+                withAnimation(.easeInOut) {
+                    showingSettings = false
+                }
+            }
+            #endif
         }
     }
 }
